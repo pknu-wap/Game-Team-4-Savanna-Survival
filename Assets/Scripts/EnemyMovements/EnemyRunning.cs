@@ -16,7 +16,8 @@ public class EnemyRunning : Enemy
         if (player == null) return;
 
         Vector2 direction = (transform.position - player.position).normalized;
-        transform.Translate(direction * stats.speed * Time.deltaTime);
+
+        rb.linearVelocity = direction * stats.speed;
     }
 
     protected override bool IsPlayerInDetection()

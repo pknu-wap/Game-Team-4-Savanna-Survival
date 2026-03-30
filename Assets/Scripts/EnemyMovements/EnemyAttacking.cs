@@ -19,7 +19,7 @@ public class EnemyAttacking : Enemy
         if (player == null) return;
 
         Vector2 direction = (player.position - transform.position).normalized;
-        transform.Translate(direction * stats.speed * Time.deltaTime);
+        rb.linearVelocity = direction * stats.speed;
 
         HandleAttack();
     }
@@ -42,31 +42,36 @@ public class EnemyAttacking : Enemy
 
             if (attackTimer >= stats.attackInterval)
             {
-                player.GetComponent<PlayerDummy>()?.TakeDamage(stats.attackDamage);
+                player.GetComponent<PlayerDummy>()
+                    ?.TakeDamage(stats.attackDamage);
+
                 attackTimer = 0f;
             }
         }
+        else
+        {
+            attackTimer = 0f;
+        }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!collision.gameObject.CompareTag("Player")) return;
+        if (!collision.CompareTag("Player")) return;
 
         contactTimer += Time.deltaTime;
 
         if (contactTimer >= stats.contactInterval)
         {
-            collision.gameObject
-                .GetComponent<PlayerDummy>()
+            collision.GetComponent<PlayerDummy>()
                 ?.TakeDamage(stats.contactDamage);
 
             contactTimer = 0f;
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.CompareTag("Player"))
         {
             contactTimer = 0f;
         }
