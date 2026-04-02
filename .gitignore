@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# Allow these
+!.gitignore
+!Assets/
+!Assets/**
+!Packages/
+!Packages/**
+!ProjectSettings/
+!ProjectSettings/**
