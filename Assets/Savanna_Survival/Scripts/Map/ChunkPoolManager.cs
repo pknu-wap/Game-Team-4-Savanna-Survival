@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +9,13 @@ public class ChunkPoolManager : MonoBehaviour
     [SerializeField] private float chunkSize = 20f;
     [SerializeField] private int poolSize = 15;
 
+    public event Action<ChunkEntity> OnChunkActivated;
+
     private Queue<ChunkEntity> _idlePool = new Queue<ChunkEntity>();
     private Dictionary<Vector2Int, ChunkEntity> _activeChunks = new Dictionary<Vector2Int, ChunkEntity>();
+
+    /// <summary>현재 활성화된 청크 목록 (읽기 전용)</summary>
+    public Dictionary<Vector2Int, ChunkEntity> ActiveChunks => _activeChunks;
     private Vector2Int _lastChunkIndex = new Vector2Int(int.MinValue, int.MinValue);
 
     private void Start()
@@ -96,6 +102,7 @@ public class ChunkPoolManager : MonoBehaviour
             entity.gameObject.SetActive(true);
             entity.Initialize(index);
             _activeChunks[index] = entity;
+            OnChunkActivated?.Invoke(entity);
         }
     }
 }

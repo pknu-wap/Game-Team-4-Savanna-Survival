@@ -40,6 +40,13 @@ public class TimeManager : MonoBehaviour
     /// <summary>현재 주기 내에서의 진행률 (0.0 ~ 1.0)</summary>
     public float CurrentTimeProgress => timeTicker.CurrentProgress;
 
+    /// <summary>현재 주기 인덱스 (밤 count = CurrentCycleIndex / 2)</summary>
+    public int CurrentCycleIndex => timeTicker.CurrentCycleIndex;
+
+    private int nightCount = 0;
+    /// <summary>지금까지 진행된 밤의 횟수</summary>
+    public int NightCount => nightCount;
+
     /// <summary>낮/밤 전환 시 호출되는 이벤트</summary>
     public event Action<bool> OnTimeStateChanged;
 
@@ -65,6 +72,8 @@ public class TimeManager : MonoBehaviour
         if (timeTicker.CycleChanged)
         {
             OnTimeStateChanged?.Invoke(IsDay);
+            if (!IsDay) // 밤으로 전환될 때만 카운트
+                nightCount++;
         }
     }
 }
