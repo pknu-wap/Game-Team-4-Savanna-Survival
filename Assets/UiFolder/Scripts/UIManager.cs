@@ -1,23 +1,21 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
     public GameObject startUI;
-    public GameObject gameUI;
 
+    void Start()
+    {
+        Time.timeScale = 1f;
+        startUI.SetActive(true);
+    }
     public void OnStartButton()
     {
-        startUI.SetActive(false); 
-        gameUI.SetActive(true);   
-
-        Time.timeScale = 1f;
+        SceneManager.LoadScene("GameScene");
     }
-
     public void OnEndButton()
     {
         startUI.SetActive(false);
-        gameUI.SetActive(false);
-
-        Time.timeScale = 0f;
     }
 }

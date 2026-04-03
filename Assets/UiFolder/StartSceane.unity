@@ -202,7 +202,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1761148946}
+      - m_Target: {fileID: 1761148948}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OnStartButton
         m_Mode: 1
@@ -641,7 +641,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1761148946}
+      - m_Target: {fileID: 1761148948}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OnEndButton
         m_Mode: 1
@@ -803,7 +803,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1761148947}
-  - component: {fileID: 1761148946}
+  - component: {fileID: 1761148948}
   m_Layer: 0
   m_Name: UIObject
   m_TagString: Untagged
@@ -811,20 +811,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1761148946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761148945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c50bafaa7bcbed2438ccb84da4cc8679, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  startUI: {fileID: 557893719}
-  gameUI: {fileID: 1542920998}
 --- !u!4 &1761148947
 Transform:
   m_ObjectHideFlags: 0
@@ -840,6 +826,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1761148948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761148945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c50bafaa7bcbed2438ccb84da4cc8679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIManager
+  startUI: {fileID: 682081923}
 --- !u!1 &1828986398
 GameObject:
   m_ObjectHideFlags: 0
