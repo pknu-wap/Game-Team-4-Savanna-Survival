@@ -2,84 +2,180 @@ using UnityEngine;
 
 public class EnemyAttacking : Enemy
 {
-    [Header("Stats")]
-    [SerializeField] private AttackingStats stats;
+    [Header("Config")]
+    [SerializeField] private float moveSpeed = 3f;
+    [SerializeField] private float maxHp = 50f;
+    [SerializeField] private float damage = 10f;
+
+    [SerializeField] private float detectionRange = 6f;
+    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float attackInterval = 2f;
+
+    [Header("Wander")]
+    [SerializeField] private float wanderRadius = 3f;
+    [SerializeField] private float arriveDistance = 0.2f;
+    [SerializeField] private float idleChance = 0.2f;
+
+    [Header("Attack Telegraph")]
+    [SerializeField] private GameObject attackIndicatorPrefab;
+
+    private Vector2 velocity;
+    private Vector2 wanderTarget;
+
+    private bool isIdle;
+    private float idleTimer;
 
     private float attackTimer;
-    private float contactTimer;
+    private bool telegraph;
+
+    private GameObject indicator;
 
     protected override void Awake()
     {
         base.Awake();
-        currentHp = stats.maxHp;
+
+        statManager.InitAttacker(maxHp, damage);
+        currentHp = statManager.getStat(StatType.HEALTH).rawValue;
+
+        SetNewWanderTarget();
     }
 
     protected override void Move()
     {
-        if (player == null) return;
-
-        Vector2 direction = (player.position - transform.position).normalized;
-        transform.Translate(direction * stats.speed * Time.deltaTime);
-
-        HandleAttack();
-    }
-
-    protected override bool IsPlayerInDetection()
-    {
-        if (player == null) return false;
-
-        float distance = Vector2.Distance(transform.position, player.position);
-        return distance <= stats.detectionRange;
-    }
-
-    private void HandleAttack()
-    {
-        float distance = Vector2.Distance(transform.position, player.position);
-
-        if (distance <= stats.attackRange)
+        if (player == null || !player.gameObject.activeInHierarchy)
         {
-            attackTimer += Time.deltaTime;
+            Wander();
+            return;
+        }
 
-            if (attackTimer >= stats.attackInterval)
+        float dist = Vector2.Distance(transform.position, player.position);
+
+        if (dist <= attackRange)
+            Attack();
+        else if (dist <= detectionRange)
+            Chase();
+        else
+            Wander();
+    }
+
+    protected override bool IsPlayerInDetection() => true;
+
+    // Wander
+
+    private void Wander()
+    {
+        if (isIdle)
+        {
+            idleTimer += Time.deltaTime;
+
+            if (idleTimer > 1f)
             {
-                player.GetComponent<PlayerDummy>()?.TakeDamage(stats.attackDamage);
-                attackTimer = 0f;
+                isIdle = false;
+                idleTimer = 0f;
+                SetNewWanderTarget();
             }
+
+            MoveSmooth(Vector2.zero);
+            return;
         }
-    }
 
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (!collision.gameObject.CompareTag("Player")) return;
-
-        contactTimer += Time.deltaTime;
-
-        if (contactTimer >= stats.contactInterval)
+        if (Vector2.Distance(transform.position, wanderTarget) < arriveDistance)
         {
-            collision.gameObject
-                .GetComponent<PlayerDummy>()
-                ?.TakeDamage(stats.contactDamage);
+            if (Random.value < idleChance)
+            {
+                isIdle = true;
+                return;
+            }
 
-            contactTimer = 0f;
+            SetNewWanderTarget();
         }
+
+        Vector2 dir = (wanderTarget - (Vector2)transform.position).normalized;
+        MoveSmooth(dir * moveSpeed * 0.7f);
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void SetNewWanderTarget()
     {
-        if (collision.gameObject.CompareTag("Player"))
+        Vector2 randomOffset = Random.insideUnitCircle * wanderRadius;
+        wanderTarget = (Vector2)transform.position + randomOffset;
+    }
+
+
+    private void Chase()
+    {
+        Vector2 dir = (player.position - transform.position).normalized;
+        MoveSmooth(dir * moveSpeed);
+
+        attackTimer = 0f;
+        telegraph = false;
+        HideIndicator();
+    }
+
+    private void Attack()
+    {
+        MoveSmooth(Vector2.zero);
+
+        attackTimer += Time.deltaTime;
+
+        if (!telegraph && attackTimer >= attackInterval - 1f)
         {
-            contactTimer = 0f;
+            ShowIndicator();
+            telegraph = true;
+        }
+
+        if (attackTimer >= attackInterval)
+        {
+            float dmg = statManager.getStat(StatType.DAMAGE).calibratedValue;
+
+            player.GetComponent<PlayerDummy>()
+                ?.TakeDamage(dmg);
+
+            attackTimer = 0f;
+            telegraph = false;
+            HideIndicator();
         }
     }
+
+
+    private void MoveSmooth(Vector2 targetVel)
+    {
+        velocity = Vector2.Lerp(
+            velocity,
+            targetVel,
+            Time.deltaTime * 10f
+        );
+
+        rb.linearVelocity = velocity;
+    }
+
+
+    private void ShowIndicator()
+    {
+        if (attackIndicatorPrefab == null) return;
+
+        if (indicator == null)
+            indicator = Instantiate(attackIndicatorPrefab, transform);
+
+        indicator.transform.localPosition = Vector3.zero;
+        indicator.transform.localScale = Vector3.one * attackRange * 2f;
+        indicator.SetActive(true);
+    }
+
+    private void HideIndicator()
+    {
+        if (indicator != null)
+            indicator.SetActive(false);
+    }
+
+
 
     private void OnDrawGizmosSelected()
     {
-        if (stats == null) return;
-
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, stats.detectionRange);
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, stats.attackRange);
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+
     }
 }

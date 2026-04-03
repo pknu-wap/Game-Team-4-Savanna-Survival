@@ -2,28 +2,37 @@ using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
 {
-    protected float currentHp;
+    [Header("Drop")]
+    [SerializeField] protected DropTable dropTable;
+
+    protected Rigidbody2D rb;
     protected Transform player;
+
+    protected EnemyStatManager statManager;
+    protected float currentHp;
+
 
     protected virtual void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
+
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
             player = playerObj.transform;
+
+        statManager = new EnemyStatManager();
     }
 
-    protected virtual void Update()
+    protected virtual void FixedUpdate()
     {
-        if (player == null) return;
-
-        if (IsPlayerInDetection())
-        {
-            Move();
-        }
+        Move();
     }
+
 
     protected abstract void Move();
+
     protected abstract bool IsPlayerInDetection();
+
 
     public virtual void TakeDamage(float damage)
     {
@@ -37,6 +46,11 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
+        if (dropTable != null)
+        {
+            dropTable.Drop(transform.position);
+        }
+
         Destroy(gameObject);
     }
 }

@@ -65,11 +65,11 @@ public class StatCalibrater
 
     public static float calibrateUserDamage(float total)
     {
-        return (float)Math.Log(userDamageBase, total);
+        return (float)Math.Log(total, userDamageBase);
     }
 
     public static float calibrateUserHealth(float total)
     {
-        return (float)Math.Log(userHealthBase, total);
+        return (float)Math.Log(total, userHealthBase);
     }
 }
