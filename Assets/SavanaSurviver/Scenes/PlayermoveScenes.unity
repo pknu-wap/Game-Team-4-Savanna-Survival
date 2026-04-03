@@ -297,17 +297,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 245868388547347678, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
-      propertyPath: Equipments.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 245868388547347678, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
-      propertyPath: Equipments.Array.data[0].value
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 2225388967113992947, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
       propertyPath: m_Name
       value: Equipment
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: Equipments.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: Equipments.Array.data[0].value
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: Equipments.Array.data[0].statType
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -632,7 +636,6 @@ GameObject:
   - component: {fileID: 1699142406}
   - component: {fileID: 1699142407}
   - component: {fileID: 1699142408}
-  - component: {fileID: 1699142409}
   m_Layer: 6
   m_Name: PlayerTemp_0
   m_TagString: Player
@@ -843,26 +846,108 @@ MonoBehaviour:
   m_GameObject: {fileID: 1699142400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c433ce7ba56402d4387b9ab70e8ea05a, type: 3}
+  m_Script: {fileID: 11500000, guid: a8bfd7e44940e734590b932fa6e5c786, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerStat
-  playerMaxHp: 100
-  playerAttack: 10
-  playerSpeed: 10
-  playerSkillcooldown: 0
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatManager
+  startDamage: 10
+  startDefense: 0
+  startHealth: 100
+  startMaxHealth: 100
+  startLevel: 1
+  startHunger: 50
+  startExp: 0
+  startMaxExp: 100
+  startMoveSpeed: 5
+  startSkillDamage: 20
+  startSkillCooldown: 1
+  playerDamage: 0
+  playerDefense: 0
+  playerHealth: 0
+  playerMaxHealth: 0
+  playerLevel: 0
+  playerHunger: 0
+  playerExp: 0
+  playerMaxExp: 0
+  playerMoveSpeed: 0
   playerSkillDamage: 0
---- !u!114 &1699142409
-MonoBehaviour:
+  playerSkillCooldown: 0
+--- !u!1001 &1826050892
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1699142400}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95ddbe51c2a757f47b6720ffde422dab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EquipmentSystem
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2225388967113992947, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_Name
+      value: Equipment (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: Equipments.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: Equipments.Array.data[0].value
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885541636237828980, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_Color.b
+      value: 0.1647059
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885541636237828980, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_Color.g
+      value: 0.1647059
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885541636237828980, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_Color.r
+      value: 0.6470588
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265734529130855001, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -871,3 +956,4 @@ SceneRoots:
   - {fileID: 1699142403}
   - {fileID: 1031696892}
   - {fileID: 291335273}
+  - {fileID: 1826050892}

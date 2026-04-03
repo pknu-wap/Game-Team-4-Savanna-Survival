@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5265734529130855001}
   - component: {fileID: 3885541636237828980}
-  - component: {fileID: 245868388547347678}
   - component: {fileID: -6268642715569965173}
   - component: {fileID: -7949581327148482543}
+  - component: {fileID: 2793720753241203544}
   m_Layer: 9
   m_Name: Equipment
   m_TagString: Untagged
@@ -94,19 +94,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &245868388547347678
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2225388967113992947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e05ea862c222404dbb9fe811890b491, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EquipmentTemp
-  Equipments: []
 --- !u!70 &-6268642715569965173
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -171,3 +158,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &2793720753241203544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2225388967113992947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be57281b168e0e24bbfddfc7d03197f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EquipmentTemp2
+  Equipments: []
