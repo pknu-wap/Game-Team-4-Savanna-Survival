@@ -307,7 +307,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
       propertyPath: Equipments.Array.data[0].value
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
       propertyPath: Equipments.Array.data[0].statType
@@ -522,7 +522,7 @@ Transform:
   m_GameObject: {fileID: 1031696887}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.24, y: 0.54, z: 0}
+  m_LocalPosition: {x: 4.21, y: 0.67, z: 0}
   m_LocalScale: {x: 6, y: 6, z: 6}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -885,11 +885,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
       propertyPath: Equipments.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
       propertyPath: Equipments.Array.data[0].value
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: Equipments.Array.data[1].value
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: Equipments.Array.data[1].statType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3885541636237828980, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
       propertyPath: m_Color.b
