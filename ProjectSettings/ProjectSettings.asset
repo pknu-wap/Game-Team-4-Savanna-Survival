@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 28
-  productGUID: 223b9b235106eb74f94a73eebded9fe0
+  productGUID: 2766560b82ab42344978ce72d0658c7d
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -678,13 +678,13 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 1
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 05c4331e-d7e3-4301-bd01-4530c669c884
+  cloudProjectId: 2e021741-fa02-42da-9d94-db4f9f432e65
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 2D
-  organizationId: khw3268480_unity
+  projectName: SavannaSurvival 2026-03-31_19-27-59
+  organizationId: unity_0d41d6c45f684257a38b
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

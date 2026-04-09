@@ -74,11 +74,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-# Custom
-/.vscode
-.vsconfig
-Game-Team-4-Savanna-Survival.slnx
-README.md
-SavannaSurvival.slnx
-
 # End of https://www.toptal.com/developers/gitignore/api/unity
