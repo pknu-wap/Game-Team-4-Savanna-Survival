@@ -36,7 +36,9 @@ public class AugmentChoiceButton : MonoBehaviour
 
     private void OnClick()
     {
-        Debug.Log("asd");
         onSelected?.Invoke(augmentData);
+        
+        // 실제 시스템 작동 코드 적용 필요.
+        
     }
 }
