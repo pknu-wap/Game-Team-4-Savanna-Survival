@@ -61,7 +61,6 @@ public class EnemyAttacking : Enemy
     protected override bool IsPlayerInDetection() => true;
 
     // Wander
-
     private void Wander()
     {
         if (isIdle)
@@ -99,6 +98,7 @@ public class EnemyAttacking : Enemy
         Vector2 randomOffset = Random.insideUnitCircle * wanderRadius;
         wanderTarget = (Vector2)transform.position + randomOffset;
     }
+
 
 
     private void Chase()
@@ -166,7 +166,6 @@ public class EnemyAttacking : Enemy
         if (indicator != null)
             indicator.SetActive(false);
     }
-
 
 
     private void OnDrawGizmosSelected()
