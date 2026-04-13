@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UIManager : MonoBehaviour
+public class StartUIManager : MonoBehaviour
 {
     public GameObject startUI;
 
