@@ -1,0 +1,20 @@
+{
+    "ID": 4,
+    "Name": "더 강한 눈",
+    "Description": "치명타 확률이 10/20/40% 증가합니다.",
+    "Stat": "SPEED",
+    "Power": [
+        {
+            "Level": 1,
+            "Amount": 10
+        },
+        {
+            "Level": 2,
+            "Amount": 20
+        },
+        {
+            "Level": 3,
+            "Amount": 40
+        }
+    ]
+}

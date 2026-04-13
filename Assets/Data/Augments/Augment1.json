@@ -1,0 +1,20 @@
+{
+    "ID": 1,
+    "Name": "더 강한 공격력",
+    "Description": "공격력이 10/20/40% 증가합니다.",
+    "Stat": "DAMAGE",
+    "Power": [
+        {
+            "Level": 1,
+            "Amount": 10
+        },
+        {
+            "Level": 2,
+            "Amount": 20
+        },
+        {
+            "Level": 3,
+            "Amount": 40
+        }
+    ]
+}
