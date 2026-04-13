@@ -4,11 +4,16 @@ using System.Collections.Generic;
 public enum StatType
 {
     DAMAGE,
+    DEFENSE,
+    MAX_EXP,
+    MAX_HEALTH,
+    MOVESPEED,
+    SKILL_DAMAGE,
+    SKILL_COOLDOWN,
     HEALTH,
     LEVEL,
     HUNGER,
-    EXP,
-    SPEED
+    EXP
 }
 
 public class StatData
@@ -66,11 +71,11 @@ public class StatCalibrater
 
     public static float calibrateUserDamage(float total)
     {
-        return (float)Math.Log(userDamageBase, total);
+        return (float)Math.Log(total, userDamageBase);
     }
 
     public static float calibrateUserHealth(float total)
     {
-        return (float)Math.Log(userHealthBase, total);
+        return (float)Math.Log(total, userHealthBase);
     }
 }
