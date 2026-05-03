@@ -13,6 +13,7 @@ public class ChunkPoolManager : MonoBehaviour
 
     private Queue<ChunkEntity> _idlePool = new Queue<ChunkEntity>();
     private Dictionary<Vector2Int, ChunkEntity> _activeChunks = new Dictionary<Vector2Int, ChunkEntity>();
+    private StructureManager _structureManager;
 
     /// <summary>현재 활성화된 청크 목록 (읽기 전용)</summary>
     public Dictionary<Vector2Int, ChunkEntity> ActiveChunks => _activeChunks;
@@ -20,6 +21,7 @@ public class ChunkPoolManager : MonoBehaviour
 
     private void Start()
     {
+        _structureManager = FindAnyObjectByType<StructureManager>();
         InitPool();
         if (playerTransform != null)
         {
@@ -88,6 +90,10 @@ public class ChunkPoolManager : MonoBehaviour
         {
             ChunkEntity entity = _activeChunks[index];
             _activeChunks.Remove(index);
+            if (_structureManager != null)
+            {
+                _structureManager.ClearStructuresForChunk(entity);
+            }
             entity.ResetChunk();
             entity.gameObject.SetActive(false);
             _idlePool.Enqueue(entity);
@@ -102,6 +108,12 @@ public class ChunkPoolManager : MonoBehaviour
             entity.gameObject.SetActive(true);
             entity.Initialize(index);
             _activeChunks[index] = entity;
+
+            if (_structureManager != null)
+            {
+                _structureManager.SpawnStructuresForChunk(entity);
+            }
+
             OnChunkActivated?.Invoke(entity);
         }
     }

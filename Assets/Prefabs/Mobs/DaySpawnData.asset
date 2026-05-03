@@ -17,3 +17,4 @@ MonoBehaviour:
     weight: 1
     minGroupSize: 1
     maxGroupSize: 5
+    preferredStructure: 1

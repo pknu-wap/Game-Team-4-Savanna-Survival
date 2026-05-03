@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// Layer 2: MobSpawnStrategy - 소환 위치 및 전략 관리
@@ -14,6 +15,7 @@ public class MobSpawnStrategy : MonoBehaviour
 
     private ChunkPoolManager chunkPoolManager;
     private MobSpawnTicker mobSpawnTicker;
+    private StructureManager structureManager;
 
     /// 유효 좌표 1개 + 몹 엔트리를 Layer 3로 전달
     public event Action<Vector2, MobSpawnEntry> SpawnRequested;
@@ -22,6 +24,7 @@ public class MobSpawnStrategy : MonoBehaviour
     {
         chunkPoolManager = FindAnyObjectByType<ChunkPoolManager>();
         mobSpawnTicker = FindAnyObjectByType<MobSpawnTicker>();
+        structureManager = FindAnyObjectByType<StructureManager>();
 
         if (mobSpawnTicker != null)
         {
@@ -56,13 +59,43 @@ public class MobSpawnStrategy : MonoBehaviour
 
             if (TimeManager.Instance.IsDay)
             {
-                // 낮: 활성 청크 기반
-                spawnPos = TryGetValidPosition(FindDaySpawnPosition, maxWalkableRetries);
+                // 낮: 활성 청크 기반 + 구조물 연동 지원
+                if (entry.preferredStructure != StructureType.None)
+                {
+                    // 선호 구조물이 있으면 구조물 반경 스폰 시도
+                    ChunkEntity randomChunk = GetRandomActiveChunk();
+                    if (randomChunk != null)
+                    {
+                        spawnPos = TryGetValidPosition(
+                            () => FindStructureLinkedPosition(randomChunk, entry.preferredStructure),
+                            maxWalkableRetries
+                        );
+
+                        // 선호 구조물이 없으면 스폰 불가 (스펙 준수)
+                        if (spawnPos == Vector2.zero)
+                            continue;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    // 구조물 미연동: 일반 스폰
+                    spawnPos = TryGetValidPosition(FindDaySpawnPosition, maxWalkableRetries);
+
+                    if (spawnPos == Vector2.zero)
+                        continue;
+                }
             }
             else
             {
-                // 밤: 카메라 시야 밖 반경 기반
+                // 밤: 카메라 시야 밖 반경 기반 (구조물 무시)
                 spawnPos = TryGetValidPosition(FindNightSpawnPosition, maxWalkableRetries);
+
+                if (spawnPos == Vector2.zero)
+                    continue;
             }
 
             if (spawnPos != Vector2.zero)
@@ -93,32 +126,58 @@ public class MobSpawnStrategy : MonoBehaviour
         // 해당 청크 내에서 N개 좌표 탐색
         for (int i = 0; i < groupSize; i++)
         {
-            Vector2 spawnPos = TryGetValidPosition(
-                () => FindDaySpawnPosition(chunk),
-                maxWalkableRetries
-            );
+            Vector2 spawnPos;
 
-            if (spawnPos != Vector2.zero)
+            // preferredStructure가 None이 아니면 구조물 반경 스폰 시도
+            if (selectedEntry.preferredStructure != StructureType.None)
             {
-                SpawnRequested?.Invoke(spawnPos, selectedEntry);
+                spawnPos = TryGetValidPosition(
+                    () => FindStructureLinkedPosition(chunk, selectedEntry.preferredStructure),
+                    maxWalkableRetries
+                );
+
+                // 선호 구조물이 없으면 해당 몹은 스폰하지 않음 (스펙 준수)
+                if (spawnPos == Vector2.zero)
+                    continue;
             }
+            else
+            {
+                // 일반 스폰 (구조물 미연동)
+                spawnPos = TryGetValidPosition(
+                    () => FindDaySpawnPosition(chunk),
+                    maxWalkableRetries
+                );
+
+                if (spawnPos == Vector2.zero)
+                    continue;
+            }
+
+            SpawnRequested?.Invoke(spawnPos, selectedEntry);
         }
     }
 
-    /// 청크 내 무작위 좌표 탐색
-    private Vector2 FindDaySpawnPosition()
+    /// 활성 청크 중 무작위 선택 헬퍼 메서드
+    private ChunkEntity GetRandomActiveChunk()
     {
         if (chunkPoolManager == null || chunkPoolManager.ActiveChunks.Count == 0)
-            return Vector2.zero;
+            return null;
 
-        // 무작위 청크 선택
         int randomIndex = UnityEngine.Random.Range(0, chunkPoolManager.ActiveChunks.Count);
         var enumerator = chunkPoolManager.ActiveChunks.Values.GetEnumerator();
 
         for (int i = 0; i < randomIndex; i++)
             enumerator.MoveNext();
 
-        ChunkEntity randomChunk = enumerator.Current;
+        return enumerator.Current;
+    }
+
+    /// 청크 내 무작위 좌표 탐색
+    private Vector2 FindDaySpawnPosition()
+    {
+        ChunkEntity randomChunk = GetRandomActiveChunk();
+        if (randomChunk == null)
+            return Vector2.zero;
+
         return FindDaySpawnPosition(randomChunk);
     }
 
@@ -224,5 +283,61 @@ public class MobSpawnStrategy : MonoBehaviour
         }
 
         return UnityEngine.Random.Range(entry.minGroupSize, entry.maxGroupSize + 1);
+    }
+
+    /// 선호 구조물 타입 기반 스폰 위치 탐색 (구조물 연동 스폰용)
+    /// preferredStructure가 None이면 일반 스폰 위치 반환
+    private Vector2 FindStructureLinkedPosition(ChunkEntity chunk, StructureType preferredStructure)
+    {
+        if (chunk == null || structureManager == null)
+            return Vector2.zero;
+
+        // preferredStructure가 None이면 일반 위치 탐색
+        if (preferredStructure == StructureType.None)
+            return FindDaySpawnPosition(chunk);
+
+        List<GameObject> structures = structureManager.GetStructuresInChunk(chunk);
+        if (structures.Count == 0)
+            return Vector2.zero;
+
+        // preferredStructure 타입과 일치하는 구조물만 필터링
+        List<GameObject> preferredStructures = new List<GameObject>();
+        foreach (var structure in structures)
+        {
+            StructureType structureType = DetermineStructureType(structure.name);
+            if (structureType == preferredStructure)
+            {
+                preferredStructures.Add(structure);
+            }
+        }
+
+        // 선호 구조물이 없으면 스폰 불가 (스펙 준수)
+        if (preferredStructures.Count == 0)
+            return Vector2.zero;
+
+        // 선호 구조물 중 무작위 선택
+        GameObject randomStructure = preferredStructures[UnityEngine.Random.Range(0, preferredStructures.Count)];
+        if (randomStructure == null)
+            return Vector2.zero;
+
+        // 구조물 반경 내(1.5Unit) 무작위 위치 선정
+        Vector2 structurePos = randomStructure.transform.position;
+        float angle = UnityEngine.Random.Range(0f, 360f) * Mathf.Deg2Rad;
+        float distance = UnityEngine.Random.Range(0f, 1.5f);
+
+        return new Vector2(
+            structurePos.x + Mathf.Cos(angle) * distance,
+            structurePos.y + Mathf.Sin(angle) * distance
+        );
+    }
+
+    /// 구조물 타입 판정 (이름 기반)
+    private StructureType DetermineStructureType(string objectName)
+    {
+        if (objectName.Contains("Tree"))
+            return StructureType.Tree;
+        if (objectName.Contains("Rock"))
+            return StructureType.Rock;
+        return StructureType.None;
     }
 }
