@@ -1,0 +1,20 @@
+{
+    "ID": 3,
+    "Name": "더 강한 신발",
+    "Description": "속도가 10/20/40% 증가합니다.",
+    "Stat": "SPEED",
+    "Power": [
+        {
+            "Level": 1,
+            "Amount": 10
+        },
+        {
+            "Level": 2,
+            "Amount": 20
+        },
+        {
+            "Level": 3,
+            "Amount": 40
+        }
+    ]
+}
