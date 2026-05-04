@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
@@ -8,6 +9,12 @@ public abstract class Enemy : MonoBehaviour
     [Header("Contact Damage")]
     [SerializeField] private float contactDamage   = 5f;  
     [SerializeField] private float contactCooldown = 1f;  
+    // spriterenderer sr 추가하기
+
+    // public float moveSpeed = 3f;
+
+    // private float originalSpeed;
+    // private Coroutine slowCoroutine;
 
     protected Rigidbody2D rb;
     protected Transform player;
@@ -86,4 +93,28 @@ public abstract class Enemy : MonoBehaviour
 
         Destroy(gameObject);
     }
+    // public void ApplySlow(float duration, float slowPercent)
+    // {
+    //     if (slowCoroutine != null)
+    //     {
+    //         StopCoroutine(slowCoroutine);
+    //     }
+
+    //     slowCoroutine = StartCoroutine(Slow(duration, slowPercent));
+    // }
+
+    // IEnumerator Slow(float duration, float slowPercent)
+    // {
+    //     moveSpeed = originalSpeed * (1f - slowPercent);
+
+    //     // if (sr != null)
+    //     //     sr.color = Color.blue;
+
+    //     yield return new WaitForSeconds(duration);
+
+    //     moveSpeed = originalSpeed;
+
+    //     // if (sr != null)
+    //     //     sr.color = Color.white;
+    // }
 }
