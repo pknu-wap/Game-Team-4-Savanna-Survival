@@ -88,16 +88,16 @@ public class StatDetailPanel : MonoBehaviour
         float skillCooldown = statCore.getStat(StatType.SKILL_COOLDOWN).rawValue;
         float healthRegen = statCore.getStat(StatType.HEALTH_REGEN).rawValue;
 
-        damageText.text = "Attack : " + formatStat(damage);
-        defenseText.text = "Defense : " + formatStat(defense);
-        healthText.text = "Hp : " + formatStat(currentHealth) + " / " + formatStat(maxHealth);
-        hungerText.text = "Hunger : " + formatStat(currentHunger) + " / " + formatStat(maxHunger);
+        damageText.text = "공격력 : " + formatStat(damage);
+        defenseText.text = "방어력 : " + formatStat(defense);
+        healthText.text = "체력 : " + formatStat(currentHealth) + " / " + formatStat(maxHealth);
+        hungerText.text = "배고픔 : " + formatStat(currentHunger) + " / " + formatStat(maxHunger);
         expText.text = "Exp : " + formatStat(currentExp) + " / " + formatStat(maxExp);
         levelText.text = "LV : " + formatStat(level);
-        moveSpeedText.text = "Speed : " + formatStat(moveSpeed);
-        skillDamageText.text = "SkillDamage : " + formatStat(skillDamage);
-        skillCooldownText.text = "SkillCoolDown : " + formatStat(skillCooldown);
-        healthRegenText.text = "HpRegen : " + formatStat(healthRegen);
+        moveSpeedText.text = "이동속도 : " + formatStat(moveSpeed);
+        skillDamageText.text = "스킬 공격력 : " + formatStat(skillDamage);
+        skillCooldownText.text = "스킬 가속 : " + formatStat(skillCooldown);
+        healthRegenText.text = "체력 재생 : " + formatStat(healthRegen);
     }
 
     private string formatStat(float value)
