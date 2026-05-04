@@ -113,20 +113,18 @@ MonoBehaviour:
   detectionRange: 8
   meleeRange: 2
   meleeInterval: 1.5
-  meleeIndicatorPrefab: {fileID: 0}
+  indicatorPrefab: {fileID: 0}
   aoeRange: 3
   aoeInterval: 8
   aoeTelegraph: 2.5
   aoeDamage: 40
-  aoeIndicatorPrefab: {fileID: 0}
   waterRange: 5
   waterDuration: 3
   waterCooldown: 5
   waterTelegraph: 0.8
   waterDamage: 8
   waterWidth: 1.5
-  waterZonePrefab: {fileID: 0}
-  waterIndicatorPrefab: {fileID: 0}
+  waterZonePrefab: {fileID: 298413470088328658, guid: 7c37a0aac33857c40a3435f3e6d6dbaa, type: 3}
   wanderRadius: 3
   arriveDistance: 0.1
   idleChance: 0.1
