@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1a8bb3223825474db2ddd8d52e6e50d, type: 3}
+  m_Name: StructureData
+  m_EditorClassIdentifier: Assembly-CSharp::StructureData
+  structureEntries:
+  - structureType: 1
+    prefab: {fileID: 3457881830450173535, guid: 2330edfa2c23dad4ba06e1283ee664a9, type: 3}
+    minCount: 1
+    maxCount: 3
+    minDistance: 1.5
+    poolSize: 50
+  - structureType: 2
+    prefab: {fileID: 613842792418945416, guid: 67c3e05c632f63d4589c6808cb0dac16, type: 3}
+    minCount: 1
+    maxCount: 2
+    minDistance: 2
+    poolSize: 30
