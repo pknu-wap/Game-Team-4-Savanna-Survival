@@ -5,15 +5,17 @@ public enum StatType
 {
     DAMAGE,
     DEFENSE,
-    MAX_EXP,
+    HEALTH,
     MAX_HEALTH,
+    LEVEL,
+    HUNGER,
+    EXP,
+    MAX_EXP,
     MOVESPEED,
     SKILL_DAMAGE,
     SKILL_COOLDOWN,
-    HEALTH,
-    LEVEL,
-    HUNGER,
-    EXP
+    HEALTH_REGEN,
+    MAX_HUNGER
 }
 
 public class StatData
@@ -62,9 +64,22 @@ public abstract class StatManager
         calibratedStats[statType] = new StatData(statType, value, calibrated);
         onStatRegistered?.Invoke(statType, value);
     }
+    
+    public void addStat(StatType statType, float value)
+    {
+        float currentValue = 0f;
+
+        if (calibratedStats.ContainsKey(statType))
+        {
+            currentValue = calibratedStats[statType].rawValue;
+        }
+
+        registerStat(statType, currentValue + value);
+    }
 }
 
 public class StatCalibrater
+//스탯 보정 함수
 {
     private static float userDamageBase = 2f;
     private static float userHealthBase = 2f;

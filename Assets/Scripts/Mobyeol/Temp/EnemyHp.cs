@@ -6,10 +6,10 @@ public class EnemyHp : MonoBehaviour
     private const float MaxHp = 100f;
     private float currentHp = MaxHp;
 
-    public void TakeDamage(float damage)
+    public void takeDamage(float damage)
     {
         currentHp -= damage;
-        Debug.Log("적 체력: " + currentHp);
+        Debug.Log("적 체력: " + Mathf.Ceil(currentHp));
         if (currentHp <= 0f) Destroy(gameObject);
     }
 }
