@@ -544,6 +544,7 @@ GameObject:
   - component: {fileID: 93224114}
   - component: {fileID: 93224113}
   - component: {fileID: 93224112}
+  - component: {fileID: 93224116}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -636,6 +637,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &93224116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93224110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836c51b42c842c04496c0692c66c6b70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatDetailPanel
+  playerStatManager: {fileID: 1526872023}
+  statDetailPanel: {fileID: 1444324583}
+  damageText: {fileID: 268838134}
+  defenseText: {fileID: 185954905}
+  healthText: {fileID: 1038036043}
+  hungerText: {fileID: 989085584}
+  expText: {fileID: 927999362}
+  levelText: {fileID: 175087586}
+  moveSpeedText: {fileID: 1065998017}
+  skillDamageText: {fileID: 818396627}
+  skillCooldownText: {fileID: 1841957126}
+  healthRegenText: {fileID: 1270430275}
 --- !u!1 &154232907
 GameObject:
   m_ObjectHideFlags: 0
@@ -1789,7 +1814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 0.85882354}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5062,7 +5087,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1444324584}
-  - component: {fileID: 1444324585}
   m_Layer: 5
   m_Name: StatDetailPanel
   m_TagString: Untagged
@@ -5096,30 +5120,6 @@ Transform:
   - {fileID: 1841957125}
   m_Father: {fileID: 93224115}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1444324585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1444324583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 836c51b42c842c04496c0692c66c6b70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatDetailPanel
-  playerStatManager: {fileID: 1526872023}
-  statDetailPanel: {fileID: 1444324583}
-  damageText: {fileID: 268838134}
-  defenseText: {fileID: 185954905}
-  healthText: {fileID: 1038036043}
-  hungerText: {fileID: 989085584}
-  expText: {fileID: 927999362}
-  levelText: {fileID: 175087586}
-  moveSpeedText: {fileID: 1065998017}
-  skillDamageText: {fileID: 818396627}
-  skillCooldownText: {fileID: 1841957126}
-  healthRegenText: {fileID: 1270430275}
 --- !u!1001 &1456768987
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5547,7 +5547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852c33db32f4fea4298ac586b04b5160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputRelay
-  statDetailPanel: {fileID: 1444324585}
+  statDetailPanel: {fileID: 93224116}
 --- !u!1 &1585440094
 GameObject:
   m_ObjectHideFlags: 0
