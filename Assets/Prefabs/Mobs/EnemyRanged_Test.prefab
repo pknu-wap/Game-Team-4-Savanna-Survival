@@ -171,6 +171,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRanged
   dropTable: {fileID: 0}
+  contactDamage: 5
+  contactCooldown: 1
   moveSpeed: 2
   maxHp: 40
   damage: 8
@@ -181,5 +183,5 @@ MonoBehaviour:
   wanderRadius: 2
   arriveDistance: 0.2
   idleChance: 0.2
-  attackIndicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
-  projectilePrefab: {fileID: 0}
+  indicatorPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 5465070902174546490, guid: 4d40fbd9a2e91644982a6f80aaeaceeb, type: 3}

@@ -13,8 +13,18 @@ MonoBehaviour:
   m_Name: DaySpawnData
   m_EditorClassIdentifier: Assembly-CSharp::MobSpawnData
   mobEntries:
-  - mobPrefab: {fileID: 8259726111937408803, guid: feb11d62027ec104b9a955d4245ae412, type: 3}
+  - mobPrefab: {fileID: 7883874561632515422, guid: 33e2b26145e57104ebe05b9a26369040, type: 3}
+    weight: 1
+    minGroupSize: 1
+    maxGroupSize: 5
+    preferredStructure: 0
+  - mobPrefab: {fileID: 7925200749395881049, guid: 1bc3cff24189bdd4180c0b805f6cda04, type: 3}
     weight: 1
     minGroupSize: 1
     maxGroupSize: 5
     preferredStructure: 1
+  - mobPrefab: {fileID: 5096061125741263335, guid: d082b95bda31c1340b89ab848b9905f9, type: 3}
+    weight: 1
+    minGroupSize: 1
+    maxGroupSize: 5
+    preferredStructure: 2

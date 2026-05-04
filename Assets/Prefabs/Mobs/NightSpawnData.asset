@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: NightSpawnData
   m_EditorClassIdentifier: Assembly-CSharp::MobSpawnData
   mobEntries:
-  - mobPrefab: {fileID: 3398688611168107689, guid: 56f77c3a813a84e46ae8ab71ab856f12, type: 3}
+  - mobPrefab: {fileID: 516846558159759908, guid: 535d17bbcdeccb742a5fabfa24d52adf, type: 3}
     weight: 1
     minGroupSize: 1
     maxGroupSize: 10
+    preferredStructure: 0
