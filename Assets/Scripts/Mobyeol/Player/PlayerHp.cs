@@ -10,7 +10,6 @@ public class PlayerHp : MonoBehaviour
 
     private Animator animator;
     private PlayerMovement playerMovement;
-    //private Rigidbody2D rigid;
 
     private bool isDead = false;
 
@@ -68,13 +67,6 @@ public class PlayerHp : MonoBehaviour
             playerMovement.stopMove();
             playerMovement.enabled = false;
         }
-
-        /*
-        if (rigid != null)
-        {
-            rigid.linearVelocity = Vector2.zero;
-        }
-        */
 
         Debug.Log("죽었습니다.");
 

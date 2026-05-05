@@ -3,8 +3,8 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [Header("Config")]
-    [SerializeField] private float speed         = 8f;   
-    [SerializeField] private float lifeTime      = 3f;   
+    [SerializeField] private float speed    = 8f;
+    [SerializeField] private float lifeTime = 3f;
 
     private Vector2 direction;
     private float   damage;
@@ -32,22 +32,26 @@ public class Projectile : MonoBehaviour
     private void FixedUpdate()
     {
         if (!initialized) return;
-
         rb.linearVelocity = direction * speed;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        PlayerDummy playerDummy = other.GetComponent<PlayerDummy>();
-        if (playerDummy != null)
+        if (!other.CompareTag("Player")) 
         {
-            playerDummy.TakeDamage(damage);
-            Destroy(gameObject); 
+            if (!other.isTrigger)
+                Destroy(gameObject);
             return;
         }
 
+        PlayerStatCore statCore = other.GetComponent<PlayerStatManager>()?.StatCore;
+        if (statCore != null)
+        {
+            float currentHp = statCore.getStat(StatType.HEALTH).rawValue;
+            float next      = Mathf.Max(0f, currentHp - damage);
+            statCore.registerStat(StatType.HEALTH, next);
+        }
 
-        if (!other.isTrigger)
-            Destroy(gameObject);
+        Destroy(gameObject);
     }
 }
