@@ -15,6 +15,7 @@ public class Skill : MonoBehaviour
 
     public GameObject fireballPrefab;
     public GameObject roarEffectPrefab;
+    public GameObject skillUI;
 
     private Rigidbody2D rb;
 
@@ -30,6 +31,9 @@ public class Skill : MonoBehaviour
         lastUsedTime[SkillType.Fireball] = -999f;
         lastUsedTime[SkillType.Dash] = -999f;
         lastUsedTime[SkillType.Roar] = -999f;
+
+        if (skillUI != null)
+            skillUI.SetActive(false);
     }
 
     void Update()
@@ -47,95 +51,97 @@ public class Skill : MonoBehaviour
     }
 
     void UseSkill(SkillData data)
-{
-    SkillType type = data.skillType;
-
-    if (Time.time < lastUsedTime[type] + data.cooldown)
     {
-        Debug.Log("쿨타임 중!");
-        return;
+        SkillType type = data.skillType;
+
+        if (Time.time < lastUsedTime[type] + data.cooldown)
+            return;
+
+        lastUsedTime[type] = Time.time;
+        currentSkill = data;
+
+        if (skillUI != null)
+        {
+            skillUI.SetActive(true);
+            StartCoroutine(HideUI());
+        }
+
+        switch (type)
+        {
+            case SkillType.Fireball:
+                Fireball();
+                break;
+
+            case SkillType.Dash:
+                StartCoroutine(Dash());
+                break;
+
+            case SkillType.Roar:
+                Roar();
+                break;
+        }
     }
 
-    lastUsedTime[type] = Time.time;
-    currentSkill = data;
-
-    Debug.Log("스킬 사용: " + data.skillName);
-
-    if (data.effectType == SkillEffectType.Buff)
+    IEnumerator HideUI()
     {
-        Debug.Log("버프 스킬");
+        yield return new WaitForSeconds(2f);
+        if (skillUI != null)
+            skillUI.SetActive(false);
     }
-    else if (data.effectType == SkillEffectType.Debuff)
-    {
-        Debug.Log("디버프 스킬");
-    }
-
-    switch (type)
-    {
-        case SkillType.Fireball:
-            Fireball();
-            break;
-
-        case SkillType.Dash:
-            StartCoroutine(Dash());
-            break;
-
-        case SkillType.Roar:
-            Roar();
-            break;
-    }
-}
 
     void Fireball()
     {
         Vector3 spawnPos = transform.position + transform.right * 2f;
-        Instantiate(fireballPrefab, spawnPos, Quaternion.identity);
+        Instantiate(fireballPrefab, spawnPos, transform.rotation);
     }
 
     IEnumerator Dash()
-{
-    float dashSpeed = 25f;
-    float dashTime = 0.15f;
-    float hitRadius = 1.5f;
-
-    float startTime = Time.time;
-    Vector2 dir = transform.right;
-
-    while (Time.time < startTime + dashTime)
     {
-        rb.linearVelocity = dir * dashSpeed;
+        float dashSpeed = 25f;
+        float dashTime = 0.15f;
+        float hitRadius = 1.5f;
 
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, hitRadius);
+        isDashing = true;
 
-        foreach (Collider2D hit in hits)
+        float startTime = Time.time;
+        Vector2 dir = transform.right;
+
+        while (Time.time < startTime + dashTime)
         {
-            if (hit.CompareTag("Enemy"))
-            {
-                if (currentSkill.effectType == SkillEffectType.Debuff)
-                {
-                    Enemy enemy = hit.GetComponent<Enemy>();
+            rb.linearVelocity = dir * dashSpeed;
 
-                    if (enemy != null)
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, hitRadius);
+
+            foreach (Collider2D hit in hits)
+            {
+                if (hit.CompareTag("Enemy"))
+                {
+                    if (currentSkill.effectType == SkillEffectType.Debuff)
                     {
-                        // enemy.ApplySlow(2f, 0.5f);
+                        Enemy enemy = hit.GetComponent<Enemy>();
+
+                        if (enemy != null)
+                        {
+                            // enemy.ApplySlow(2f, 0.5f);
+                        }
                     }
                 }
             }
+
+            yield return null;
         }
 
-        yield return null;
+        rb.linearVelocity = Vector2.zero;
+        isDashing = false;
     }
-
-    rb.linearVelocity = Vector2.zero;
-}
 
     void Roar()
 {
-    float radius = 3f;
-
-    Debug.Log("포효!!!");
+    float radius = 5f;
 
     GameObject fx = Instantiate(roarEffectPrefab, transform.position, Quaternion.identity);
+
+    fx.transform.SetParent(transform);
 
     Destroy(fx, 2f);
 
@@ -145,16 +151,11 @@ public class Skill : MonoBehaviour
     {
         if (hit.CompareTag("Enemy"))
         {
-            Debug.Log("포효 데미지!");
+            Enemy enemy = hit.GetComponent<Enemy>();
 
-            if (currentSkill.effectType == SkillEffectType.Debuff)
+            if (enemy != null)
             {
-                Enemy enemy = hit.GetComponent<Enemy>();
-
-                if (enemy != null)
-                {
-                    // enemy.ApplySlow(2f, 0.5f);
-                }
+                // enemy.ApplySlow(2f, 0.5f);
             }
         }
     }
@@ -184,24 +185,6 @@ public class Skill : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, 3f);
+        Gizmos.DrawWireSphere(transform.position, 5f);
     }
-
-    void OnCollisionEnter2D(Collision2D collision)
-{
-    if (isDashing && currentSkill.effectType == SkillEffectType.Debuff)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            // Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-
-            // if (enemy != null)
-            // {
-            //     enemy.ApplySlow(2f, 0.5f);
-            //     Debug.Log("대시 디버프 적용!");
-            // }
-        }
-    }
-}
-
 }
