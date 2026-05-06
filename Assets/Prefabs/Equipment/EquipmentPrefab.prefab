@@ -170,4 +170,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be57281b168e0e24bbfddfc7d03197f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentTemp2
-  Equipments: []
+  equipmentData: {fileID: 0}
+  outlineObject: {fileID: 7361449958033169289, guid: 984d391945434f84bb340d720d748388, type: 3}

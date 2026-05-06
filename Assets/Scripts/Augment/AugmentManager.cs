@@ -20,10 +20,12 @@ public class AugmentManager : MonoBehaviour
             augmentPanel.SetActive(false);
     }
 
+    /*
     private void Start()
     {
         OpenAugment(1);
     }
+    */
 
     /// 게임을 중단하고 증강 3개를 보여준다.
     public void OpenAugment(int level)
