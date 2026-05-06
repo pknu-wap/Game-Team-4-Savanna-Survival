@@ -7,7 +7,7 @@ public class WaterZone : MonoBehaviour
     private float length;
     private float width;
 
-    private PlayerDummy playerInZone;
+    private PlayerStatCore playerStatCore;
 
     private float tickInterval = 0.5f;
     private float tickTimer;
@@ -33,13 +33,15 @@ public class WaterZone : MonoBehaviour
             return;
         }
 
-        if (playerInZone != null)
+        if (playerStatCore != null)
         {
             tickTimer += Time.deltaTime;
 
             if (tickTimer >= tickInterval)
             {
-                playerInZone.TakeDamage(damagePerSecond * tickInterval);
+                float currentHp = playerStatCore.getStat(StatType.HEALTH).rawValue;
+                float next      = Mathf.Max(0f, currentHp - damagePerSecond * tickInterval);
+                playerStatCore.registerStat(StatType.HEALTH, next);
                 tickTimer = 0f;
             }
         }
@@ -47,15 +49,19 @@ public class WaterZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (playerInZone != null) return;
-        PlayerDummy pd = other.GetComponent<PlayerDummy>();
-        if (pd != null) playerInZone = pd;
+        if (playerStatCore != null) return;
+
+        if (!other.CompareTag("Player")) return;
+
+        playerStatCore = other.GetComponent<PlayerStatManager>()?.StatCore;
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        PlayerDummy pd = other.GetComponent<PlayerDummy>();
-        if (pd != null && pd == playerInZone)
-            playerInZone = null;
+        if (!other.CompareTag("Player")) return;
+
+        PlayerStatCore exiting = other.GetComponent<PlayerStatManager>()?.StatCore;
+        if (exiting == playerStatCore)
+            playerStatCore = null;
     }
 }
