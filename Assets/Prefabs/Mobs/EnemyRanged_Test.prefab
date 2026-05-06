@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -712631045867808456, guid: b670ab75dde984907b8570040daa08c5, type: 3}
+  m_Sprite: {fileID: -4798825762170945512, guid: b8f8b584e4f37d948ad7ec41aa4bfe4d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -176,9 +176,9 @@ MonoBehaviour:
   hungerReward: 10
   moveSpeed: 2
   maxHp: 40
-  damage: 8
-  detectionRange: 8
-  preferredRange: 3
+  damage: 5
+  detectionRange: 7
+  preferredRange: 4
   attackRange: 5
   attackInterval: 2.5
   wanderRadius: 2
