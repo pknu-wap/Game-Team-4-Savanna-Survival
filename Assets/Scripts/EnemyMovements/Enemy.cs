@@ -124,4 +124,17 @@ public abstract class Enemy : MonoBehaviour
     //     // if (sr != null)
     //     //     sr.color = Color.white;
     // }
+    private void AddPlayerHunger(float amount)
+    {
+        if (playerStatCore == null) return;
+
+        float current   = playerStatCore.getStat(StatType.HUNGER).rawValue;
+        float maxHunger = playerStatCore.getStat(StatType.MAX_HUNGER).rawValue;
+        float next      = Mathf.Min(current + amount, maxHunger);
+
+        playerStatCore.registerStat(StatType.HUNGER, next);
+
+        Debug.Log($"[적 처치 보상] {gameObject.name} 처치" +
+                  $"\n 배고픔 +{amount} ({current:F1} → {next:F1} / {maxHunger:F1})");
+    }
 }
