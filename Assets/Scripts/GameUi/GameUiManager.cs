@@ -11,9 +11,10 @@ public class GameUIManager : MonoBehaviour
     {
         ShowStartUI();
 
-        if (SceneManager.GetActiveScene().name == "map-time_system")
+        if (SceneManager.GetActiveScene().name == "Start Scene")
         {
-            Time.timeScale = 1f;
+        startUI.SetActive(false);
+        gameUI.SetActive(true);
         }
     }
 

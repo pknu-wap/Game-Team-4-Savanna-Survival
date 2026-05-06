@@ -4,7 +4,8 @@ using UnityEngine.SceneManagement;
 public class SettingUiManager : MonoBehaviour
 {
     public GameObject settingUI;
-
+    public GameObject startUI;
+    public GameObject gameUI;
     void Start()
     {
         settingUI.SetActive(false);
@@ -27,7 +28,9 @@ public class SettingUiManager : MonoBehaviour
 
     public void OnExitButton()
     {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("Start Scene");
+        Time.timeScale = 0f;
+        startUI.SetActive(true);
+        gameUI.SetActive(false);
+        settingUI.SetActive(false);
     }
 }

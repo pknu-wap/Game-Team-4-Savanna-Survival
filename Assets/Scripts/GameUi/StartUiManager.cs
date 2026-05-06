@@ -7,13 +7,14 @@ public class StartUIManager : MonoBehaviour
 
     void Start()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 0f;
         startUI.SetActive(true);
     }
 
     public void OnStartButton()
     {
-        SceneManager.LoadScene("map-time_system");
+        startUI.SetActive(false);
+        Time.timeScale = 1f;
     }
 
     public void OnEndButton()

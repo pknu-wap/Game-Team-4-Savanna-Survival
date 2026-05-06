@@ -5727,7 +5727,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 260, y: 164}
+  m_AnchoredPosition: {x: 386, y: 127}
   m_SizeDelta: {x: -656, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1079702623
@@ -6404,7 +6404,7 @@ RectTransform:
   m_GameObject: {fileID: 1303386652}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.225, y: 1.1333, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 323042603}
@@ -9185,7 +9185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingUiManager
   settingUI: {fileID: 837841057}
-  startUI: {fileID: 1059505232}
+  startUI: {fileID: 1248011850}
   gameUI: {fileID: 184044098}
 --- !u!4 &2028296620
 Transform:
