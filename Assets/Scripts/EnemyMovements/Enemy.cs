@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
@@ -99,19 +100,28 @@ public abstract class Enemy : MonoBehaviour
 
         Destroy(gameObject);
     }
+    // public void ApplySlow(float duration, float slowPercent)
+    // {
+    //     if (slowCoroutine != null)
+    //     {
+    //         StopCoroutine(slowCoroutine);
+    //     }
 
-    private void AddPlayerHunger(float amount)
-    {
-        if (playerStatCore == null) return;
+    //     slowCoroutine = StartCoroutine(Slow(duration, slowPercent));
+    // }
 
-        float current   = playerStatCore.getStat(StatType.HUNGER).rawValue;
-        float maxHunger = playerStatCore.getStat(StatType.MAX_HUNGER).rawValue;
-        float next      = Mathf.Min(current + amount, maxHunger);
+    // IEnumerator Slow(float duration, float slowPercent)
+    // {
+    //     moveSpeed = originalSpeed * (1f - slowPercent);
 
-        playerStatCore.registerStat(StatType.HUNGER, next);
+    //     // if (sr != null)
+    //     //     sr.color = Color.blue;
 
-        Debug.Log($"[적 처치 보상] {gameObject.name} 처치" +
-                  $"\n 배고픔 +{amount} ({current:F1} → {next:F1} / {maxHunger:F1})");
-    }
+    //     yield return new WaitForSeconds(duration);
+
+    //     moveSpeed = originalSpeed;
+
+    //     // if (sr != null)
+    //     //     sr.color = Color.white;
+    // }
 }
-    
