@@ -174,7 +174,7 @@ MonoBehaviour:
   contactDamage: 5
   contactCooldown: 1
   hungerReward: 10
-  moveSpeed: 2
+  moveSpeed: 6
   maxHp: 40
   damage: 5
   detectionRange: 7
