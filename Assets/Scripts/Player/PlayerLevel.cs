@@ -26,8 +26,16 @@ public class PlayerLevel : MonoBehaviour
             currentExp -= maxExp;
             level++;
             maxExp *= 1.2f; //임시 레벨업 경험치통 증가 수치
-            // 레벨업 이벤트 호출
-            Debug.Log("레벨업! 현재 레벨: " + level);
+
+            if (AugmentManager.Instance != null)
+            {
+                AugmentManager.Instance.OpenAugment((int)level);
+            }
+            else
+            {
+                Debug.Log("PlayerLevel: AugmentManager.Instance가 없음");
+            }
+            Debug.LogError("레벨업! 현재 레벨: " + level);
         }
 
         statCore.registerStat(StatType.EXP, currentExp);
