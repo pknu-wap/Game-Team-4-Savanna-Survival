@@ -32,8 +32,8 @@ TagManager:
   - Dummy
   - Player_Attack
   - Equipment
-  - 
-  - 
+  - Enemy
+  - Enemy_Attack
   - 
   - 
   - 
