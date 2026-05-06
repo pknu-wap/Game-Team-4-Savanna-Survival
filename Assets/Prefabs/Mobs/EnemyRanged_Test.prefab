@@ -178,7 +178,7 @@ MonoBehaviour:
   maxHp: 40
   damage: 5
   detectionRange: 7
-  preferredRange: 4
+  preferredRange: 5
   attackRange: 5
   attackInterval: 2.5
   wanderRadius: 2
