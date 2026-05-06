@@ -1,38 +1,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartUiManager : MonoBehaviour
+public class StartUIManager : MonoBehaviour
 {
-    public GameObject startUi;
-
-    public GameObject timeUi;
+    public GameObject startUI;
 
     void Start()
     {
-        Time.timeScale = 0f;
-        startUi.SetActive(true);
-
-        timeUi = GameObject.Find("TimeCanvas");
-
-        if (timeUi != null)
-        {
-            timeUi.SetActive(false);
-        }
+        Time.timeScale = 1f;
+        startUI.SetActive(true);
     }
 
     public void OnStartButton()
     {
-        if (timeUi == null)
-        {
-            timeUi = GameObject.Find("TimeCanvas");
-        }
-
-        if (timeUi != null)
-        {
-            timeUi.SetActive(true);
-        }
-
-        Time.timeScale = 1f;
         SceneManager.LoadScene("map-time_system");
     }
 
