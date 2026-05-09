@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EquipmentSystem : MonoBehaviour
+public class EquipmentPickup : MonoBehaviour
 {
     [Header("장비 데이터")]
     [SerializeField] private EquipmentData equipmentData;

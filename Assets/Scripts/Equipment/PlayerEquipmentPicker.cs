@@ -4,10 +4,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerEquipmentPicker : MonoBehaviour
 {
-    private readonly List<EquipmentSystem> nearbyEquipments = new List<EquipmentSystem>();
+    private readonly List<EquipmentPickup> nearbyEquipments = new List<EquipmentPickup>();
 
     private PlayerStatManager playerStatManager;
-    private EquipmentSystem selectedEquipment;
+    private EquipmentPickup selectedEquipment;
 
     private void Awake()
     {
@@ -39,7 +39,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
         pickUpSelectedEquipment();
     }
 
-    public void addNearbyEquipment(EquipmentSystem equipment)
+    public void addNearbyEquipment(EquipmentPickup equipment)
     {
         if (equipment == null)
         {
@@ -54,7 +54,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
         nearbyEquipments.Add(equipment);
     }
 
-    public void removeNearbyEquipment(EquipmentSystem equipment)
+    public void removeNearbyEquipment(EquipmentPickup equipment)
     {
         if (equipment == null)
         {
@@ -72,7 +72,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
 
     private void selectClosestEquipment()
     {
-        EquipmentSystem closestEquipment = getClosestEquipment();
+        EquipmentPickup closestEquipment = getClosestEquipment();
 
         if (selectedEquipment == closestEquipment)
         {
@@ -92,14 +92,14 @@ public class PlayerEquipmentPicker : MonoBehaviour
         }
     }
 
-    private EquipmentSystem getClosestEquipment()
+    private EquipmentPickup getClosestEquipment()
     {
-        EquipmentSystem closestEquipment = null;
+        EquipmentPickup closestEquipment = null;
         float closestDistanceSqr = float.MaxValue;
 
         for (int i = nearbyEquipments.Count - 1; i >= 0; i--)
         {
-            EquipmentSystem equipment = nearbyEquipments[i];
+            EquipmentPickup equipment = nearbyEquipments[i];
 
             if (equipment == null)
             {
@@ -121,7 +121,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
 
     private void pickUpSelectedEquipment()
     {
-        EquipmentSystem equipmentToPickUp = selectedEquipment;
+        EquipmentPickup equipmentToPickUp = selectedEquipment;
 
         if (equipmentToPickUp == null)
         {
