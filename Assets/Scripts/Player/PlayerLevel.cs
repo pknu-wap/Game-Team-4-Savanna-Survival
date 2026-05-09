@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerLevel : MonoBehaviour
 {
     public PlayerStatCore statCore;
+    private PlayerMovement playerMovement;
     private float currentExp;
     private float maxExp;
     private float level;
@@ -11,6 +12,8 @@ public class PlayerLevel : MonoBehaviour
     {
         PlayerStatManager playerStatManager = GetComponent<PlayerStatManager>();
         statCore = playerStatManager.StatCore;
+
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     public void addExp(float value)
@@ -23,6 +26,8 @@ public class PlayerLevel : MonoBehaviour
 
         while (currentExp >= maxExp)
         {
+            playerMovement.stopMove();
+
             currentExp -= maxExp;
             level++;
             maxExp *= 1.2f; //임시 레벨업 경험치통 증가 수치

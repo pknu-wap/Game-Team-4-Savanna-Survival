@@ -48,7 +48,7 @@ public class PlayerHp : MonoBehaviour
             }
             statCore.registerStat(StatType.HEALTH, currentHp);
             currentTime = 0;
-            Debug.Log("현재 체력: " + currentHp);
+            // Debug.Log("현재 체력: " + currentHp);    
         }
     }
 

@@ -10,6 +10,9 @@ public class AugmentManager : MonoBehaviour
     [SerializeField] private GameObject augmentPanel;
     [SerializeField] private AugmentChoiceButton[] choiceButtons;
 
+    // 증강 선택시 움직임 차단
+    [SerializeField] private PlayerMovement playerMovement;
+
     private int currentLevel;
     private bool isOpen;
 
@@ -66,6 +69,9 @@ public class AugmentManager : MonoBehaviour
         augmentPanel.SetActive(false);
         isOpen = false;
         Time.timeScale = 1f;
+
+        // 증강 선택시 움직임 차단
+        playerMovement.reStartMove(); 
     }
 
     /// 전체 증강 목록에서 count개를 중복 없이 랜덤 선택한다.

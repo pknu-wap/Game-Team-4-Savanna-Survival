@@ -54,4 +54,10 @@ public class PlayerMovement : MonoBehaviour
         canMove = false;
         moveDirection = Vector3.zero;
     }
+
+    public void reStartMove()
+    {
+        canMove = true;
+        animator.SetBool("isMoving", false);
+    }
 }
