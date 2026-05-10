@@ -205,7 +205,7 @@ GameObject:
   - component: {fileID: 28616445}
   m_Layer: 22
   m_Name: camera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1536,7 +1536,7 @@ MonoBehaviour:
   - 3
   - 3
   - 2
-  dayInterval: 2
+  baseInterval: 1
 --- !u!4 &233990444
 Transform:
   m_ObjectHideFlags: 0
@@ -3051,7 +3051,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  attemptsPerChunk: 3
 --- !u!4 &828986719
 Transform:
   m_ObjectHideFlags: 0
