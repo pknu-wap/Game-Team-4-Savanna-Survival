@@ -630,6 +630,7 @@ RectTransform:
   m_Children:
   - {fileID: 1991369657}
   - {fileID: 1444324584}
+  - {fileID: 1870327628}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3960,6 +3961,10 @@ PrefabInstance:
       propertyPath: outlineObject
       value: 
       objectReference: {fileID: 1749048419}
+    - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: equipmentInventory
+      value: 
+      objectReference: {fileID: 1526872032}
     - target: {fileID: 3885541636237828980, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
       propertyPath: m_Color.b
       value: 0.23713294
@@ -4496,6 +4501,10 @@ PrefabInstance:
     - target: {fileID: 962449065283664708, guid: 6fa1a4a7cea6d0843bdaf9e7b3c5e84d, type: 3}
       propertyPath: m_Name
       value: ExpOrb
+      objectReference: {fileID: 0}
+    - target: {fileID: 962449065283664708, guid: 6fa1a4a7cea6d0843bdaf9e7b3c5e84d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6686318397589978865, guid: 6fa1a4a7cea6d0843bdaf9e7b3c5e84d, type: 3}
       propertyPath: expAmount
@@ -5289,6 +5298,7 @@ GameObject:
   - component: {fileID: 1526872020}
   - component: {fileID: 1526872019}
   - component: {fileID: 1526872031}
+  - component: {fileID: 1526872032}
   - component: {fileID: 1526872018}
   m_Layer: 22
   m_Name: Player
@@ -5331,6 +5341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21173a1313d67454a8d5ac7a33dd0620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEquipmentPicker
+  equipmentInventory: {fileID: 1526872032}
 --- !u!114 &1526872020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5613,6 +5624,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputRelay
   statDetailPanel: {fileID: 93224116}
+--- !u!114 &1526872032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1526872017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b4649ac7fa5eb14d98c128f74563318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EquipmentInventory
+  playerStatManager: {fileID: 1526872023}
 --- !u!1 &1585440094
 GameObject:
   m_ObjectHideFlags: 0
@@ -6650,6 +6674,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1865069105}
   m_CullTransparentMesh: 1
+--- !u!1 &1870327627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1870327628}
+  - component: {fileID: 1870327630}
+  - component: {fileID: 1870327629}
+  m_Layer: 5
+  m_Name: Inventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1870327628
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870327627}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 93224115}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 268, y: -14.94043}
+  m_SizeDelta: {x: -561.9403, y: -62.5225}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1870327629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870327627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0.8627451}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1870327630
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870327627}
+  m_CullTransparentMesh: 1
 --- !u!1001 &1900312376
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6744,6 +6843,10 @@ PrefabInstance:
       propertyPath: outlineObject
       value: 
       objectReference: {fileID: 1848982613}
+    - target: {fileID: 2793720753241203544, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
+      propertyPath: equipmentInventory
+      value: 
+      objectReference: {fileID: 1526872032}
     - target: {fileID: 3885541636237828980, guid: 4eaaf486a6f04d341a7e99b0d3a985ba, type: 3}
       propertyPath: m_Color.b
       value: 0.3812271

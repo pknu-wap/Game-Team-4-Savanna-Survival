@@ -6,21 +6,16 @@ public class PlayerEquipmentPicker : MonoBehaviour
 {
     private readonly List<EquipmentPickup> nearbyEquipments = new List<EquipmentPickup>();
 
-    private PlayerStatManager playerStatManager;
+    [SerializeField] private EquipmentInventory equipmentInventory;
     private EquipmentPickup selectedEquipment;
-
-    private void Awake()
-    {
-        playerStatManager = GetComponentInParent<PlayerStatManager>();
-
-        if (playerStatManager == null)
-        {
-            Debug.LogError("PlayerEquipmentPicker: PlayerStatManager를 못찾음");
-        }
-    }
 
     private void Update()
     {
+        if (nearbyEquipments.Count <= 0)
+        {
+            return;
+        }
+        
         selectClosestEquipment();
     }
 
@@ -41,11 +36,6 @@ public class PlayerEquipmentPicker : MonoBehaviour
 
     public void addNearbyEquipment(EquipmentPickup equipment)
     {
-        if (equipment == null)
-        {
-            return;
-        }
-
         if (nearbyEquipments.Contains(equipment))
         {
             return;
@@ -56,11 +46,6 @@ public class PlayerEquipmentPicker : MonoBehaviour
 
     public void removeNearbyEquipment(EquipmentPickup equipment)
     {
-        if (equipment == null)
-        {
-            return;
-        }
-
         if (equipment == selectedEquipment)
         {
             selectedEquipment.setOutline(false);
@@ -95,23 +80,17 @@ public class PlayerEquipmentPicker : MonoBehaviour
     private EquipmentPickup getClosestEquipment()
     {
         EquipmentPickup closestEquipment = null;
-        float closestDistanceSqr = float.MaxValue;
+        float closestDistance = 100f;
 
         for (int i = nearbyEquipments.Count - 1; i >= 0; i--)
         {
             EquipmentPickup equipment = nearbyEquipments[i];
 
-            if (equipment == null)
-            {
-                nearbyEquipments.RemoveAt(i);
-                continue;
-            }
+            float distance = Vector2.Distance(transform.position, equipment.transform.position);
 
-            float distanceSqr = ((Vector2)transform.position - (Vector2)equipment.transform.position).sqrMagnitude;
-
-            if (distanceSqr < closestDistanceSqr)
+            if (distance < closestDistance)
             {
-                closestDistanceSqr = distanceSqr;
+                closestDistance = distance;
                 closestEquipment = equipment;
             }
         }
@@ -121,17 +100,11 @@ public class PlayerEquipmentPicker : MonoBehaviour
 
     private void pickUpSelectedEquipment()
     {
-        EquipmentPickup equipmentToPickUp = selectedEquipment;
+        nearbyEquipments.Remove(selectedEquipment);
+        
+        selectedEquipment.setOutline(false);
+        selectedEquipment.pickUp(equipmentInventory);
 
-        if (equipmentToPickUp == null)
-        {
-            return;
-        }
-
-        nearbyEquipments.Remove(equipmentToPickUp);
         selectedEquipment = null;
-
-        equipmentToPickUp.setOutline(false);
-        equipmentToPickUp.pickUp(playerStatManager);
     }
 }

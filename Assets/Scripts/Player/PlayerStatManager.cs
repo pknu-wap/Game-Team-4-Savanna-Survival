@@ -89,11 +89,20 @@ public class PlayerStatManager : MonoBehaviour
     }
 
     //장비스탯 리스트의 스탯 반영
-    public void applyEquipmentList(List<EquipmentStat> equipmentStats) 
+    public void applyEquipmentStat(List<EquipmentStat> equipmentStats) 
     {
         foreach (EquipmentStat equipmentStat in equipmentStats) 
         {
             statCore.addStat(equipmentStat.statType, equipmentStat.value);
+        }
+        refreshInspectorValue();
+    }
+
+    public void removeEquipmentStat(List<EquipmentStat> equipmentStats)
+    {
+        foreach (EquipmentStat equipmentStat in equipmentStats) 
+        {
+            statCore.addStat(equipmentStat.statType, -equipmentStat.value);
         }
         refreshInspectorValue();
     }
