@@ -8,7 +8,7 @@ public enum EquipmentSlotArea
     Equipped
 }
 
-public class InventoryDrag : MonoBehaviour, IBeginDragHandler, IDropHandler
+public class InventoryDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     [Header("슬롯")]
     // 인벤 위아래 구분
@@ -18,7 +18,8 @@ public class InventoryDrag : MonoBehaviour, IBeginDragHandler, IDropHandler
 
     [Header("UI 표시")]
     // 이 슬롯의 장비 텍스트
-    [SerializeField] private TMP_Text slotNameText;
+    // [SerializeField] private TMP_Text slotNameText;
+    // image
 
     [Header("스크립트")]
     [SerializeField] private EquipmentInventory equipmentInventory;
@@ -27,32 +28,19 @@ public class InventoryDrag : MonoBehaviour, IBeginDragHandler, IDropHandler
     // 현재 드래그중인 장비
     private EquipmentData currentEquipment;
     private static InventoryDrag currentDragging;
-    
-    // get
-    public EquipmentSlotArea SlotArea
-    {
-        get { return slotArea; }
-    }
-    public int SlotIndex
-    {
-        get { return slotIndex; }
-    }
-    public EquipmentData CurrentEquipment
-    {
-        get { return currentEquipment; }
-    }
 
     public void setSlot(EquipmentData equipment)
     {
         currentEquipment = equipment;
-        if (currentEquipment = null)
+        if (currentEquipment == null)
         {
-            slotNameText.text = "";
+            // slotNameText.text = "";
             // image false
             return;
         }
-        slotNameText.text = currentEquipment.equipmentName;
+        // slotNameText.text = currentEquipment.equipmentName;
         // image true
+        // 분리해야할듯
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -64,11 +52,23 @@ public class InventoryDrag : MonoBehaviour, IBeginDragHandler, IDropHandler
             return;
         }
         currentDragging = this;
+        // Debug.Log("드래그 시작");
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        // Debug.Log("드래그 중");
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        // Debug.Log("드래그 끝");
     }
 
     // 다른 슬롯 위에 드롭했을 때 호출됨
     public void OnDrop(PointerEventData eventData)
     {
+        // Debug.Log("드래그 드랍 호출");
         // 드래그 시작 슬롯이 없으면
         if (currentDragging == null)
         {
@@ -83,51 +83,56 @@ public class InventoryDrag : MonoBehaviour, IBeginDragHandler, IDropHandler
         }
 
         // 드래그한 슬롯의 장비
-        EquipmentData tempFromEquipment = currentDragging.CurrentEquipment;
+        EquipmentData tempFromEquipment = currentDragging.currentEquipment;
 
         // 드롭한 슬롯의 기존 장비
         EquipmentData tempToEquipment = currentEquipment;
 
         // 인벤 -> 장착
-        if (currentDragging.SlotArea == EquipmentSlotArea.Inventory && slotArea == EquipmentSlotArea.Equipped)
+        if (currentDragging.slotArea == EquipmentSlotArea.Inventory && slotArea == EquipmentSlotArea.Equipped)
         {
             inventoryMove.moveBagToEquip(
-                currentDragging.SlotIndex,
+                currentDragging.slotIndex,
                 slotIndex,
                 tempFromEquipment,
                 tempToEquipment
             );
+            Debug.Log("인벤 -> 장착");
         }
         // 인벤 -> 인벤
-        else if (currentDragging.SlotArea == EquipmentSlotArea.Inventory && slotArea == EquipmentSlotArea.Inventory)
+        else if (currentDragging.slotArea == EquipmentSlotArea.Inventory && slotArea == EquipmentSlotArea.Inventory)
         {
             inventoryMove.moveBagToBag(
-                currentDragging.SlotIndex,
+                currentDragging.slotIndex,
                 slotIndex,
                 tempFromEquipment,
                 tempToEquipment
             );
+            Debug.Log("인벤 -> 인벤");
         }
         // 장착 → 인벤
-        else if (currentDragging.SlotArea == EquipmentSlotArea.Equipped && slotArea == EquipmentSlotArea.Inventory)
+        else if (currentDragging.slotArea == EquipmentSlotArea.Equipped && slotArea == EquipmentSlotArea.Inventory)
         {
             inventoryMove.moveEquipToBag(
-                currentDragging.SlotIndex,
+                currentDragging.slotIndex,
                 slotIndex,
                 tempFromEquipment,
                 tempToEquipment
             );
+            Debug.Log("장착 -> 인벤");
         }
         // 장착 → 장착
-        else if (currentDragging.SlotArea == EquipmentSlotArea.Equipped && slotArea == EquipmentSlotArea.Equipped)
+        else if (currentDragging.slotArea == EquipmentSlotArea.Equipped && slotArea == EquipmentSlotArea.Equipped)
         {
             inventoryMove.moveEquipToEquip(
-                currentDragging.SlotIndex,
+                currentDragging.slotIndex,
                 slotIndex,
                 tempFromEquipment,
                 tempToEquipment
             );
+            Debug.Log("장착 -> 장착");
         }
         currentDragging = null;
+        // Debug.Log("드래그 완료");
     }
 }

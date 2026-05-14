@@ -15,9 +15,9 @@ public class EquipmentInventory : MonoBehaviour
 
     public EquipmentData getBag(int index)
     {
-        if (bagItems[index].equipmentData == null)
+        if (bagItems[index] == null)
         {
-            Debug.LogError("null return");
+            Debug.LogWarning("null return");
             return null;
         }
         return bagItems[index].equipmentData;
@@ -25,9 +25,9 @@ public class EquipmentInventory : MonoBehaviour
 
     public EquipmentData getEquipped(int index)
     {
-        if (equippedItems[index].equipmentData == null)
+        if (equippedItems[index] == null)
         {
-            Debug.LogError("null return");
+            Debug.LogWarning("null return");
             return null;
         }
         return equippedItems[index].equipmentData;
@@ -39,10 +39,7 @@ public class EquipmentInventory : MonoBehaviour
         {
             bagItems[index] = null;
         }
-        else
-        {
-            bagItems[index] = new EquipmentInventoryData(equipment);
-        }
+        bagItems[index] = new EquipmentInventoryData(equipment);
         notifyInventoryChanged();
     }
 
@@ -52,10 +49,7 @@ public class EquipmentInventory : MonoBehaviour
         {
             equippedItems[index] = null;
         }
-        else
-        {
-            equippedItems[index] = new EquipmentInventoryData(equipment);
-        }
+        equippedItems[index] = new EquipmentInventoryData(equipment);
         notifyInventoryChanged();
     }
 

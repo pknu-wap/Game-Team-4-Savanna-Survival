@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Temp_Hp-100
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentData
   equipmentId: Temp_Hp-100
-  equipmentName: 
+  equipmentName: SiNe
   equipmentStats:
   - statType: 2
     value: -100

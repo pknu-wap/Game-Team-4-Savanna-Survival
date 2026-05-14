@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EquipmentTemp1
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentData
   equipmentId: temp1
-  equipmentName: 
+  equipmentName: TEMP1
   equipmentStats:
   - statType: 0
     value: 10

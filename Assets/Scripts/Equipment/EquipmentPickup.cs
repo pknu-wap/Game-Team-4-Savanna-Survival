@@ -16,7 +16,7 @@ public class EquipmentPickup : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        PlayerEquipmentPicker playerEquipmentPicker = other.GetComponent<PlayerEquipmentPicker>();
+        PlayerEquipmentPicker playerEquipmentPicker = other.GetComponentInChildren<PlayerEquipmentPicker>();
 
         if (playerEquipmentPicker == null)
         {
@@ -28,7 +28,7 @@ public class EquipmentPickup : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        PlayerEquipmentPicker playerEquipmentPicker = other.GetComponent<PlayerEquipmentPicker>();
+        PlayerEquipmentPicker playerEquipmentPicker = other.GetComponentInChildren<PlayerEquipmentPicker>();
 
         if (playerEquipmentPicker == null)
         {

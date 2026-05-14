@@ -4,8 +4,9 @@ using UnityEngine.InputSystem;
 public class PlayerInputRelay : MonoBehaviour
 {
     [SerializeField] private StatDetailPanel statDetailPanel;
+    [SerializeField] private PlayerEquipmentPicker playerEquipmentPicker;
 
-    public void OnStatDetailPanel(InputValue value)
+    public void OnStatAndInventory(InputValue value)
     {
         if (value.isPressed == false)
         {
@@ -14,4 +15,14 @@ public class PlayerInputRelay : MonoBehaviour
 
         statDetailPanel.toggleStatDetailPanel();
     }
+
+    public void OnInteract(InputValue value)
+    {
+        if (value.isPressed == false)
+        {
+            return;
+        }
+
+        playerEquipmentPicker.toggleInteract();
+    } 
 }

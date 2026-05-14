@@ -19,6 +19,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
         selectClosestEquipment();
     }
 
+    /*
     public void OnInteract(InputValue value)
     {
         if (value.isPressed == false)
@@ -26,6 +27,17 @@ public class PlayerEquipmentPicker : MonoBehaviour
             return;
         }
 
+        if (selectedEquipment == null)
+        {
+            return;
+        }
+
+        pickUpSelectedEquipment();
+    } 
+    */
+
+    public void toggleInteract()
+    {
         if (selectedEquipment == null)
         {
             return;
