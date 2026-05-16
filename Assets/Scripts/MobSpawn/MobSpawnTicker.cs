@@ -10,8 +10,8 @@ public class MobSpawnTicker : MonoBehaviour
     [SerializeField] private MobSpawnData daySpawnData;
     [SerializeField] private MobSpawnData nightSpawnData;
     [SerializeField] private List<float> nightIntervals = new() { 6f, 6f, 5f, 4f, 3f };
-    //nightIntervals가 비어있을 때만 사용되는 폴백 값
-    [SerializeField] private float baseInterval = 3f;
+    /// 낮 시간 동안 사용되는 소환 간격 (초)
+    [SerializeField] private float dayInterval = 3f;
 
     private Coroutine tickerCoroutine;
 
@@ -23,9 +23,31 @@ public class MobSpawnTicker : MonoBehaviour
         StartTicker();
     }
 
+    private void Start()
+    {
+        if (TimeManager.Instance != null)
+        {
+            TimeManager.Instance.OnTimeStateChanged += HandleTimeStateChanged;
+        }
+    }
+
     private void OnDisable()
     {
         StopTicker();
+    }
+
+    private void OnDestroy()
+    {
+        if (TimeManager.Instance != null)
+        {
+            TimeManager.Instance.OnTimeStateChanged -= HandleTimeStateChanged;
+        }
+    }
+
+    private void HandleTimeStateChanged(bool isDay)
+    {
+        // 시간이 변경되면 기존 대기를 취소하고 즉시 새로운 주기로 재시작
+        StartTicker();
     }
 
     /// 틱 루프 시작
@@ -76,8 +98,8 @@ public class MobSpawnTicker : MonoBehaviour
     }
 
     /// 현재 시간 진행률에 따라 소환 간격 계산 (감쇄 적용)
-    /// 0.0~0.4: baseInterval * 1.0x
-    /// 0.4~1.0: baseInterval * Lerp(1.0f, 3.0f, progress)
+    /// 0.0~0.4: 기준 간격 * 1.0x
+    /// 0.4~1.0: 기준 간격 * Lerp(1.0f, 3.0f, progress)
     private float CalculateCurrentInterval()
     {
         float baseInt = GetBaseInterval();
@@ -100,6 +122,13 @@ public class MobSpawnTicker : MonoBehaviour
     /// TimeManager.NightCount를 사용하여 정확한 밤 횟수 카운트
     private float GetBaseInterval()
     {
+        // 1. 낮일 때는 무조건 dayInterval을 사용
+        if (TimeManager.Instance.IsDay)
+        {
+            return dayInterval;
+        }
+
+        // 2. 밤일 때는 회차별 간격 사용
         int nightCount = TimeManager.Instance.NightCount;
 
         if (nightCount < nightIntervals.Count)
@@ -107,8 +136,14 @@ public class MobSpawnTicker : MonoBehaviour
             return nightIntervals[nightCount];
         }
 
-        // 범위를 넘으면 마지막 값 반복
-        return nightIntervals.Count > 0 ? nightIntervals[nightIntervals.Count - 1] : baseInterval;
+        // 3. 리스트 범위를 벗어난 경우 마지막 값 유지
+        if (nightIntervals.Count > 0)
+        {
+            return nightIntervals[nightIntervals.Count - 1];
+        }
+
+        // 리스트가 아예 비어있는 경우에만 dayInterval로 폴백
+        return dayInterval;
     }
 
     /// 가중치 기반으로 몹 엔트리 선택

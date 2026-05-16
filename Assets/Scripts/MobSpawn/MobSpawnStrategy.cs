@@ -12,6 +12,7 @@ public class MobSpawnStrategy : MonoBehaviour
     [SerializeField] private int maxWalkableRetries = 10;
     [SerializeField] private float walkableCheckRadius = 0.5f;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private int attemptsPerChunk = 3;
 
     private ChunkPoolManager chunkPoolManager;
     private MobSpawnTicker mobSpawnTicker;
@@ -111,6 +112,15 @@ public class MobSpawnStrategy : MonoBehaviour
         if (!TimeManager.Instance.IsDay || daySpawnData == null)
             return;
 
+        for (int i = 0; i < attemptsPerChunk; i++)
+        {
+            TrySpawnInChunk(chunk);
+        }
+    }
+
+    /// 청크 내에서 1회 소환 시도 (한 무리 생성)
+    private void TrySpawnInChunk(ChunkEntity chunk)
+    {
         if (daySpawnData.mobEntries.Count == 0)
             return;
 

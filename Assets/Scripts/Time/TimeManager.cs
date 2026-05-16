@@ -2,11 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Layer 2: TimeManager - 상태 및 이벤트 허브
-/// TimeTicker를 내부에 보유하고 싱글톤 인터페이스를 통해 시간 상태를 제공하며,
-/// 상태 변화 시 이벤트를 발생시킵니다.
-/// </summary>
+// Layer 2: TimeManager - 상태 및 이벤트 허브
 public class TimeManager : MonoBehaviour
 {
     [SerializeField] private List<CycleDuration> cycleDurations = new()
@@ -34,20 +30,20 @@ public class TimeManager : MonoBehaviour
         }
     }
 
-    /// <summary>현재 낮/밤 상태 (true: 낮, false: 밤)</summary>
+    // 현재 낮/밤 상태 (true: 낮, false: 밤)
     public bool IsDay => timeTicker.IsDay;
 
-    /// <summary>현재 주기 내에서의 진행률 (0.0 ~ 1.0)</summary>
+    // 현재 주기 내에서의 진행률 (0.0 ~ 1.0)
     public float CurrentTimeProgress => timeTicker.CurrentProgress;
 
-    /// <summary>현재 주기 인덱스 (밤 count = CurrentCycleIndex / 2)</summary>
+    // 현재 주기 인덱스
     public int CurrentCycleIndex => timeTicker.CurrentCycleIndex;
 
     private int nightCount = 0;
-    /// <summary>지금까지 진행된 밤의 횟수</summary>
+    // 지금까지 진행된 밤의 횟수
     public int NightCount => nightCount;
 
-    /// <summary>낮/밤 전환 시 호출되는 이벤트</summary>
+    // 낮/밤 전환 시 호출되는 이벤트
     public event Action<bool> OnTimeStateChanged;
 
     private void Awake()
