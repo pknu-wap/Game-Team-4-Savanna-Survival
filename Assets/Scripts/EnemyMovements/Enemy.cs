@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : Entity
 {
     [Header("Drop")]
     [SerializeField] protected DropTable dropTable;
@@ -11,21 +11,40 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private float contactCooldown = 1f;
 
     [Header("Kill Reward")]
-    [SerializeField] private float hungerReward = 10f; 
+    [SerializeField] private float hungerReward = 10f;
 
+    // ── 공통 컴포넌트 ──────────────────────────────────────────
     protected Rigidbody2D    rb;
     protected Transform      player;
-    protected PlayerStatCore playerStatCore; 
+    protected PlayerStatCore playerStatCore;
 
     protected EnemyStatManager statManager;
     protected float            currentHp;
 
     private float contactTimer;
 
+    // ── 공통 배회(Wander) 상태 ─────────────────────────────────
+    protected Vector2 velocity;
+    protected Vector2 wanderTarget;
+    protected bool    isIdle;
+    protected float   idleTimer;
+
+    // 스폰 위치를 홈으로 고정하고 반경 내에서만 배회
+    protected Vector2 wanderHome;
+
+    [Header("Wander")]
+    [SerializeField] protected float wanderRadius   = 3f;
+    [SerializeField] protected float arriveDistance = 0.2f;
+    [SerializeField] protected float idleChance     = 0.2f;
+    [SerializeField] protected float moveSpeed      = 3f;
+
+    // ──────────────────────────────────────────────────────────
+
     protected virtual void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb          = GetComponent<Rigidbody2D>();
         statManager = new EnemyStatManager();
+        wanderHome  = transform.position;
     }
 
     protected virtual void Start()
@@ -40,7 +59,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        Move();
+        if (!isDead) Move();
     }
 
     protected virtual void Update()
@@ -52,78 +71,111 @@ public abstract class Enemy : MonoBehaviour
     protected abstract void Move();
     protected abstract bool IsPlayerInDetection();
 
+    // ── 이동 헬퍼 ─────────────────────────────────────────────
+
+    protected void MoveSmooth(Vector2 targetVel)
+    {
+        velocity          = Vector2.Lerp(velocity, targetVel, Time.deltaTime * 10f);
+        rb.linearVelocity = velocity;
+    }
+
+    protected void Wander()
+    {
+        if (isIdle)
+        {
+            idleTimer += Time.deltaTime;
+            if (idleTimer > 1f)
+            {
+                isIdle    = false;
+                idleTimer = 0f;
+                SetNewWanderTarget();
+            }
+            MoveSmooth(Vector2.zero);
+            return;
+        }
+
+        if (Vector2.Distance(transform.position, wanderTarget) < arriveDistance)
+        {
+            if (Random.value < idleChance) { isIdle = true; return; }
+            SetNewWanderTarget();
+        }
+
+        MoveSmooth((wanderTarget - (Vector2)transform.position).normalized * moveSpeed * 0.7f);
+    }
+
+    protected void SetNewWanderTarget()
+    {
+        // 현재 위치가 아닌 홈 기준으로 목표를 잡아 한쪽으로 쏠리는 현상을 방지
+        wanderTarget = wanderHome + Random.insideUnitCircle * wanderRadius;
+    }
+
+    // ── 플레이어 상호작용 ──────────────────────────────────────
 
     protected void DamagePlayer(float damage)
     {
         if (playerStatCore == null) return;
-
-        float currentHp = playerStatCore.getStat(StatType.HEALTH).rawValue;
-        float next      = Mathf.Max(0f, currentHp - damage);
+        float next = Mathf.Max(0f, playerStatCore.getStat(StatType.HEALTH).rawValue - damage);
         playerStatCore.registerStat(StatType.HEALTH, next);
     }
 
+    // ── 피격 / 사망 ───────────────────────────────────────────
 
-    private void OnTriggerEnter2D(Collider2D other)
+    protected bool isDead;
+
+    public override void TakeDamage(float damage)
     {
-        TryApplyContactDamage(other.gameObject);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        TryApplyContactDamage(collision.gameObject);
-    }
-
-    private void TryApplyContactDamage(GameObject other)
-    {
-        if (!other.CompareTag("Player"))    return;
-        if (contactTimer < contactCooldown) return;
-
-        DamagePlayer(contactDamage);
-        contactTimer = 0f;
-    }
-
-
-    public virtual void TakeDamage(float damage)
-    {
+        if (isDead) return;
         currentHp -= damage;
-
-        if (currentHp <= 0)
-            Die();
+        if (currentHp <= 0) Die();
     }
 
     protected virtual void Die()
     {
+        if (isDead) return;
+        isDead = true;
+
+        rb.linearVelocity = Vector2.zero;
+        ApplyDeathRewards();
+
+        StartCoroutine(DieRoutine(0f));
+    }
+
+    protected void ApplyDeathRewards()
+    {
         AddPlayerHunger(hungerReward);
+        dropTable?.Drop(transform.position);
+    }
 
-        if (dropTable != null)
-            dropTable.Drop(transform.position);
-
+    protected IEnumerator DieRoutine(float delay)
+    {
+        if (delay > 0f) yield return new WaitForSeconds(delay);
         Destroy(gameObject);
     }
-    // public void ApplySlow(float duration, float slowPercent)
-    // {
-    //     if (slowCoroutine != null)
-    //     {
-    //         StopCoroutine(slowCoroutine);
-    //     }
 
-    //     slowCoroutine = StartCoroutine(Slow(duration, slowPercent));
-    // }
+    // Animator에서 사망 클립 길이를 읽는 헬퍼/클립이 없으면 0 반환
+    // clipName을 생략하면 "Die"를 기본값으로 사용
+    protected float GetDieClipLength(Animator animator, string clipName = "Die")
+    {
+        if (animator == null) return 0f;
+        foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips)
+            if (clip.name == clipName) return clip.length;
+        return 0f;
+    }
 
-    // IEnumerator Slow(float duration, float slowPercent)
-    // {
-    //     moveSpeed = originalSpeed * (1f - slowPercent);
+    // ── 접촉 데미지 ───────────────────────────────────────────
 
-    //     // if (sr != null)
-    //     //     sr.color = Color.blue;
+    private void OnCollisionEnter2D(Collision2D collision) => TryApplyContactDamage(collision.gameObject);
 
-    //     yield return new WaitForSeconds(duration);
+    private void TryApplyContactDamage(GameObject other)
+    {
+        if (isDead) return;
+        if (!other.CompareTag("Player") || contactTimer < contactCooldown) return;
+        DamagePlayer(contactDamage);
+        contactTimer = 0f;
+    }
 
-    //     moveSpeed = originalSpeed;
+    // ── 내부 유틸리티 ─────────────────────────────────────────────
 
-    //     // if (sr != null)
-    //     //     sr.color = Color.white;
-    // }
     private void AddPlayerHunger(float amount)
     {
         if (playerStatCore == null) return;
@@ -131,7 +183,6 @@ public abstract class Enemy : MonoBehaviour
         float current   = playerStatCore.getStat(StatType.HUNGER).rawValue;
         float maxHunger = playerStatCore.getStat(StatType.MAX_HUNGER).rawValue;
         float next      = Mathf.Min(current + amount, maxHunger);
-
         playerStatCore.registerStat(StatType.HUNGER, next);
 
         Debug.Log($"[적 처치 보상] {gameObject.name} 처치" +

@@ -3,98 +3,61 @@ using UnityEngine;
 public class EnemyAttacking : Enemy
 {
     [Header("Config")]
-    [SerializeField] private float moveSpeed      = 3f;
     [SerializeField] private float maxHp          = 50f;
     [SerializeField] private float damage         = 10f;
-
     [SerializeField] private float detectionRange = 6f;
     [SerializeField] private float attackRange    = 2f;
     [SerializeField] private float attackInterval = 2f;
 
-    [Header("Wander")]
-    [SerializeField] private float wanderRadius   = 3f;
-    [SerializeField] private float arriveDistance = 0.2f;
-    [SerializeField] private float idleChance     = 0.2f;
-
     [Header("Attack Telegraph")]
     [SerializeField] private GameObject attackIndicatorPrefab;
 
-    private Vector2 velocity;
-    private Vector2 wanderTarget;
-
-    private bool  isIdle;
-    private float idleTimer;
-
-    private float attackTimer;
-    private bool  telegraph;
-
+    private float      attackTimer;
+    private bool       telegraph;
     private GameObject indicator;
+
+    [Header("Animation")]
+    [SerializeField] private string dieClipName = "Die";
+
+    private Animator   anim;
+
+    private static readonly int ParamSpeed  = Animator.StringToHash("Speed");
+    private static readonly int ParamAttack = Animator.StringToHash("Attack");   
+    private static readonly int ParamDie    = Animator.StringToHash("Die");
 
     protected override void Awake()
     {
         base.Awake();
-
         statManager.InitAttacker(maxHp, damage);
         currentHp = statManager.getStat(StatType.HEALTH).rawValue;
-
         SetNewWanderTarget();
+
+        anim = GetComponent<Animator>();
     }
 
-    protected override void Move()
+    protected override void Update()
     {
-        if (player == null || !player.gameObject.activeInHierarchy)
-        {
-            Wander();
-            return;
-        }
-
-        float dist = Vector2.Distance(transform.position, player.position);
-
-        if (dist <= attackRange)
-            Attack();
-        else if (dist <= detectionRange)
-            Chase();
-        else
-            Wander();
+        base.Update();
+        UpdateAnimator();
+        UpdateFacing();
     }
 
     protected override bool IsPlayerInDetection() => true;
 
-    private void Wander()
+    protected override void Move()
     {
-        if (isIdle)
-        {
-            idleTimer += Time.deltaTime;
-            if (idleTimer > 1f)
-            {
-                isIdle    = false;
-                idleTimer = 0f;
-                SetNewWanderTarget();
-            }
-            MoveSmooth(Vector2.zero);
-            return;
-        }
+        if (player == null || !player.gameObject.activeInHierarchy) { Wander(); return; }
 
-        if (Vector2.Distance(transform.position, wanderTarget) < arriveDistance)
-        {
-            if (Random.value < idleChance) { isIdle = true; return; }
-            SetNewWanderTarget();
-        }
+        float dist = Vector2.Distance(transform.position, player.position);
 
-        Vector2 dir = (wanderTarget - (Vector2)transform.position).normalized;
-        MoveSmooth(dir * moveSpeed * 0.7f);
-    }
-
-    private void SetNewWanderTarget()
-    {
-        wanderTarget = (Vector2)transform.position + Random.insideUnitCircle * wanderRadius;
+        if      (dist <= attackRange)    Attack();
+        else if (dist <= detectionRange) Chase();
+        else                             Wander();
     }
 
     private void Chase()
     {
-        Vector2 dir = (player.position - transform.position).normalized;
-        MoveSmooth(dir * moveSpeed);
-
+        MoveSmooth((player.position - transform.position).normalized * moveSpeed);
         attackTimer = 0f;
         telegraph   = false;
         HideIndicator();
@@ -103,7 +66,6 @@ public class EnemyAttacking : Enemy
     private void Attack()
     {
         MoveSmooth(Vector2.zero);
-
         attackTimer += Time.deltaTime;
 
         if (!telegraph && attackTimer >= attackInterval - 1f)
@@ -114,25 +76,50 @@ public class EnemyAttacking : Enemy
 
         if (attackTimer >= attackInterval)
         {
+            anim?.SetTrigger(ParamAttack);   
             DamagePlayer(statManager.getStat(StatType.DAMAGE).calibratedValue);
-
             attackTimer = 0f;
             telegraph   = false;
             HideIndicator();
         }
     }
 
-    private void MoveSmooth(Vector2 targetVel)
+    protected override void Die()
     {
-        velocity = Vector2.Lerp(velocity, targetVel, Time.deltaTime * 10f);
-        rb.linearVelocity = velocity;
+        if (isDead) return;
+        isDead = true;
+
+        rb.linearVelocity = Vector2.zero;
+        ApplyDeathRewards();
+
+        anim?.SetTrigger(ParamDie);
+        if (indicator != null) Destroy(indicator);
+
+        StartCoroutine(DieRoutine(GetDieClipLength(anim, dieClipName)));
     }
+
+    // ── 애니메이터 / 방향 ──────────────────────────────────────
+    private void UpdateAnimator()
+    {
+        if (anim == null) return;
+        anim.SetFloat(ParamSpeed, rb.linearVelocity.magnitude);
+    }
+
+    private void UpdateFacing()
+    {
+        if (Mathf.Abs(velocity.x) < 0.05f) return;
+
+        Vector3 s = transform.localScale;
+        s.x = velocity.x > 0 ? -Mathf.Abs(s.x) : Mathf.Abs(s.x);
+        transform.localScale = s;
+    }
+
+    // ── 인디케이터 ────────────────────────────────────────────
 
     private void ShowIndicator()
     {
         if (attackIndicatorPrefab == null) return;
-        if (indicator == null)
-            indicator = Instantiate(attackIndicatorPrefab, transform);
+        indicator ??= Instantiate(attackIndicatorPrefab, transform);
         indicator.transform.localPosition = Vector3.zero;
         indicator.transform.localScale    = Vector3.one * attackRange * 2f;
         indicator.SetActive(true);
@@ -140,15 +127,12 @@ public class EnemyAttacking : Enemy
 
     private void HideIndicator()
     {
-        if (indicator != null)
-            indicator.SetActive(false);
+        if (indicator != null) indicator.SetActive(false);
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.color = Color.blue; Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.color = Color.red;  Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
