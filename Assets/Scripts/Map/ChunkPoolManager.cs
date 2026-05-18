@@ -15,7 +15,6 @@ public class ChunkPoolManager : MonoBehaviour
     private Dictionary<Vector2Int, ChunkEntity> _activeChunks = new Dictionary<Vector2Int, ChunkEntity>();
     private StructureManager _structureManager;
 
-    /// <summary>현재 활성화된 청크 목록 (읽기 전용)</summary>
     public Dictionary<Vector2Int, ChunkEntity> ActiveChunks => _activeChunks;
     private Vector2Int _lastChunkIndex = new Vector2Int(int.MinValue, int.MinValue);
 

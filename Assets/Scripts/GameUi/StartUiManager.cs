@@ -1,22 +1,15 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartUIManager : MonoBehaviour
+public class StartUiManager : MonoBehaviour
 {
-    public GameObject startUI;
-
-    void Start()
-    {
-        Time.timeScale = 1f;
-        startUI.SetActive(true);
-    }
-
     public void OnStartButton()
     {
-        SceneManager.LoadScene("map-time_system");
+        Time.timeScale = 0f;
+        SceneManager.LoadScene("Middle Scene");
     }
 
-    public void OnEndButton()
+    public void OnQuitButton()
     {
         Application.Quit();
     }

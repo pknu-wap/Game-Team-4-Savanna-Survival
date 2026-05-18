@@ -3,110 +3,91 @@ using UnityEngine;
 public class EnemyRunning : Enemy
 {
     [Header("Config")]
-    [SerializeField] private float moveSpeed = 4f;
-    [SerializeField] private float maxHp = 30f;
+    [SerializeField] private float maxHp          = 30f;
     [SerializeField] private float detectionRange = 6f;
 
-    [Header("Wander")]
-    [SerializeField] private float wanderRadius = 3f;
-    [SerializeField] private float arriveDistance = 0.2f;
-    [SerializeField] private float idleChance = 0.2f;
+    [Tooltip("도망 시작 후 이 거리까지 벗어나야 Wander로 전환 (detectionRange보다 커야 함)")]
+    [SerializeField] private float fleeStopRange  = 9f;
 
-    private Vector2 velocity;
-    private Vector2 wanderTarget;
+    private bool     isFleeing;
+    [Header("Animation")]
+    [SerializeField] private string dieClipName = "Die";
 
-    private bool isIdle;
-    private float idleTimer;
+    private Animator anim;
+
+    private static readonly int ParamSpeed = Animator.StringToHash("Speed");
+    private static readonly int ParamDie   = Animator.StringToHash("Die");
 
     protected override void Awake()
     {
         base.Awake();
-
         statManager.InitRunner(maxHp);
         currentHp = statManager.getStat(StatType.HEALTH).rawValue;
-
         SetNewWanderTarget();
+
+        anim = GetComponent<Animator>();
     }
 
-    protected override void Move()
+    protected override void Update()
     {
-        if (player == null || !player.gameObject.activeInHierarchy)
-        {
-            Wander();
-            return;
-        }
-
-        float dist = Vector2.Distance(transform.position, player.position);
-
-        if (dist <= detectionRange)
-            Flee();
-        else
-            Wander();
+        base.Update();
+        UpdateAnimator();
+        UpdateFacing();
     }
 
     protected override bool IsPlayerInDetection() => true;
 
-    private void Wander()
+    protected override void Move()
     {
-        if (isIdle)
-        {
-            idleTimer += Time.deltaTime;
+        if (player == null || !player.gameObject.activeInHierarchy) { Wander(); return; }
 
-            if (idleTimer > 1f)
-            {
-                isIdle = false;
-                idleTimer = 0f;
-                SetNewWanderTarget();
-            }
+        float dist = Vector2.Distance(transform.position, player.position);
 
-            MoveSmooth(Vector2.zero);
-            return;
-        }
+        //진입과 해제 범위를 분리해 경계선에서의 상태 진동을 방지
+        if (!isFleeing && dist <= detectionRange) isFleeing = true;
+        if (isFleeing  && dist >= fleeStopRange)  isFleeing = false;
 
-        if (Vector2.Distance(transform.position, wanderTarget) < arriveDistance)
-        {
-            if (Random.value < idleChance)
-            {
-                isIdle = true;
-                return;
-            }
-
-            SetNewWanderTarget();
-        }
-
-        Vector2 dir = (wanderTarget - (Vector2)transform.position).normalized;
-        MoveSmooth(dir * moveSpeed * 0.7f);
+        if (isFleeing)
+            MoveSmooth((transform.position - player.position).normalized * moveSpeed);
+        else
+            Wander();
     }
 
-    private void SetNewWanderTarget()
+    protected override void Die()
     {
-        Vector2 randomOffset = Random.insideUnitCircle * wanderRadius;
-        wanderTarget = (Vector2)transform.position + randomOffset;
+        if (isDead) return;
+        isDead = true;
+
+        rb.linearVelocity = Vector2.zero;
+        ApplyDeathRewards();
+
+        anim?.SetTrigger(ParamDie);
+
+        StartCoroutine(DieRoutine(GetDieClipLength(anim, dieClipName)));
     }
 
-    private void Flee()
+    // ── 애니메이터 / 방향 ─────────────────────────────────────
+    private void UpdateAnimator()
     {
-        Vector2 dir = (transform.position - player.position).normalized;
-        MoveSmooth(dir * moveSpeed);
+        if (anim == null) return;
+        anim.SetFloat(ParamSpeed, rb.linearVelocity.magnitude);
     }
 
-    private void MoveSmooth(Vector2 targetVel)
+    private void UpdateFacing()
     {
-        velocity = Vector2.Lerp(
-            velocity,
-            targetVel,
-            Time.deltaTime * 10f
-        );
+        if (Mathf.Abs(velocity.x) < 0.05f) return;
 
-        rb.linearVelocity = velocity;
+        Vector3 s = transform.localScale;
+        s.x = velocity.x > 0 ? -Mathf.Abs(s.x) : Mathf.Abs(s.x);
+        transform.localScale = s;
     }
+
+    // ─────────────────────────────────────────────────────────
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(wanderTarget, 0.1f);
+        Gizmos.color = Color.blue;  Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.color = Color.cyan;  Gizmos.DrawWireSphere(transform.position, fleeStopRange);
+        Gizmos.color = Color.green; Gizmos.DrawSphere(wanderTarget, 0.1f);
     }
 }

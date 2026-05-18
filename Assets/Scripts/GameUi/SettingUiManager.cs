@@ -3,31 +3,44 @@ using UnityEngine.SceneManagement;
 
 public class SettingUiManager : MonoBehaviour
 {
-    public GameObject settingUI;
+    public GameObject settingPanel;
 
-    void Start()
+    private bool isOpen = false;
+
+    private void Start()
     {
-        settingUI.SetActive(false);
+        settingPanel.SetActive(false);
+        Time.timeScale = 1f;
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            settingUI.SetActive(true);
-            Time.timeScale = 0f;
+            ToggleSetting();
         }
     }
 
-    public void OnContinueButton()
+    public void ToggleSetting()
     {
-        settingUI.SetActive(false);
+        isOpen = !isOpen;
+        settingPanel.SetActive(isOpen);
+
+        Time.timeScale = isOpen ? 0f : 1f;
+    }
+
+    public void OnStayButton()
+    {
+        isOpen = false;
+        settingPanel.SetActive(false);
         Time.timeScale = 1f;
     }
 
-    public void OnExitButton()
+    public void OnExitToGameButton()
     {
-        Time.timeScale = 1f;
+        isOpen = false;
+        settingPanel.SetActive(false);
+        Time.timeScale = 0f;
         SceneManager.LoadScene("Start Scene");
     }
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4619708141149759447}
   - component: {fileID: 459029316920976220}
   - component: {fileID: 8406159217340069016}
+  - component: {fileID: -4829959775748403633}
   m_Layer: 26
   m_Name: EnemyRunning_Test
   m_TagString: Enemy
@@ -174,9 +175,33 @@ MonoBehaviour:
   contactDamage: 5
   contactCooldown: 1
   hungerReward: 20
-  moveSpeed: 7
-  maxHp: 30
-  detectionRange: 4
   wanderRadius: 3
   arriveDistance: 0.2
   idleChance: 0.2
+  moveSpeed: 7
+  maxHp: 30
+  detectionRange: 4
+  fleeStopRange: 9
+  dieClipName: ZebraDie
+--- !u!95 &-4829959775748403633
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7883874561632515422}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 638de1c340ad56842be43b2638692a12, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
