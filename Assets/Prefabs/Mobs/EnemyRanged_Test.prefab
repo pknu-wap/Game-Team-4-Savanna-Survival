@@ -174,15 +174,16 @@ MonoBehaviour:
   contactDamage: 5
   contactCooldown: 1
   hungerReward: 10
+  wanderRadius: 2
+  arriveDistance: 0.2
+  idleChance: 0.2
   moveSpeed: 6
   maxHp: 40
   damage: 5
   detectionRange: 7
   preferredRange: 5
-  attackRange: 5
+  attackRange: 8
   attackInterval: 2.5
-  wanderRadius: 2
-  arriveDistance: 0.2
-  idleChance: 0.2
+  disengageRange: 14
   indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
   projectilePrefab: {fileID: 5465070902174546490, guid: 4d40fbd9a2e91644982a6f80aaeaceeb, type: 3}
