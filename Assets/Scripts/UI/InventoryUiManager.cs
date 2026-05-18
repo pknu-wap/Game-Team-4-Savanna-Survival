@@ -8,7 +8,7 @@ public enum EquipmentSlotArea
     Equipped
 }
 
-public class InventoryDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class InventoryUiManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("슬롯")]
     // 인벤 위아래 구분
@@ -24,10 +24,11 @@ public class InventoryDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [Header("스크립트")]
     [SerializeField] private EquipmentInventory equipmentInventory;
     [SerializeField] private InventoryMove inventoryMove;
+    [SerializeField] private ItemInfoUI ItemInfoUI;
 
     // 현재 드래그중인 장비
     private EquipmentData currentEquipment;
-    private static InventoryDrag currentDragging;
+    private static InventoryUiManager currentDragging;
 
     public void setSlot(EquipmentData equipment)
     {
@@ -41,6 +42,17 @@ public class InventoryDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         // slotNameText.text = currentEquipment.equipmentName;
         // image true
         // 분리해야할듯
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (currentEquipment == null) return;
+        ItemInfoUI.openEquipmentInfo(currentEquipment);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ItemInfoUI.hideEquipmentInfo();
     }
 
     public void OnBeginDrag(PointerEventData eventData)

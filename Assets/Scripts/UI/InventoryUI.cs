@@ -5,8 +5,8 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private EquipmentInventory equipmentInventory;
     [SerializeField] private GameObject inventoryPanel;
     
-    [SerializeField] private InventoryDrag[] equippedSlots;
-    [SerializeField] private InventoryDrag[] bagSlots;
+    [SerializeField] private InventoryUiManager[] equippedSlots;
+    [SerializeField] private InventoryUiManager[] bagSlots;
     
     private void refreshUI()
     {
