@@ -1,0 +1,15 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "#SCRIPTNAME#", menuName = "SkillTree/Effects/#SCRIPTNAME#")]
+public class #SCRIPTNAME# : PassiveEffect
+{
+    public override void Apply(GameObject player)
+    {
+
+    }
+
+    public override void Remove(GameObject player)
+    {
+
+    }
+}

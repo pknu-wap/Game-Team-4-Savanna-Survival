@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3f508e7b9fe4f498fb8d3a40f90a64, type: 3}
+  m_Name: Skill_Roar
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
+  id: roar
+  skillName: "\uD3EC\uD6A8"
+  icon: {fileID: 21300000, guid: 294dc2d997706254ea1bb655406e5f57, type: 3}
+  description: "\uD06C\uAC8C \uD3EC\uD6A8\uD558\uC5EC \uC8FC\uBCC0 \uC801\uC744 \uBC00\uCCD0\uB0B8\uB2E4."
+  cost: 3
+  prerequisites:
+  - {fileID: 11400000, guid: 7983f2bafaca9fe4a91d44f3709e5c14, type: 2}
+  treePosition: {x: 200, y: -200}
+  cooldown: 5
+  action: {fileID: 11400000, guid: 20fda02e304231f4bb58c6506ba832e4, type: 2}

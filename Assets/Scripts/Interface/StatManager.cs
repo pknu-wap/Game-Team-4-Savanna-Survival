@@ -15,7 +15,8 @@ public enum StatType
     SKILL_DAMAGE,
     SKILL_COOLDOWN,
     HEALTH_REGEN,
-    MAX_HUNGER
+    MAX_HUNGER,
+    SKILL_POINTS
 }
 
 public class StatData
