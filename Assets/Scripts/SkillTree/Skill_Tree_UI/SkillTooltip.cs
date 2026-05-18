@@ -9,12 +9,15 @@ public class SkillTooltip : MonoBehaviour
     [SerializeField] private Text descriptionText;
     [SerializeField] private Text cooldownText;
     [SerializeField] private Text costText;
+    [SerializeField] private GameObject cooldownRow;
 
     private Canvas parentCanvas;
+    private RectTransform tooltipRect;
 
     private void Awake()
     {
         parentCanvas = GetComponentInParent<Canvas>();
+        tooltipRect = GetComponent<RectTransform>();
 
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
@@ -25,6 +28,10 @@ public class SkillTooltip : MonoBehaviour
     public void Show(BaseSkillData skillData, RectTransform nodeRect)
     {
         gameObject.SetActive(true);
+        UpdateTooltipContent(skillData);
+
+        Canvas.ForceUpdateCanvases();
+
         PositionNextToNode(nodeRect);
 
         if (canvasGroup != null)
@@ -32,45 +39,50 @@ public class SkillTooltip : MonoBehaviour
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = false;
         }
-
-        UpdateTooltipText(skillData);
     }
 
     public void Hide()
     {
         if (canvasGroup != null)
-        {
             canvasGroup.alpha = 0f;
-        }
 
         gameObject.SetActive(false);
     }
 
     private void PositionNextToNode(RectTransform nodeRect)
     {
-        if (parentCanvas == null) return;
+        if (parentCanvas == null || tooltipRect == null) return;
 
-        // 노드 월드 좌표 → 캔버스 로컬 좌표 변환
-        Vector3 localPos = parentCanvas.transform.InverseTransformPoint(nodeRect.position);
-        float xOffset = nodeRect.sizeDelta.x * 0.5f + 10f;
-        transform.localPosition = new Vector3(localPos.x + xOffset, localPos.y, 0f);
+        Vector3 nodeLocalPos = parentCanvas.transform.InverseTransformPoint(nodeRect.position);
+        float nodeHalfWidth = nodeRect.sizeDelta.x * 0.5f;
+        float tooltipHalfWidth = tooltipRect.sizeDelta.x * 0.5f;
+        float gap = 10f;
+
+        RectTransform canvasRect = parentCanvas.GetComponent<RectTransform>();
+        float canvasHalfWidth = canvasRect.sizeDelta.x * 0.5f;
+
+        float rightX = nodeLocalPos.x + nodeHalfWidth + gap + tooltipHalfWidth;
+        float leftX  = nodeLocalPos.x - nodeHalfWidth - gap - tooltipHalfWidth;
+
+        float finalX = (rightX + tooltipHalfWidth <= canvasHalfWidth) ? rightX : leftX;
+
+        tooltipRect.localPosition = new Vector3(finalX, nodeLocalPos.y, 0f);
     }
 
-    private void UpdateTooltipText(BaseSkillData skillData)
+    private void UpdateTooltipContent(BaseSkillData skillData)
     {
         if (nameText != null)
             nameText.text = skillData.skillName;
 
         if (typeText != null)
         {
-            string type = skillData switch
+            typeText.text = skillData switch
             {
                 ActiveSkillData => "Active",
-                AutoSkillData => "Auto",
+                AutoSkillData   => "Auto",
                 PassiveSkillData => "Passive",
                 _ => "Unknown"
             };
-            typeText.text = type;
         }
 
         if (descriptionText != null)
@@ -79,15 +91,19 @@ public class SkillTooltip : MonoBehaviour
         if (costText != null)
             costText.text = $"Cost: {skillData.cost}";
 
-        if (cooldownText != null)
+        bool hasCooldown = skillData is ActiveSkillData || skillData is AutoSkillData;
+
+        if (cooldownRow != null)
+            cooldownRow.SetActive(hasCooldown);
+
+        if (cooldownText != null && hasCooldown)
         {
-            string cooldown = skillData switch
+            cooldownText.text = skillData switch
             {
                 ActiveSkillData active => $"Cooldown: {active.cooldown}s",
-                AutoSkillData auto => $"Interval: {auto.interval}s",
+                AutoSkillData auto     => $"Interval: {auto.interval}s",
                 _ => ""
             };
-            cooldownText.text = cooldown;
         }
     }
 }

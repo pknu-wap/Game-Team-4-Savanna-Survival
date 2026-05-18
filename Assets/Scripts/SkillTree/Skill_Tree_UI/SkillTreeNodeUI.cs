@@ -120,7 +120,12 @@ public void OnPointerExit(PointerEventData eventData)
         }
     }
 
-private void UpdateVisualState()
+public void RefreshVisual()
+    {
+        UpdateVisualState();
+    }
+
+    private void UpdateVisualState()
     {
         if (skillData == null || SkillManager.Instance == null) return;
 

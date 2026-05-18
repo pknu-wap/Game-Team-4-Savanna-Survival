@@ -9,6 +9,7 @@ public class SkillTreeWindow : MonoBehaviour
     [SerializeField] private RectTransform lineContainer;
     [SerializeField] private Button leftArrowButton;
     [SerializeField] private Button rightArrowButton;
+    [SerializeField] private Text skillPointsText;
     [SerializeField] private Color lockedLineColor = Color.gray;
     [SerializeField] private Color unlockedLineColor = new Color(0.2f, 0.6f, 1f);
 
@@ -112,6 +113,7 @@ public class SkillTreeWindow : MonoBehaviour
         if (open)
         {
             Time.timeScale = 0f;
+            RefreshAllNodeVisuals();
         }
         else
         {
@@ -180,8 +182,23 @@ public class SkillTreeWindow : MonoBehaviour
         lineRect.localRotation = Quaternion.FromToRotation(Vector3.right, new Vector3(direction.x, direction.y, 0f));
     }
 
+    private void RefreshAllNodeVisuals()
+    {
+        var allNodes = GetComponentsInChildren<SkillTreeNodeUI>(true);
+        foreach (var node in allNodes)
+        {
+            node.RefreshVisual();
+        }
+
+        if (skillPointsText != null && SkillManager.Instance != null)
+        {
+            skillPointsText.text = "SP: " + SkillManager.Instance.GetCurrentPoints();
+        }
+    }
+
     private void OnSkillUnlocked(BaseSkillData skill)
     {
+        RefreshAllNodeVisuals();
         DrawConnectionLines();
     }
 
