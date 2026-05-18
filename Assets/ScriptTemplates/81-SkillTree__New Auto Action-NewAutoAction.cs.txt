@@ -1,0 +1,15 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "#SCRIPTNAME#", menuName = "SkillTree/Actions/#SCRIPTNAME#")]
+public class #SCRIPTNAME# : AutoAction
+{
+    public override void Process(GameObject player, AutoSkillData data)
+    {
+
+    }
+
+    public override void Clear(GameObject player)
+    {
+
+    }
+}
