@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 4619708141149759447}
   - component: {fileID: 459029316920976220}
   - component: {fileID: 8406159217340069016}
-  - component: {fileID: 5378736574240054305}
-  m_Layer: 0
+  m_Layer: 26
   m_Name: EnemyRunning_Test
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,7 +151,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -171,29 +170,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bcdc24ba362a3d4a840cb4b7696f323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityRunning
+  dropTable: {fileID: 11400000, guid: 4eccaddaec1e57e479f3cd601952ee18, type: 2}
+  contactDamage: 5
+  contactCooldown: 1
+  hungerReward: 10
   moveSpeed: 2
   maxHp: 30
   detectionRange: 5
-  wanderChangeTime: 0
---- !u!95 &5378736574240054305
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7883874561632515422}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8dc889ab9ff79844c8f2eca009c041cf, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  wanderRadius: 3
+  arriveDistance: 0.2
+  idleChance: 0.2

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -6656869047474873328}
   m_Layer: 0
   m_Name: EnemyNeutral_Test
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,16 +105,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61530ab2b2c24ad4ca85197719f59d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyNeutral
-  dropTable: {fileID: 0}
+  dropTable: {fileID: 11400000, guid: 8fd2ad6f9ebf95847a9df1f241698fc1, type: 2}
   contactDamage: 5
   contactCooldown: 1
+  hungerReward: 10
   moveSpeed: 2.5
   maxHp: 200
   damage: 25
   detectionRange: 8
   meleeRange: 2
   meleeInterval: 1.5
-  indicatorPrefab: {fileID: 0}
+  indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
   aoeRange: 3
   aoeInterval: 8
   aoeTelegraph: 2.5

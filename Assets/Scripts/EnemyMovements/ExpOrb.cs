@@ -7,14 +7,13 @@ public class ExpOrb : MonoBehaviour
 
     [Header("Magnet")]
     [SerializeField] private float magnetRange = 3f;
-    [SerializeField] private float moveSpeed = 6f;
+    [SerializeField] private float moveSpeed   = 6f;
 
     private Transform player;
 
     private void Start()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-
         if (playerObj != null)
             player = playerObj.transform;
     }
@@ -37,12 +36,10 @@ public class ExpOrb : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        PlayerDummy player = other.GetComponent<PlayerDummy>();
+        PlayerLevel playerLevel = other.GetComponentInParent<PlayerLevel>();
+        if (playerLevel == null) return;
 
-        if (player != null)
-        {
-            player.AddExp(expAmount);
-            Destroy(gameObject);
-        }
+        playerLevel.addExp(expAmount);
+        Destroy(gameObject);
     }
 }

@@ -3,14 +3,14 @@ using UnityEngine;
 public class EnemyRanged : Enemy
 {
     [Header("Config")]
-    [SerializeField] private float moveSpeed   = 2f;
-    [SerializeField] private float maxHp       = 40f;
-    [SerializeField] private float damage      = 8f;
+    [SerializeField] private float moveSpeed      = 2f;
+    [SerializeField] private float maxHp          = 40f;
+    [SerializeField] private float damage         = 8f;
 
-    [SerializeField] private float detectionRange = 10f; 
-    [SerializeField] private float preferredRange = 6f;  
-    [SerializeField] private float attackRange    = 8f;  
-    [SerializeField] private float attackInterval = 2.5f; 
+    [SerializeField] private float detectionRange = 10f;
+    [SerializeField] private float preferredRange = 6f;
+    [SerializeField] private float attackRange    = 8f;
+    [SerializeField] private float attackInterval = 2.5f;
 
     [Header("Wander")]
     [SerializeField] private float wanderRadius   = 3f;
@@ -23,7 +23,6 @@ public class EnemyRanged : Enemy
     [Header("Projectile")]
     [SerializeField] private GameObject projectilePrefab;
 
-
     private Vector2 velocity;
     private Vector2 wanderTarget;
 
@@ -31,9 +30,9 @@ public class EnemyRanged : Enemy
     private float idleTimer;
 
     private float attackTimer;
-    private bool  telegraph; 
+    private bool  telegraph;
 
-    private GameObject indicator; 
+    private GameObject indicator;
 
     protected override void Awake()
     {
@@ -47,7 +46,8 @@ public class EnemyRanged : Enemy
 
     private void Update()
     {
-        base.Update(); 
+        base.Update();
+
         if (telegraph && player != null && indicator != null && indicator.activeSelf)
             UpdateIndicatorTransform();
     }
@@ -79,32 +79,24 @@ public class EnemyRanged : Enemy
 
     protected override bool IsPlayerInDetection() => true;
 
-
     private void Wander()
     {
         if (isIdle)
         {
             idleTimer += Time.deltaTime;
-
             if (idleTimer > 1f)
             {
                 isIdle    = false;
                 idleTimer = 0f;
                 SetNewWanderTarget();
             }
-
             MoveSmooth(Vector2.zero);
             return;
         }
 
         if (Vector2.Distance(transform.position, wanderTarget) < arriveDistance)
         {
-            if (Random.value < idleChance)
-            {
-                isIdle = true;
-                return;
-            }
-
+            if (Random.value < idleChance) { isIdle = true; return; }
             SetNewWanderTarget();
         }
 
@@ -114,15 +106,13 @@ public class EnemyRanged : Enemy
 
     private void SetNewWanderTarget()
     {
-        Vector2 randomOffset = Random.insideUnitCircle * wanderRadius;
-        wanderTarget = (Vector2)transform.position + randomOffset;
+        wanderTarget = (Vector2)transform.position + Random.insideUnitCircle * wanderRadius;
     }
 
     private void Approach()
     {
         Vector2 dir = (player.position - transform.position).normalized;
         MoveSmooth(dir * moveSpeed * 0.8f);
-
         ResetAttack();
     }
 
@@ -130,7 +120,6 @@ public class EnemyRanged : Enemy
     {
         Vector2 dir = (transform.position - player.position).normalized;
         MoveSmooth(dir * moveSpeed);
-
         ResetAttack();
     }
 
@@ -140,7 +129,6 @@ public class EnemyRanged : Enemy
         telegraph   = false;
         HideIndicator();
     }
-
 
     private void AttackPlayer()
     {
@@ -177,16 +165,13 @@ public class EnemyRanged : Enemy
             proj.Init(dir, dmg);
     }
 
-
     private void ShowIndicator()
     {
         if (indicatorPrefab == null) return;
-
         if (indicator == null)
             indicator = Instantiate(indicatorPrefab);
-
         indicator.SetActive(true);
-        UpdateIndicatorTransform(); 
+        UpdateIndicatorTransform();
     }
 
     private void HideIndicator()
@@ -197,40 +182,27 @@ public class EnemyRanged : Enemy
 
     private void UpdateIndicatorTransform()
     {
-        Vector2 dir  = (player.position - transform.position).normalized;
-        float   dist = Vector2.Distance(transform.position, player.position);
+        Vector2 dir    = (player.position - transform.position).normalized;
+        Vector2 center = (Vector2)transform.position + dir * (attackRange * 0.5f);
+        float   angle  = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        float   halfLength      = attackRange * 0.5f;
-        Vector2 indicatorCenter = (Vector2)transform.position + dir * halfLength;
-        indicator.transform.position = indicatorCenter;
-
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        indicator.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-
+        indicator.transform.position   = center;
+        indicator.transform.rotation   = Quaternion.Euler(0f, 0f, angle);
         indicator.transform.localScale = new Vector3(attackRange, 1f, 1f);
     }
 
-
     private void MoveSmooth(Vector2 targetVel)
     {
-        velocity = Vector2.Lerp(
-            velocity,
-            targetVel,
-            Time.deltaTime * 10f
-        );
-
+        velocity = Vector2.Lerp(velocity, targetVel, Time.deltaTime * 10f);
         rb.linearVelocity = velocity;
     }
-
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
-
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
-
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, preferredRange);
     }

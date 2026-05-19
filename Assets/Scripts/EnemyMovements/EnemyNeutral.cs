@@ -3,16 +3,16 @@ using UnityEngine;
 public class EnemyNeutral : Enemy
 {
     [Header("Config")]
-    [SerializeField] private float moveSpeed = 2.5f;
-    [SerializeField] private float maxHp     = 200f;
-    [SerializeField] private float damage    = 25f;
+    [SerializeField] private float moveSpeed      = 2.5f;
+    [SerializeField] private float maxHp          = 200f;
+    [SerializeField] private float damage         = 25f;
 
     [SerializeField] private float detectionRange = 8f;
 
     [Header("Melee (근거리)")]
     [SerializeField] private float meleeRange    = 2f;
     [SerializeField] private float meleeInterval = 1.5f;
-    [SerializeField] private GameObject indicatorPrefab;
+    [SerializeField] private GameObject indicatorPrefab; 
 
     [Header("AoE (광역)")]
     [SerializeField] private float aoeRange     = 4f;
@@ -28,25 +28,15 @@ public class EnemyNeutral : Enemy
     [SerializeField] private float waterDamage    = 8f;
     [SerializeField] private float waterWidth     = 1.5f;
     [SerializeField] private GameObject waterZonePrefab;
-    // 인디케이터는 indicatorPrefab 하나를 공용으로 사용
 
     [Header("Wander")]
     [SerializeField] private float wanderRadius   = 3f;
     [SerializeField] private float arriveDistance = 0.2f;
     [SerializeField] private float idleChance     = 0.2f;
 
-    // 한 번 true가 되면 절대 false로 돌아오지 않음
     private bool isHostile = false;
 
-    private enum AttackState
-    {
-        Ready,
-        AoeWaiting,
-        AoeTelegraph,
-        Aoe,
-        Water,
-        Melee
-    }
+    private enum AttackState { Ready, AoeWaiting, AoeTelegraph, Aoe, Water, Melee }
     private AttackState state = AttackState.Ready;
 
     private float meleeTimer;
@@ -73,12 +63,12 @@ public class EnemyNeutral : Enemy
         currentHp = statManager.getStat(StatType.HEALTH).rawValue;
 
         SetNewWanderTarget();
-        aoeTimer = aoeInterval * 0.5f;
+        aoeTimer = aoeInterval * 0.5f; 
     }
 
     public override void TakeDamage(float dmg)
     {
-        isHostile = true;
+        isHostile = true; 
         base.TakeDamage(dmg);
     }
 
@@ -114,13 +104,14 @@ public class EnemyNeutral : Enemy
         }
     }
 
+
     private void UpdateReady(float dist)
     {
-        if (aoeTimer >= aoeInterval)        { EnterAoeWaiting(); return; }
-        if (dist >= waterRange && waterTimer >= waterCooldown) { EnterWater(); return; }
-        if (dist <= meleeRange)             { state = AttackState.Melee; return; }
-        if (dist <= detectionRange)         Chase();
-        else                                Wander();
+        if (aoeTimer >= aoeInterval)                               { EnterAoeWaiting(); return; }
+        if (dist >= waterRange && waterTimer >= waterCooldown)     { EnterWater();      return; }
+        if (dist <= meleeRange)                                    { state = AttackState.Melee; return; }
+        if (dist <= detectionRange) Chase();
+        else                        Wander();
     }
 
     private void EnterAoeWaiting()
@@ -159,7 +150,7 @@ public class EnemyNeutral : Enemy
     private void UpdateAoe(float dist)
     {
         if (dist <= aoeRange)
-            player.GetComponent<PlayerDummy>()?.TakeDamage(aoeDamage);
+            DamagePlayer(aoeDamage); 
 
         state = AttackState.Ready;
     }
@@ -231,8 +222,7 @@ public class EnemyNeutral : Enemy
 
         if (meleeTimer >= meleeInterval)
         {
-            float dmg = statManager.getStat(StatType.DAMAGE).calibratedValue;
-            player.GetComponent<PlayerDummy>()?.TakeDamage(dmg);
+            DamagePlayer(statManager.getStat(StatType.DAMAGE).calibratedValue);
 
             meleeTimer = 0f;
             HideMeleeIndicator();
@@ -241,6 +231,7 @@ public class EnemyNeutral : Enemy
             state = AttackState.Ready;
         }
     }
+
 
     private void Chase()
     {
@@ -284,13 +275,32 @@ public class EnemyNeutral : Enemy
         rb.linearVelocity = velocity;
     }
 
+
+    private void SetWorldScale(GameObject indicator, float diameter)
+    {
+        var sr = indicator.GetComponent<SpriteRenderer>();
+        if (sr == null || sr.sprite == null) return;
+
+        float currentWorldSize = sr.bounds.size.x;
+        if (currentWorldSize <= 0f) return;
+
+        float ratio = diameter / currentWorldSize;
+
+        Transform t = indicator.transform;
+        t.localScale = new Vector3(
+            t.localScale.x * ratio,
+            t.localScale.y * ratio,
+            1f
+        );
+    }
+
     private void ShowMeleeIndicator()
     {
         if (indicatorPrefab == null) return;
         if (meleeIndicator == null)
             meleeIndicator = Instantiate(indicatorPrefab, transform);
         meleeIndicator.transform.localPosition = Vector3.zero;
-        meleeIndicator.transform.localScale    = Vector3.one * meleeRange * 2f;
+        SetWorldScale(meleeIndicator, meleeRange * 2f); // 수정: localScale → SetWorldScale
         meleeIndicator.SetActive(true);
     }
     private void HideMeleeIndicator()
@@ -304,7 +314,7 @@ public class EnemyNeutral : Enemy
         if (aoeIndicator == null)
             aoeIndicator = Instantiate(indicatorPrefab, transform);
         aoeIndicator.transform.localPosition = Vector3.zero;
-        aoeIndicator.transform.localScale    = Vector3.one * aoeRange * 2f;
+        SetWorldScale(aoeIndicator, aoeRange * 2f); 
         aoeIndicator.SetActive(true);
     }
     private void HideAoeIndicator()
@@ -316,7 +326,7 @@ public class EnemyNeutral : Enemy
     {
         if (indicatorPrefab == null) return;
         if (waterIndicator == null)
-            waterIndicator = Instantiate(indicatorPrefab);
+            waterIndicator = Instantiate(indicatorPrefab); 
         waterIndicator.SetActive(true);
         UpdateWaterIndicatorTransform();
     }

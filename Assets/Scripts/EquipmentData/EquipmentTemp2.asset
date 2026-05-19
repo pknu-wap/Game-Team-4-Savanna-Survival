@@ -17,3 +17,7 @@ MonoBehaviour:
   equipmentStats:
   - statType: 8
     value: 10
+  - statType: 3
+    value: 20
+  - statType: 11
+    value: 3

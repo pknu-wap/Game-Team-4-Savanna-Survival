@@ -7,33 +7,35 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected DropTable dropTable;
 
     [Header("Contact Damage")]
-    [SerializeField] private float contactDamage   = 5f;  
-    [SerializeField] private float contactCooldown = 1f;  
-    // spriterenderer sr 추가하기
+    [SerializeField] private float contactDamage   = 5f;
+    [SerializeField] private float contactCooldown = 1f;
 
-    // public float moveSpeed = 3f;
+    [Header("Kill Reward")]
+    [SerializeField] private float hungerReward = 10f; 
 
-    // private float originalSpeed;
-    // private Coroutine slowCoroutine;
-
-    protected Rigidbody2D rb;
-    protected Transform player;
+    protected Rigidbody2D    rb;
+    protected Transform      player;
+    protected PlayerStatCore playerStatCore; 
 
     protected EnemyStatManager statManager;
-    protected float currentHp;
+    protected float            currentHp;
 
-    private float contactTimer; 
-
+    private float contactTimer;
 
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        statManager = new EnemyStatManager();
+    }
 
+    protected virtual void Start()
+    {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
-            player = playerObj.transform;
-
-        statManager = new EnemyStatManager();
+        {
+            player         = playerObj.transform;
+            playerStatCore = playerObj.GetComponent<PlayerStatManager>()?.StatCore;
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -47,11 +49,18 @@ public abstract class Enemy : MonoBehaviour
             contactTimer += Time.deltaTime;
     }
 
-
     protected abstract void Move();
-
     protected abstract bool IsPlayerInDetection();
 
+
+    protected void DamagePlayer(float damage)
+    {
+        if (playerStatCore == null) return;
+
+        float currentHp = playerStatCore.getStat(StatType.HEALTH).rawValue;
+        float next      = Mathf.Max(0f, currentHp - damage);
+        playerStatCore.registerStat(StatType.HEALTH, next);
+    }
 
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -66,15 +75,11 @@ public abstract class Enemy : MonoBehaviour
 
     private void TryApplyContactDamage(GameObject other)
     {
-        if (!other.CompareTag("Player")) return;
-
+        if (!other.CompareTag("Player"))    return;
         if (contactTimer < contactCooldown) return;
 
-        PlayerDummy playerDummy = other.GetComponent<PlayerDummy>();
-        if (playerDummy == null) return;
-
-        playerDummy.TakeDamage(contactDamage);
-        contactTimer = 0f; 
+        DamagePlayer(contactDamage);
+        contactTimer = 0f;
     }
 
 
@@ -88,6 +93,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
+        AddPlayerHunger(hungerReward);
+
         if (dropTable != null)
             dropTable.Drop(transform.position);
 
