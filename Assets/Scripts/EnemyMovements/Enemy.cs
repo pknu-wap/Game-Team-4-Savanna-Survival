@@ -93,7 +93,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
-        AddPlayerHunger(hungerReward);
+        //AddPlayerHunger(hungerReward);
 
         if (dropTable != null)
             dropTable.Drop(transform.position);

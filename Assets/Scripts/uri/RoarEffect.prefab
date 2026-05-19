@@ -125,3 +125,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d32a8df64597f94da78919d4343fe64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoarSkill
+  roarEffect: {fileID: 3106494318341356402}
