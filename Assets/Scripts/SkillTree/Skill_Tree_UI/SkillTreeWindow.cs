@@ -25,7 +25,7 @@ public class SkillTreeWindow : MonoBehaviour
 
     private void Start()
     {
-        // Find all page containers (direct children of NodesContainer)
+        // 페이지 컨테이너 탐색 (SkillContainer 직속 자식들)
         Transform nodesContainer = transform.Find("SkillContainer");
         if (nodesContainer != null)
         {
@@ -35,19 +35,19 @@ public class SkillTreeWindow : MonoBehaviour
             }
         }
 
-        // Subscribe to arrow buttons
+        // 화살표 버튼 이벤트 구독
         if (leftArrowButton != null)
             leftArrowButton.onClick.AddListener(PreviousPage);
         if (rightArrowButton != null)
             rightArrowButton.onClick.AddListener(NextPage);
 
-        // Subscribe to skill unlock events
+        // 스킬 해금 이벤트 구독
         if (SkillManager.Instance != null)
         {
             SkillManager.Instance.OnSkillUnlocked += OnSkillUnlocked;
         }
 
-        // Initialize window state
+        // 윈도우 초기 상태 설정
         SetWindowOpen(false);
         UpdatePageDisplay();
     }
@@ -77,7 +77,7 @@ public class SkillTreeWindow : MonoBehaviour
             pageContainers[i].gameObject.SetActive(i == currentPage);
         }
 
-        // Update arrow button states
+        // 화살표 버튼 활성화 상태 갱신
         if (leftArrowButton != null)
             leftArrowButton.interactable = (currentPage > 0);
         if (rightArrowButton != null)
@@ -127,19 +127,19 @@ public class SkillTreeWindow : MonoBehaviour
     {
         if (lineContainer == null) return;
 
-        // Clear existing lines
+        // 기존 연결선 제거
         foreach (Transform child in lineContainer)
         {
             Destroy(child.gameObject);
         }
 
-        // Get nodes from current page only
+        // 현재 페이지 노드만 가져오기
         if (currentPage >= pageContainers.Count) return;
 
         List<SkillTreeNodeUI> currentPageNodes = new();
         currentPageNodes.AddRange(pageContainers[currentPage].GetComponentsInChildren<SkillTreeNodeUI>());
 
-        // Draw lines between connected skills
+        // 연결된 스킬 간 선 그리기
         foreach (var node in currentPageNodes)
         {
             if (node.SkillData == null || node.SkillData.prerequisites.Count == 0)

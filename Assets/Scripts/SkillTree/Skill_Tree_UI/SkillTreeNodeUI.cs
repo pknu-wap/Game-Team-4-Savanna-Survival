@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
+public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [SerializeField] private BaseSkillData skillData;
     [SerializeField] private Image iconImage;
@@ -13,44 +13,40 @@ public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     private float holdTime = 0f;
     private bool isHolding = false;
+    private bool holdCompleted = false;
     private Vector2 originalLocalPosition;
     private const float HOLD_DURATION = 2f;
 
     private SkillTooltip tooltip;
     private Button button;
+    private PlayerSkillController skillController;
 
     public BaseSkillData SkillData => skillData;
 
     private void Awake()
     {
         button = GetComponent<Button>();
-        if (button != null)
-        {
-            button.interactable = true;
-        }
 
         tooltip = GetComponentInParent<SkillTreeWindow>()?.GetComponentInChildren<SkillTooltip>(true);
         if (tooltip == null)
-        {
             tooltip = FindObjectOfType<SkillTooltip>(true);
-        }
     }
 
     private void Start()
     {
+        skillController = FindObjectOfType<PlayerSkillController>();
+
         if (skillData != null)
-        {
             GetComponent<RectTransform>().anchoredPosition = skillData.treePosition;
-        }
+
         originalLocalPosition = transform.localPosition;
         UpdateVisualState();
+
         if (SkillManager.Instance != null)
-        {
             SkillManager.Instance.OnSkillUnlocked += OnSkillUnlockedAnywhere;
-        }
     }
 
-private void Update()
+    private void Update()
     {
         if (isHolding)
         {
@@ -69,9 +65,12 @@ private void Update()
         }
     }
 
-public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
         if (skillData == null || SkillManager.Instance == null) return;
+
+        holdCompleted = false;
+
         if (SkillManager.Instance.IsUnlocked(skillData)) return;
 
         isHolding = true;
@@ -79,27 +78,35 @@ public void OnPointerDown(PointerEventData eventData)
         originalLocalPosition = transform.localPosition;
     }
 
-public void OnPointerUp(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)
     {
         isHolding = false;
         holdTime = 0f;
         ResetScale();
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (skillData == null || SkillManager.Instance == null) return;
+        if (!SkillManager.Instance.IsUnlocked(skillData)) return;
+        if (skillData is not ActiveSkillData activeSkill) return;
+
+        // 2초 홀드 완료 직후 릴리즈를 클릭으로 오인하지 않도록 가드
+        if (holdCompleted) { holdCompleted = false; return; }
+
+        skillController?.RequestBinding(activeSkill);
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (tooltip != null)
-        {
             tooltip.Show(skillData, GetComponent<RectTransform>());
-        }
     }
 
-public void OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData eventData)
     {
         if (tooltip != null)
-        {
             tooltip.Hide();
-        }
 
         isHolding = false;
         holdTime = 0f;
@@ -108,11 +115,14 @@ public void OnPointerExit(PointerEventData eventData)
 
     private void OnHoldComplete()
     {
+        holdCompleted = true;
         bool success = SkillManager.Instance.TryUnlockSkill(skillData);
-        
+
         if (success)
         {
             UpdateVisualState();
+            if (skillData is ActiveSkillData activeSkill)
+                skillController?.RequestBinding(activeSkill);
         }
         else
         {
@@ -120,7 +130,7 @@ public void OnPointerExit(PointerEventData eventData)
         }
     }
 
-public void RefreshVisual()
+    public void RefreshVisual()
     {
         UpdateVisualState();
     }
@@ -142,32 +152,26 @@ public void RefreshVisual()
         }
 
         if (skillNameText != null)
-        {
             skillNameText.text = skillData.skillName;
-        }
 
         if (button != null)
-        {
-            button.interactable = !isUnlocked;
-        }
+            button.interactable = true;
     }
 
-private bool CanUnlock()
+    private bool CanUnlock()
     {
         if (skillData == null || SkillManager.Instance == null) return false;
 
         foreach (var prerequisite in skillData.prerequisites)
         {
             if (!SkillManager.Instance.IsUnlocked(prerequisite))
-            {
                 return false;
-            }
         }
 
         return SkillManager.Instance.GetCurrentPoints() >= skillData.cost;
     }
 
-private void ShakeNode()
+    private void ShakeNode()
     {
         Vector2 offset = Random.insideUnitCircle * 2f;
         transform.localPosition = originalLocalPosition + offset;
@@ -179,7 +183,7 @@ private void ShakeNode()
         transform.localScale = Vector3.one * scale;
     }
 
-private void ResetScale()
+    private void ResetScale()
     {
         transform.localPosition = originalLocalPosition;
         transform.localScale = Vector3.one;
@@ -190,7 +194,7 @@ private void ResetScale()
         StartCoroutine(FlashCoroutine());
     }
 
-private System.Collections.IEnumerator FlashCoroutine()
+    private System.Collections.IEnumerator FlashCoroutine()
     {
         if (iconImage == null) yield break;
 
@@ -208,8 +212,6 @@ private System.Collections.IEnumerator FlashCoroutine()
     private void OnDestroy()
     {
         if (SkillManager.Instance != null)
-        {
             SkillManager.Instance.OnSkillUnlocked -= OnSkillUnlockedAnywhere;
-        }
     }
 }
