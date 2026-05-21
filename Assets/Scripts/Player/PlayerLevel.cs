@@ -8,6 +8,9 @@ public class PlayerLevel : MonoBehaviour
     private float maxExp;
     private float level;
 
+    [Header("레벨업 보상")]
+    public int skillPointsPerLevel = 1;
+
     void Start()
     {
         PlayerStatManager playerStatManager = GetComponent<PlayerStatManager>();
@@ -31,6 +34,8 @@ public class PlayerLevel : MonoBehaviour
             currentExp -= maxExp;
             level++;
             maxExp *= 1.2f; //임시 레벨업 경험치통 증가 수치
+
+            statCore.addStat(StatType.SKILL_POINTS, skillPointsPerLevel);
 
             if (AugmentManager.Instance != null)
             {

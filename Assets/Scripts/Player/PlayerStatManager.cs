@@ -23,6 +23,7 @@ public class PlayerStatManager : MonoBehaviour
     public float startSkillDamage = 20f;
     public float startSkillCooldown = 1f;
     public float startHealthRegen = 0.5f;
+    public float startSkillPoints = 0f;
 
     [Header("현재 스탯")]
     public float playerDamage;
@@ -38,6 +39,7 @@ public class PlayerStatManager : MonoBehaviour
     public float playerSkillDamage;
     public float playerSkillCooldown;
     public float playerHealthRegen;
+    public float playerSkillPoints;
 
     private void Awake()
     {
@@ -64,6 +66,7 @@ public class PlayerStatManager : MonoBehaviour
         statCore.registerStat(StatType.SKILL_DAMAGE, startSkillDamage);
         statCore.registerStat(StatType.SKILL_COOLDOWN, startSkillCooldown);
         statCore.registerStat(StatType.HEALTH_REGEN, startHealthRegen);
+        statCore.registerStat(StatType.SKILL_POINTS, startSkillPoints);
     }
 
     private void onStatRegistered(StatType statType, float value) //이벤트 연결용 함수
@@ -86,6 +89,7 @@ public class PlayerStatManager : MonoBehaviour
         playerSkillDamage = statCore.getStat(StatType.SKILL_DAMAGE).rawValue;
         playerSkillCooldown = statCore.getStat(StatType.SKILL_COOLDOWN).rawValue;
         playerHealthRegen = statCore.getStat(StatType.HEALTH_REGEN).rawValue;
+        playerSkillPoints = statCore.getStat(StatType.SKILL_POINTS).rawValue;
     }
 
     //장비스탯 리스트의 스탯 반영

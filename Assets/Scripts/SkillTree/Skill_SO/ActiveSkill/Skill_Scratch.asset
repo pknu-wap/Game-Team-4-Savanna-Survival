@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3f508e7b9fe4f498fb8d3a40f90a64, type: 3}
+  m_Name: Skill_Scratch
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
+  id: scratch
+  skillName: "\uD560\uD034\uAE30"
+  icon: {fileID: -8283620988547500454, guid: e5c711bbb49a36c4e894f1d23ae9fad4, type: 3}
+  description: "\uC55E\uC744 \uD560\uD034\uC5B4 \uC801\uC5D0\uAC8C \uD53C\uD574\uB97C
+    \uC785\uD78C\uB2E4."
+  cost: 1
+  prerequisites:
+  - {fileID: 11400000, guid: ec4108ecd44137f4c9eb61fe2d4a54ad, type: 2}
+  - {fileID: 11400000, guid: 26e04c4953117b04598dcbb2046d1efe, type: 2}
+  treePosition: {x: -300, y: -200}
+  cooldown: 2
+  action: {fileID: 11400000, guid: 20fda02e304231f4bb58c6506ba832e4, type: 2}
