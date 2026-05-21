@@ -42,8 +42,6 @@ public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         originalLocalPosition = transform.localPosition;
         UpdateVisualState();
 
-        if (SkillManager.Instance != null)
-            SkillManager.Instance.OnSkillUnlocked += OnSkillUnlockedAnywhere;
     }
 
     private void Update()
@@ -204,14 +202,4 @@ public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         iconImage.color = originalColor;
     }
 
-    private void OnSkillUnlockedAnywhere(BaseSkillData skill)
-    {
-        UpdateVisualState();
-    }
-
-    private void OnDestroy()
-    {
-        if (SkillManager.Instance != null)
-            SkillManager.Instance.OnSkillUnlocked -= OnSkillUnlockedAnywhere;
-    }
 }

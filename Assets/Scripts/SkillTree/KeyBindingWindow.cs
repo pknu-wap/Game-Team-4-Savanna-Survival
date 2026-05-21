@@ -10,6 +10,8 @@ public class KeyBindingWindow : MonoBehaviour
     [SerializeField] private Text promptText;
     [SerializeField] private CanvasGroup canvasGroup;
 
+    private static readonly KeyCode[] allKeyCodes = (KeyCode[])System.Enum.GetValues(typeof(KeyCode));
+
     private ActiveSkillData targetSkill;
     private PlayerSkillController controller;
     private bool isListening = false;
@@ -40,7 +42,7 @@ public class KeyBindingWindow : MonoBehaviour
             return;
         }
 
-        foreach (KeyCode kc in System.Enum.GetValues(typeof(KeyCode)))
+        foreach (KeyCode kc in allKeyCodes)
         {
             if (kc == KeyCode.Escape) continue;
             if (kc == KeyCode.Mouse0 || kc == KeyCode.Mouse1 || kc == KeyCode.Mouse2) continue;

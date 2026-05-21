@@ -3696,7 +3696,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &534681092
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9568,7 +9568,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad03b13b7fbcf642a9b52a6651db343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkillController
-  keyBindingWindow: {fileID: 534681093}
 --- !u!1 &1577278823 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 962449065283664708, guid: 6fa1a4a7cea6d0843bdaf9e7b3c5e84d, type: 3}
