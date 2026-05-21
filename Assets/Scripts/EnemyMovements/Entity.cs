@@ -1,10 +1,34 @@
+using System.Collections.Generic;
 using UnityEngine;
-
-/// 모든 살아있는 오브젝트(Enemy, Player 등)의 최상위 클래스.
 
 public abstract class Entity : MonoBehaviour
 {
     public abstract void TakeDamage(float damage);
 
-    // TODO: 상태이상 시스템 추가 예정
+    private readonly List<StatusEffectBaseTemp> activeEffects = new();
+
+    public void ApplyEffect(StatusEffectBaseTemp effect)
+    {
+        effect.OnApply(this);
+        activeEffects.Add(effect);
+    }
+
+    public void RemoveEffect(StatusEffectBaseTemp effect)
+    {
+        effect.OnRemove(this);
+        activeEffects.Remove(effect);
+    }
+
+    protected void TickEffects()
+    {
+        for (int i = activeEffects.Count - 1; i >= 0; i--)
+        {
+            activeEffects[i].OnTick(this, Time.deltaTime);
+            if (activeEffects[i].IsExpired)
+            {
+                activeEffects[i].OnRemove(this);
+                activeEffects.RemoveAt(i);
+            }
+        }
+    }
 }

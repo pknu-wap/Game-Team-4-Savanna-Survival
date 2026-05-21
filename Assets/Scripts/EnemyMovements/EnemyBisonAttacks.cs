@@ -7,7 +7,7 @@ public partial class EnemyBison
 
     // ── Melee ────────────────────────────────────────────────
 
-    internal void UpdateMelee(float dist)
+    private void UpdateMelee(float dist)
     {
         if (chargeTimer >= chargeCooldown && dist <= chargeDetectionRange)
         {
@@ -19,7 +19,7 @@ public partial class EnemyBison
         if (dist > meleeRange)
         {
             HideMeleeIndicator();
-            state = State.Chase;
+            state = BisonState.Chase;
             return;
         }
 
@@ -39,9 +39,9 @@ public partial class EnemyBison
 
     // ── Charge ───────────────────────────────────────────────
 
-    internal void EnterChargeTelegraph()
+    private void EnterChargeTelegraph()
     {
-        state        = State.ChargeTelegraph;
+        state        = BisonState.ChargeTelegraph;
         patternTimer = 0f;
         chargeTimer  = 0f;
         chargeDir    = (player.position - transform.position).normalized;
@@ -50,7 +50,7 @@ public partial class EnemyBison
         anim?.SetTrigger(ParamCharge);
     }
 
-    internal void UpdateChargeTelegraph()
+    private void UpdateChargeTelegraph()
     {
         MoveSmooth(Vector2.zero);
         patternTimer += Time.deltaTime;
@@ -59,13 +59,13 @@ public partial class EnemyBison
         if (patternTimer >= chargeTelegraph)
         {
             HideChargeIndicator();
-            state             = State.Charging;
+            state             = BisonState.Charging;
             patternTimer      = 0f;
             chargeDamageDealt = false;
         }
     }
 
-    internal void UpdateCharging()
+    private void UpdateCharging()
     {
         patternTimer      += Time.deltaTime;
         rb.linearVelocity  = chargeDir * chargeSpeed;
@@ -73,25 +73,24 @@ public partial class EnemyBison
         if (patternTimer >= chargeMaxDuration) EnterChargeRecovery();
     }
 
-    internal void UpdateChargeRecovery()
+    private void UpdateChargeRecovery()
     {
         MoveSmooth(Vector2.zero);
         patternTimer += Time.deltaTime;
-        if (patternTimer >= chargeRecoveryTime) state = State.Chase;
+        if (patternTimer >= chargeRecoveryTime) state = BisonState.Chase;
     }
 
-    internal void EnterChargeRecovery()
+    private void EnterChargeRecovery()
     {
-        state             = State.ChargeRecovery;
+        state             = BisonState.ChargeRecovery;
         patternTimer      = 0f;
         rb.linearVelocity = Vector2.zero;
         velocity          = Vector2.zero;
     }
 
-    // 돌진 중 플레이어 충돌 시 데미지 + 즉시 경직
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (state != State.Charging || chargeDamageDealt) return;
+        if (state != BisonState.Charging || chargeDamageDealt) return;
         if (!col.gameObject.CompareTag("Player")) return;
         chargeDamageDealt = true;
         DamagePlayer(chargeDamage);

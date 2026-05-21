@@ -5,24 +5,22 @@ public class EnemyAttacking : Enemy
     [Header("Config")]
     [SerializeField] private float maxHp          = 50f;
     [SerializeField] private float damage         = 10f;
-    [SerializeField] private float detectionRange = 6f;
     [SerializeField] private float attackRange    = 2f;
     [SerializeField] private float attackInterval = 2f;
 
     [Header("Attack Telegraph")]
     [SerializeField] private GameObject attackIndicatorPrefab;
 
-    private float      attackTimer;
-    private bool       telegraph;
-    private GameObject indicator;
-
     [Header("Animation")]
     [SerializeField] private string dieClipName = "Die";
 
+    private float      attackTimer;
+    private bool       telegraph;
+    private GameObject indicator;
     private Animator   anim;
 
     private static readonly int ParamSpeed  = Animator.StringToHash("Speed");
-    private static readonly int ParamAttack = Animator.StringToHash("Attack");   
+    private static readonly int ParamAttack = Animator.StringToHash("Attack");
     private static readonly int ParamDie    = Animator.StringToHash("Die");
 
     protected override void Awake()
@@ -31,14 +29,13 @@ public class EnemyAttacking : Enemy
         statManager.InitAttacker(maxHp, damage);
         currentHp = statManager.getStat(StatType.HEALTH).rawValue;
         SetNewWanderTarget();
-
         anim = GetComponent<Animator>();
     }
 
     protected override void Update()
     {
         base.Update();
-        UpdateAnimator();
+        anim?.SetFloat(ParamSpeed, rb.linearVelocity.magnitude);
         UpdateFacing();
     }
 
@@ -50,9 +47,8 @@ public class EnemyAttacking : Enemy
 
         float dist = Vector2.Distance(transform.position, player.position);
 
-        if      (dist <= attackRange)    Attack();
-        else if (dist <= detectionRange) Chase();
-        else                             Wander();
+        if (dist <= attackRange) Attack();
+        else                     Chase();
     }
 
     private void Chase()
@@ -76,7 +72,7 @@ public class EnemyAttacking : Enemy
 
         if (attackTimer >= attackInterval)
         {
-            anim?.SetTrigger(ParamAttack);   
+            anim?.SetTrigger(ParamAttack);
             DamagePlayer(statManager.getStat(StatType.DAMAGE).calibratedValue);
             attackTimer = 0f;
             telegraph   = false;
@@ -91,37 +87,28 @@ public class EnemyAttacking : Enemy
 
         rb.linearVelocity = Vector2.zero;
         ApplyDeathRewards();
-
         anim?.SetTrigger(ParamDie);
         if (indicator != null) Destroy(indicator);
-
         StartCoroutine(DieRoutine(GetDieClipLength(anim, dieClipName)));
-    }
-
-    // ── 애니메이터 / 방향 ──────────────────────────────────────
-    private void UpdateAnimator()
-    {
-        if (anim == null) return;
-        anim.SetFloat(ParamSpeed, rb.linearVelocity.magnitude);
     }
 
     private void UpdateFacing()
     {
         if (Mathf.Abs(velocity.x) < 0.05f) return;
-
         Vector3 s = transform.localScale;
         s.x = velocity.x > 0 ? -Mathf.Abs(s.x) : Mathf.Abs(s.x);
         transform.localScale = s;
     }
 
-    // ── 인디케이터 ────────────────────────────────────────────
-
     private void ShowIndicator()
     {
         if (attackIndicatorPrefab == null) return;
-        indicator ??= Instantiate(attackIndicatorPrefab, transform);
-        indicator.transform.localPosition = Vector3.zero;
-        indicator.transform.localScale    = Vector3.one * attackRange * 2f;
+        if (indicator == null)
+        {
+            indicator = Instantiate(attackIndicatorPrefab, transform);
+            indicator.transform.localPosition = Vector3.zero;
+            indicator.transform.localScale    = Vector3.one * attackRange * 2f;
+        }
         indicator.SetActive(true);
     }
 
@@ -132,7 +119,6 @@ public class EnemyAttacking : Enemy
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.blue; Gizmos.DrawWireSphere(transform.position, detectionRange);
-        Gizmos.color = Color.red;  Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.color = Color.red; Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
