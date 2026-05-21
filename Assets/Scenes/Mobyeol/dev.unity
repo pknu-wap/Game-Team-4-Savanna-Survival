@@ -8505,6 +8505,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8534cc628331b184fabe8ae425394a95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHunger
+  isHungerDebuff: 0
+  playerHp: {fileID: 1526872022}
 --- !u!114 &1526872022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8517,6 +8519,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de92646027e968e43b3eb2918f318ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHp
+  currentHp: 0
+  maxHp: 0
+  hpRegen: 0
+  playerHunger: {fileID: 1526872021}
 --- !u!114 &1526872023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8543,6 +8549,7 @@ MonoBehaviour:
   startSkillCooldown: 1
   startHealthRegen: 0.5
   startSkillPoints: 0
+  startHungerDecrease: 1
   playerDamage: 0
   playerDefense: 0
   playerHealth: 0
@@ -8557,6 +8564,7 @@ MonoBehaviour:
   playerSkillCooldown: 0
   playerHealthRegen: 0
   playerSkillPoints: 0
+  playerHungerDecrease: 0
 --- !u!114 &1526872024
 MonoBehaviour:
   m_ObjectHideFlags: 0

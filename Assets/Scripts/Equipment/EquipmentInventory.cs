@@ -125,6 +125,7 @@ public class EquipmentInventory : MonoBehaviour
         return -1;
     }
 
+    // 이벤트 둘러보니까 미사용임. 이벤트 형식으로 변경할 것
     private void notifyInventoryChanged()
     {
         onInventoryChanged?.Invoke();
