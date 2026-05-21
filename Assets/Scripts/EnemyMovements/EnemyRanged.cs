@@ -19,17 +19,20 @@ public class EnemyRanged : Enemy
     [Header("Projectile")]
     [SerializeField] private GameObject projectilePrefab;
 
+    [Header("Animation")]
+    [SerializeField] private string dieClipName = "Die";
+
     private float      attackTimer;
     private bool       telegraph;
     private GameObject indicator;
+    private bool       isEngaged;
+    private bool       isRetreating;
 
-    // 감지 진입과 해제 범위를 분리해 경계선 진동을 방지
-    private bool isEngaged;
+    private Animator anim;
 
-    // preferredRange 경계에서의 진동을 방지
-    // true  : preferredRange 안으로 들어온 상태 → 공격 가능 거리까지 후퇴
-    // false : 충분히 멀어진 상태 → 공격 or 접근
-    private bool isRetreating;
+    private static readonly int ParamSpeed = Animator.StringToHash("Speed");
+    private static readonly int ParamShoot = Animator.StringToHash("Shoot");
+    private static readonly int ParamDie   = Animator.StringToHash("Die");
 
     protected override void Awake()
     {
@@ -37,11 +40,14 @@ public class EnemyRanged : Enemy
         statManager.InitAttacker(maxHp, damage);
         currentHp = statManager.getStat(StatType.HEALTH).rawValue;
         SetNewWanderTarget();
+        anim = GetComponent<Animator>();
     }
 
     protected override void Update()
     {
         base.Update();
+        anim?.SetFloat(ParamSpeed, rb.linearVelocity.magnitude);
+        UpdateFacing();
         if (telegraph && player != null && indicator != null && indicator.activeSelf)
             UpdateIndicatorTransform();
     }
@@ -54,16 +60,13 @@ public class EnemyRanged : Enemy
 
         float dist = Vector2.Distance(transform.position, player.position);
 
-        // detectionRange 진입 시 교전 시작, disengageRange 이탈 시 교전 해제
         if (!isEngaged && dist <= detectionRange) isEngaged = true;
         if (isEngaged  && dist >= disengageRange) isEngaged = false;
 
         if (!isEngaged) { Wander(); return; }
 
-        // 너무 가까워지면(< preferredRange) 후퇴 시작
-        // 공격 가능 거리(attackRange) 밖으로 나가야 후퇴 해제
-        if (!isRetreating && dist < preferredRange)  isRetreating = true;
-        if (isRetreating  && dist >= attackRange)    isRetreating = false;
+        if (!isRetreating && dist < preferredRange) isRetreating = true;
+        if (isRetreating  && dist >= attackRange)   isRetreating = false;
 
         if      (isRetreating)        Retreat();
         else if (dist <= attackRange) AttackPlayer();
@@ -102,6 +105,7 @@ public class EnemyRanged : Enemy
 
         if (attackTimer >= attackInterval)
         {
+            anim?.SetTrigger(ParamShoot);
             FireProjectile();
             attackTimer = 0f;
             telegraph   = false;
@@ -111,15 +115,29 @@ public class EnemyRanged : Enemy
 
     protected override void Die()
     {
+        if (isDead) return;
+        isDead = true;
+
+        rb.linearVelocity = Vector2.zero;
+        ApplyDeathRewards();
+        anim?.SetTrigger(ParamDie);
         if (indicator != null) Destroy(indicator);
-        base.Die();
+        StartCoroutine(DieRoutine(GetDieClipLength(anim, dieClipName)));
+    }
+
+    private void UpdateFacing()
+    {
+        if (Mathf.Abs(velocity.x) < 0.05f) return;
+        Vector3 s = transform.localScale;
+        s.x = velocity.x > 0 ? -Mathf.Abs(s.x) : Mathf.Abs(s.x);
+        transform.localScale = s;
     }
 
     private void FireProjectile()
     {
         if (projectilePrefab == null) return;
-        Vector2 dir = (player.position - transform.position).normalized;
-        GameObject go = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+        Vector2    dir = (player.position - transform.position).normalized;
+        GameObject go  = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
         go.GetComponent<Projectile>()?.Init(dir, statManager.getStat(StatType.DAMAGE).calibratedValue);
     }
 

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3753953100955033093}
   - component: {fileID: 5577831408799898796}
   - component: {fileID: 7755792919029457238}
+  - component: {fileID: -6949406449637094705}
   m_Layer: 26
   m_Name: EnemyRanged_Test
   m_TagString: Enemy
@@ -187,3 +188,25 @@ MonoBehaviour:
   disengageRange: 14
   indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
   projectilePrefab: {fileID: 5465070902174546490, guid: 4d40fbd9a2e91644982a6f80aaeaceeb, type: 3}
+--- !u!95 &-6949406449637094705
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7925200749395881049}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 74100350ade171a4691f83b70e457a7c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
