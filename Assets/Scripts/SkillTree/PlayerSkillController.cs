@@ -5,9 +5,10 @@ public class PlayerSkillController : MonoBehaviour
 {
     private List<ActiveSkillData> unlockedActiveSkills = new();
     private List<AutoSkillData> unlockedAutoSkills = new();
-    
+
     private Dictionary<ActiveSkillData, float> activeSkillCooldowns = new();
     private Dictionary<AutoSkillData, float> autoSkillTimers = new();
+    private Dictionary<ActiveSkillData, KeyCode> keyBindings = new();
 
     private int enemyLayerMask;
 
@@ -41,20 +42,49 @@ public class PlayerSkillController : MonoBehaviour
         }
     }
 
+    public void RequestBinding(ActiveSkillData skill)
+    {
+        KeyBindingWindow.Instance?.Open(skill, this);
+    }
+
+    public void SetBinding(ActiveSkillData skill, KeyCode key)
+    {
+        // 충돌 확인: 같은 키를 사용하는 다른 스킬 탐색
+        ActiveSkillData conflicting = null;
+        foreach (var pair in keyBindings)
+        {
+            if (pair.Value == key && pair.Key != skill)
+            {
+                conflicting = pair.Key;
+                break;
+            }
+        }
+
+        // 충돌 시 스왑: 기존 스킬에 현재 스킬의 이전 키 배정
+        if (conflicting != null)
+        {
+            keyBindings.TryGetValue(skill, out KeyCode oldKey);
+            keyBindings[conflicting] = oldKey;
+        }
+
+        keyBindings[skill] = key;
+    }
+
+    public KeyCode GetBinding(ActiveSkillData skill)
+    {
+        return keyBindings.TryGetValue(skill, out KeyCode key) ? key : KeyCode.None;
+    }
+
     private void HandleActiveSkills()
     {
         foreach (var skill in unlockedActiveSkills)
         {
-            // Update cooldown
+            // 쿨다운 업데이트
             if (activeSkillCooldowns[skill] > 0f)
-            {
                 activeSkillCooldowns[skill] -= Time.deltaTime;
-            }
 
-            // Check input (placeholder - needs proper key mapping)
-            // For now, we'll use number keys 1-9
-            int skillIndex = unlockedActiveSkills.IndexOf(skill);
-            KeyCode key = KeyCode.Alpha1 + skillIndex;
+            if (!keyBindings.TryGetValue(skill, out KeyCode key)) continue;
+            if (key == KeyCode.None) continue;
 
             if (Input.GetKeyDown(key) && activeSkillCooldowns[skill] <= 0f)
             {
@@ -75,7 +105,7 @@ public class PlayerSkillController : MonoBehaviour
 
             if (autoSkillTimers[skill] <= 0f)
             {
-                // Search for enemies in range
+                // 범위 내 적 탐색
                 Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(
                     transform.position,
                     skill.range,
@@ -83,14 +113,9 @@ public class PlayerSkillController : MonoBehaviour
                 );
 
                 if (enemiesInRange.Length > 0 && skill.action != null)
-                {
                     skill.action.Process(gameObject, skill);
-                    autoSkillTimers[skill] = skill.interval;
-                }
-                else
-                {
-                    autoSkillTimers[skill] = skill.interval;
-                }
+
+                autoSkillTimers[skill] = skill.interval;
             }
         }
     }
@@ -98,8 +123,6 @@ public class PlayerSkillController : MonoBehaviour
     private void OnDestroy()
     {
         if (SkillManager.Instance != null)
-        {
             SkillManager.Instance.OnSkillUnlocked -= OnSkillUnlocked;
-        }
     }
 }

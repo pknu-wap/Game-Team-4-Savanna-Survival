@@ -761,6 +761,7 @@ MonoBehaviour:
   descriptionText: {fileID: 1455739737}
   cooldownText: {fileID: 1167846504}
   costText: {fileID: 576752549}
+  cooldownRow: {fileID: 0}
 --- !u!225 &111591937
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1913,6 +1914,7 @@ MonoBehaviour:
   lineContainer: {fileID: 20822364}
   leftArrowButton: {fileID: 131512506}
   rightArrowButton: {fileID: 1759785326}
+  skillPointsText: {fileID: 0}
   lockedLineColor: {r: 0.21383637, g: 0.21383637, b: 0.21383637, a: 1}
   unlockedLineColor: {r: 0.2, g: 0.6, b: 1, a: 1}
 --- !u!225 &248755195
@@ -7086,6 +7088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77ff8573d20768f46b9c1e88d8f58152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLevel
+  skillPointsPerLevel: 1
 --- !u!114 &1526872021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7370,6 +7373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad03b13b7fbcf642a9b52a6651db343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkillController
+  keyBindingWindow: {fileID: 0}
 --- !u!1 &1578030108
 GameObject:
   m_ObjectHideFlags: 0

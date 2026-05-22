@@ -36,7 +36,7 @@ public class SkillManager : MonoBehaviour
         if (skill == null) return false;
         if (unlockedSkills.Contains(skill)) return false;
 
-        // Check prerequisites
+        // 선행 스킬 확인
         foreach (var prerequisite in skill.prerequisites)
         {
             if (!unlockedSkills.Contains(prerequisite))
@@ -45,17 +45,17 @@ public class SkillManager : MonoBehaviour
             }
         }
 
-        // Check points
+        // 포인트 확인
         int currentPoints = GetCurrentPoints();
         if (currentPoints < skill.cost) return false;
 
-        // Consume points
+        // 포인트 소모
         playerStatManager.StatCore.addStat(StatType.SKILL_POINTS, -skill.cost);
 
-        // Add to unlocked
+        // 해금 목록에 추가
         unlockedSkills.Add(skill);
 
-        // Apply passive effects if needed
+        // 패시브 효과 적용
         if (skill is PassiveSkillData passiveSkill)
         {
             GameObject player = playerStatManager.gameObject;
@@ -92,7 +92,7 @@ public class SkillManager : MonoBehaviour
 
     public void ResetRun()
     {
-        // Remove all passive effects
+        // 모든 패시브 효과 제거
         if (playerStatManager != null)
         {
             GameObject player = playerStatManager.gameObject;
