@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6148224215810393725}
   - component: {fileID: 3153350892372919145}
   - component: {fileID: 3609331740921082505}
+  - component: {fileID: 7477819077792072349}
   m_Layer: 26
   m_Name: EnemyAttacking_Test
   m_TagString: Enemy
@@ -84,7 +85,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 3d45ff7596749c54fbad17ce68ece638, type: 3}
+  m_Sprite: {fileID: -5006459737736778876, guid: 7d9ffd5c4c8f48e4db8ddf934974713e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -174,13 +175,35 @@ MonoBehaviour:
   contactDamage: 3
   contactCooldown: 1
   hungerReward: 20
-  moveSpeed: 9
-  maxHp: 30
-  damage: 8
-  detectionRange: 3
-  attackRange: 2
-  attackInterval: 3
   wanderRadius: 3
   arriveDistance: 0.2
   idleChance: 0.2
+  moveSpeed: 5
+  maxHp: 60
+  damage: 8
+  attackRange: 2
+  attackInterval: 3
   attackIndicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+  dieClipName: Die
+--- !u!95 &7477819077792072349
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516846558159759908}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d97ff5d5b2a07134cb41ad7cd54d4aae, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

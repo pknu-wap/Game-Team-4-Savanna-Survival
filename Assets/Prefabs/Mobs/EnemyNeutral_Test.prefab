@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5036623666306655944}
   - component: {fileID: -6656869047474873328}
   - component: {fileID: 2410216197034016412}
+  - component: {fileID: 9104947281227235311}
   m_Layer: 26
   m_Name: EnemyNeutral_Test
   m_TagString: Enemy
@@ -110,6 +111,9 @@ MonoBehaviour:
   contactDamage: 5
   contactCooldown: 1
   hungerReward: 50
+  wanderRadius: 3
+  arriveDistance: 0.1
+  idleChance: 0.1
   moveSpeed: 4
   maxHp: 200
   damage: 25
@@ -128,9 +132,6 @@ MonoBehaviour:
   waterDamage: 10
   waterWidth: 1.5
   waterZonePrefab: {fileID: 298413470088328658, guid: 7c37a0aac33857c40a3435f3e6d6dbaa, type: 3}
-  wanderRadius: 3
-  arriveDistance: 0.1
-  idleChance: 0.1
 --- !u!50 &-6656869047474873328
 Rigidbody2D:
   serializedVersion: 5
@@ -195,3 +196,25 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.74999994, y: 0.57812494}
   m_Direction: 0
+--- !u!95 &9104947281227235311
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5096061125741263335}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e65a193b559b4734a800b3923ffb5e53, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

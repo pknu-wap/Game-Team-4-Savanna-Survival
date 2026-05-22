@@ -13,7 +13,6 @@ public abstract class Enemy : Entity
     [Header("Kill Reward")]
     [SerializeField] private float hungerReward = 10f;
 
-    // ── 공통 컴포넌트 ──────────────────────────────────────────
     protected Rigidbody2D    rb;
     protected Transform      player;
     protected PlayerStatCore playerStatCore;
@@ -23,13 +22,10 @@ public abstract class Enemy : Entity
 
     private float contactTimer;
 
-    // ── 공통 배회(Wander) 상태 ─────────────────────────────────
     protected Vector2 velocity;
     protected Vector2 wanderTarget;
     protected bool    isIdle;
     protected float   idleTimer;
-
-    // 스폰 위치를 홈으로 고정하고 반경 내에서만 배회
     protected Vector2 wanderHome;
 
     [Header("Wander")]
@@ -38,7 +34,7 @@ public abstract class Enemy : Entity
     [SerializeField] protected float idleChance     = 0.2f;
     [SerializeField] protected float moveSpeed      = 3f;
 
-    // ──────────────────────────────────────────────────────────
+    protected bool isDead;
 
     protected virtual void Awake()
     {
@@ -66,12 +62,11 @@ public abstract class Enemy : Entity
     {
         if (contactTimer < contactCooldown)
             contactTimer += Time.deltaTime;
+        TickEffects();
     }
 
     protected abstract void Move();
     protected abstract bool IsPlayerInDetection();
-
-    // ── 이동 헬퍼 ─────────────────────────────────────────────
 
     protected void MoveSmooth(Vector2 targetVel)
     {
@@ -105,11 +100,8 @@ public abstract class Enemy : Entity
 
     protected void SetNewWanderTarget()
     {
-        // 현재 위치가 아닌 홈 기준으로 목표를 잡아 한쪽으로 쏠리는 현상을 방지
         wanderTarget = wanderHome + Random.insideUnitCircle * wanderRadius;
     }
-
-    // ── 플레이어 상호작용 ──────────────────────────────────────
 
     protected void DamagePlayer(float damage)
     {
@@ -118,9 +110,11 @@ public abstract class Enemy : Entity
         playerStatCore.registerStat(StatType.HEALTH, next);
     }
 
-    // ── 피격 / 사망 ───────────────────────────────────────────
-
-    protected bool isDead;
+    // 상태이상 적용을 위한 연결점
+    protected void ApplyStatusEffect(PlayerStatCore target /*, StatusEffect effect */)
+    {
+        // TODO: target에 상태이상(effect)을 적용하는 로직 연결
+    }
 
     public override void TakeDamage(float damage)
     {
@@ -136,7 +130,6 @@ public abstract class Enemy : Entity
 
         rb.linearVelocity = Vector2.zero;
         ApplyDeathRewards();
-
         StartCoroutine(DieRoutine(0f));
     }
 
@@ -152,8 +145,6 @@ public abstract class Enemy : Entity
         Destroy(gameObject);
     }
 
-    // Animator에서 사망 클립 길이를 읽는 헬퍼/클립이 없으면 0 반환
-    // clipName을 생략하면 "Die"를 기본값으로 사용
     protected float GetDieClipLength(Animator animator, string clipName = "Die")
     {
         if (animator == null) return 0f;
@@ -161,8 +152,6 @@ public abstract class Enemy : Entity
             if (clip.name == clipName) return clip.length;
         return 0f;
     }
-
-    // ── 접촉 데미지 ───────────────────────────────────────────
 
     private void OnCollisionEnter2D(Collision2D collision) => TryApplyContactDamage(collision.gameObject);
 
@@ -174,8 +163,6 @@ public abstract class Enemy : Entity
         contactTimer = 0f;
     }
 
-    // ── 내부 유틸리티 ─────────────────────────────────────────────
-
     private void AddPlayerHunger(float amount)
     {
         if (playerStatCore == null) return;
@@ -185,7 +172,6 @@ public abstract class Enemy : Entity
         float next      = Mathf.Min(current + amount, maxHunger);
         playerStatCore.registerStat(StatType.HUNGER, next);
 
-        Debug.Log($"[적 처치 보상] {gameObject.name} 처치" +
-                  $"\n 배고픔 +{amount} ({current:F1} → {next:F1} / {maxHunger:F1})");
+        Debug.Log($"[적 처치 보상] {gameObject.name} 처치\n 배고픔 +{amount} ({current:F1} → {next:F1} / {maxHunger:F1})");
     }
 }
