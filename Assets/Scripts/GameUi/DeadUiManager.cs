@@ -46,9 +46,11 @@ public class DeadUiManager : MonoBehaviour
 
         if (currentHp <= 0f)
         {
-            OpenDeadUI();
+            Invoke("OpenDeadUI", 3.5f);
         }
-    }//currentHp의 값이 0보다 작을 떄, 즉 플레이어가 죽을 경우 사망 화면이 띄어짐
+    }
+    //currentHp의 값이 0보다 작을 떄, 즉 플레이어가 죽을 경우 사망 화면이 띄어짐
+    //사망 후 3.5초 후 발생됨
 
     private void OpenDeadUI()
     {
