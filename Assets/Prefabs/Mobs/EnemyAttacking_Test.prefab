@@ -178,10 +178,9 @@ MonoBehaviour:
   wanderRadius: 3
   arriveDistance: 0.2
   idleChance: 0.2
-  moveSpeed: 9
-  maxHp: 30
+  moveSpeed: 5
+  maxHp: 60
   damage: 8
-  detectionRange: 3
   attackRange: 2
   attackInterval: 3
   attackIndicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
