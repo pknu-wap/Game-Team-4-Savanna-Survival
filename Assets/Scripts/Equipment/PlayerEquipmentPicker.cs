@@ -4,26 +4,22 @@ using UnityEngine.InputSystem;
 
 public class PlayerEquipmentPicker : MonoBehaviour
 {
-    private readonly List<EquipmentSystem> nearbyEquipments = new List<EquipmentSystem>();
+    private readonly List<EquipmentPickup> nearbyEquipments = new List<EquipmentPickup>();
 
-    private PlayerStatManager playerStatManager;
-    private EquipmentSystem selectedEquipment;
-
-    private void Awake()
-    {
-        playerStatManager = GetComponentInParent<PlayerStatManager>();
-
-        if (playerStatManager == null)
-        {
-            Debug.LogError("PlayerEquipmentPicker: PlayerStatManager를 못찾음");
-        }
-    }
+    [SerializeField] private EquipmentInventory equipmentInventory;
+    private EquipmentPickup selectedEquipment;
 
     private void Update()
     {
+        if (nearbyEquipments.Count <= 0)
+        {
+            return;
+        }
+        
         selectClosestEquipment();
     }
 
+    /*
     public void OnInteract(InputValue value)
     {
         if (value.isPressed == false)
@@ -37,15 +33,21 @@ public class PlayerEquipmentPicker : MonoBehaviour
         }
 
         pickUpSelectedEquipment();
-    }
+    } 
+    */
 
-    public void addNearbyEquipment(EquipmentSystem equipment)
+    public void toggleInteract()
     {
-        if (equipment == null)
+        if (selectedEquipment == null)
         {
             return;
         }
 
+        pickUpSelectedEquipment();
+    }
+
+    public void addNearbyEquipment(EquipmentPickup equipment)
+    {
         if (nearbyEquipments.Contains(equipment))
         {
             return;
@@ -54,13 +56,8 @@ public class PlayerEquipmentPicker : MonoBehaviour
         nearbyEquipments.Add(equipment);
     }
 
-    public void removeNearbyEquipment(EquipmentSystem equipment)
+    public void removeNearbyEquipment(EquipmentPickup equipment)
     {
-        if (equipment == null)
-        {
-            return;
-        }
-
         if (equipment == selectedEquipment)
         {
             selectedEquipment.setOutline(false);
@@ -72,7 +69,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
 
     private void selectClosestEquipment()
     {
-        EquipmentSystem closestEquipment = getClosestEquipment();
+        EquipmentPickup closestEquipment = getClosestEquipment();
 
         if (selectedEquipment == closestEquipment)
         {
@@ -92,26 +89,20 @@ public class PlayerEquipmentPicker : MonoBehaviour
         }
     }
 
-    private EquipmentSystem getClosestEquipment()
+    private EquipmentPickup getClosestEquipment()
     {
-        EquipmentSystem closestEquipment = null;
-        float closestDistanceSqr = float.MaxValue;
+        EquipmentPickup closestEquipment = null;
+        float closestDistance = 100f;
 
         for (int i = nearbyEquipments.Count - 1; i >= 0; i--)
         {
-            EquipmentSystem equipment = nearbyEquipments[i];
+            EquipmentPickup equipment = nearbyEquipments[i];
 
-            if (equipment == null)
+            float distance = Vector2.Distance(transform.position, equipment.transform.position);
+
+            if (distance < closestDistance)
             {
-                nearbyEquipments.RemoveAt(i);
-                continue;
-            }
-
-            float distanceSqr = ((Vector2)transform.position - (Vector2)equipment.transform.position).sqrMagnitude;
-
-            if (distanceSqr < closestDistanceSqr)
-            {
-                closestDistanceSqr = distanceSqr;
+                closestDistance = distance;
                 closestEquipment = equipment;
             }
         }
@@ -121,17 +112,11 @@ public class PlayerEquipmentPicker : MonoBehaviour
 
     private void pickUpSelectedEquipment()
     {
-        EquipmentSystem equipmentToPickUp = selectedEquipment;
+        nearbyEquipments.Remove(selectedEquipment);
+        
+        selectedEquipment.setOutline(false);
+        selectedEquipment.pickUp(equipmentInventory);
 
-        if (equipmentToPickUp == null)
-        {
-            return;
-        }
-
-        nearbyEquipments.Remove(equipmentToPickUp);
         selectedEquipment = null;
-
-        equipmentToPickUp.setOutline(false);
-        equipmentToPickUp.pickUp(playerStatManager);
     }
 }

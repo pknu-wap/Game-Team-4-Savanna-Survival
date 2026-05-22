@@ -1,10 +1,12 @@
 using UnityEngine;
 
-public class EquipmentSystem : MonoBehaviour
+public class EquipmentPickup : MonoBehaviour
 {
     [Header("장비 데이터")]
+    // 장비 데이터 연결
     [SerializeField] private EquipmentData equipmentData;
 
+    // 장비 선택시 하이라이트 연결
     [SerializeField] private GameObject outlineObject;
 
     private void Awake()
@@ -14,7 +16,7 @@ public class EquipmentSystem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        PlayerEquipmentPicker playerEquipmentPicker = other.GetComponent<PlayerEquipmentPicker>();
+        PlayerEquipmentPicker playerEquipmentPicker = other.GetComponentInChildren<PlayerEquipmentPicker>();
 
         if (playerEquipmentPicker == null)
         {
@@ -26,7 +28,7 @@ public class EquipmentSystem : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        PlayerEquipmentPicker playerEquipmentPicker = other.GetComponent<PlayerEquipmentPicker>();
+        PlayerEquipmentPicker playerEquipmentPicker = other.GetComponentInChildren<PlayerEquipmentPicker>();
 
         if (playerEquipmentPicker == null)
         {
@@ -38,28 +40,15 @@ public class EquipmentSystem : MonoBehaviour
 
     public void setOutline(bool isActive)
     {
-        if (outlineObject == null)
-        {
-            return;
-        }
-
         outlineObject.SetActive(isActive);
     }
 
-    public void pickUp(PlayerStatManager playerStatManager)
+    public void pickUp(EquipmentInventory equipmentInventory)
     {
-        if (playerStatManager == null)
-        {
-            return;
-        }
+        bool isAdded = equipmentInventory.addInventoryEquipment(equipmentData);
 
-        if (equipmentData == null)
-        {
-            Debug.LogError($"{gameObject.name}: EquipmentData 연결안됨");
-            return;
-        }
-
-        playerStatManager.applyEquipmentList(equipmentData.equipmentStats);
+        if (!isAdded) return;
+        // playerStatManager.applyEquipmentList(equipmentData.equipmentStats);
         Destroy(gameObject);
     }
 }

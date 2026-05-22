@@ -24,6 +24,7 @@ public class PlayerStatManager : MonoBehaviour
     public float startSkillCooldown = 1f;
     public float startHealthRegen = 0.5f;
     public float startSkillPoints = 0f;
+    public float startHungerDecrease = 1f;
 
     [Header("현재 스탯")]
     public float playerDamage;
@@ -40,6 +41,7 @@ public class PlayerStatManager : MonoBehaviour
     public float playerSkillCooldown;
     public float playerHealthRegen;
     public float playerSkillPoints;
+    public float playerHungerDecrease;
 
     private void Awake()
     {
@@ -67,6 +69,7 @@ public class PlayerStatManager : MonoBehaviour
         statCore.registerStat(StatType.SKILL_COOLDOWN, startSkillCooldown);
         statCore.registerStat(StatType.HEALTH_REGEN, startHealthRegen);
         statCore.registerStat(StatType.SKILL_POINTS, startSkillPoints);
+        statCore.registerStat(StatType.HUNGER_DECREASE, startHungerDecrease);
     }
 
     private void onStatRegistered(StatType statType, float value) //이벤트 연결용 함수
@@ -93,11 +96,20 @@ public class PlayerStatManager : MonoBehaviour
     }
 
     //장비스탯 리스트의 스탯 반영
-    public void applyEquipmentList(List<EquipmentStat> equipmentStats) 
+    public void applyEquipmentStat(List<EquipmentStat> equipmentStats) 
     {
         foreach (EquipmentStat equipmentStat in equipmentStats) 
         {
             statCore.addStat(equipmentStat.statType, equipmentStat.value);
+        }
+        refreshInspectorValue();
+    }
+
+    public void removeEquipmentStat(List<EquipmentStat> equipmentStats)
+    {
+        foreach (EquipmentStat equipmentStat in equipmentStats) 
+        {
+            statCore.addStat(equipmentStat.statType, -equipmentStat.value);
         }
         refreshInspectorValue();
     }

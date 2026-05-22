@@ -3,13 +3,14 @@ using UnityEngine;
 public class PlayerHp : MonoBehaviour
 {
     private PlayerStatCore statCore;
-    private float currentHp;
-    private float maxHp;
-    private float hpRegen;
+    public float currentHp;
+    public float maxHp;
+    public float hpRegen;
     private float currentTime;
 
     private Animator animator;
     private PlayerMovement playerMovement;
+    [SerializeField] private PlayerHunger playerHunger;
 
     private bool isDead = false;
 
@@ -36,6 +37,11 @@ public class PlayerHp : MonoBehaviour
             onDeath();
             return;
         }
+        if (playerHunger.isHungerDebuff)
+        {
+            currentTime = 0;
+            return;
+        }
         if(currentTime >= 2)
         {
             if (currentHp + hpRegen*2 >= maxHp)
@@ -48,7 +54,7 @@ public class PlayerHp : MonoBehaviour
             }
             statCore.registerStat(StatType.HEALTH, currentHp);
             currentTime = 0;
-            Debug.Log("현재 체력: " + currentHp);
+            // Debug.Log("현재 체력: " + currentHp);    
         }
     }
 

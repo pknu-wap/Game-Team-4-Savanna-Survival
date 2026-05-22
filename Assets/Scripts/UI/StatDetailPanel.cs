@@ -10,6 +10,7 @@ public class StatDetailPanel : MonoBehaviour
     [Header("연결 대상")]
     [SerializeField] private PlayerStatManager playerStatManager;
     [SerializeField] private GameObject statDetailPanel;
+    [SerializeField] private GameObject inventoryPanel;
 
     [Header("스탯 텍스트")]
     [SerializeField] private TMP_Text damageText;
@@ -28,6 +29,7 @@ public class StatDetailPanel : MonoBehaviour
         statCore = playerStatManager.StatCore;
         statCore.onStatRegistered += onStatRegistered; //스탯갱신용 이벤트연결
         statDetailPanel.SetActive(false); //스탯창 끄기
+        inventoryPanel.SetActive(false);
     }
     private void OnDestroy() //이벤트 해제용
     {
@@ -37,20 +39,25 @@ public class StatDetailPanel : MonoBehaviour
         }
     }
 
-    public void OnStatDetailPanel(InputValue value) //InputSystem 스탯창열기
+    /*
+    public void OnStatAndInventory(InputValue value) //InputSystem 스탯창열기
     {
+        Debug.Log("OnStatAndInventory 호출됨");
         if (value.isPressed == false)
         {
             return;
         }
 
         toggleStatDetailPanel();
-    }
+    } 
+    */
 
     public void toggleStatDetailPanel() //창 on off
     {
+        // Debug.Log("toggleStatDetailPanel 호출됨");
         isPanelOpen = !isPanelOpen;
         statDetailPanel.SetActive(isPanelOpen);
+        inventoryPanel.SetActive(isPanelOpen);
 
         if (isPanelOpen) //창열때 스탯갱신
         {
