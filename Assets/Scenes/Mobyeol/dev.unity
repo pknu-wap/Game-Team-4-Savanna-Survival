@@ -1139,6 +1139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemInfoUI
   equipmentInventory: {fileID: 444268577}
   ItemInfoPanel: {fileID: 1842555110}
+  positionController: {fileID: 1842555114}
   itemName: {fileID: 1571081052}
   statTypes:
   - {fileID: 1173299024}
@@ -4217,6 +4218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEquipmentPicker
   equipmentInventory: {fileID: 444268577}
+  itemInfoUI: {fileID: 93224119}
 --- !u!4 &444268576
 Transform:
   m_ObjectHideFlags: 0
@@ -14701,7 +14703,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemInfoUIFollowMouse
   leftTopOffset: {x: 10, y: -10}
   rightTopOffset: {x: -10, y: -10}
+  worldTargetOffset: {x: 0, y: 30}
   rightEdgeThreshold: 230
+  forceMouseModePanel: {fileID: 1870327627}
 --- !u!1 &1848982613 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7361449958033169289, guid: 984d391945434f84bb340d720d748388, type: 3}

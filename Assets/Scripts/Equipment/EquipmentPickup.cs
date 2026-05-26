@@ -9,6 +9,8 @@ public class EquipmentPickup : MonoBehaviour
     // 장비 선택시 하이라이트 연결
     [SerializeField] private GameObject outlineObject;
 
+    public EquipmentData EquipmentData => equipmentData;
+
     private void Awake()
     {
         setOutline(false);

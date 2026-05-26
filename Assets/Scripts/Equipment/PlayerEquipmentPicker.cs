@@ -7,6 +7,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
     private readonly List<EquipmentPickup> nearbyEquipments = new List<EquipmentPickup>();
 
     [SerializeField] private EquipmentInventory equipmentInventory;
+    [SerializeField] private ItemInfoUI itemInfoUI;
     private EquipmentPickup selectedEquipment;
 
     private void Update()
@@ -61,6 +62,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
         if (equipment == selectedEquipment)
         {
             selectedEquipment.setOutline(false);
+            hideSelectedEquipmentInfo();
             selectedEquipment = null;
         }
 
@@ -79,6 +81,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
         if (selectedEquipment != null)
         {
             selectedEquipment.setOutline(false);
+            hideSelectedEquipmentInfo();
         }
 
         selectedEquipment = closestEquipment;
@@ -86,6 +89,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
         if (selectedEquipment != null)
         {
             selectedEquipment.setOutline(true);
+            showSelectedEquipmentInfo();
         }
     }
 
@@ -115,8 +119,27 @@ public class PlayerEquipmentPicker : MonoBehaviour
         nearbyEquipments.Remove(selectedEquipment);
         
         selectedEquipment.setOutline(false);
+        hideSelectedEquipmentInfo();
         selectedEquipment.pickUp(equipmentInventory);
 
         selectedEquipment = null;
+    }
+
+    private void showSelectedEquipmentInfo()
+    {
+        if (itemInfoUI == null || selectedEquipment == null || selectedEquipment.EquipmentData == null)
+        {
+            return;
+        }
+
+        itemInfoUI.openEquipmentInfo(selectedEquipment.EquipmentData, selectedEquipment.transform);
+    }
+
+    private void hideSelectedEquipmentInfo()
+    {
+        if (itemInfoUI != null)
+        {
+            itemInfoUI.hideEquipmentInfo();
+        }
     }
 }
