@@ -20,6 +20,8 @@ public class PlayerSkillController : MonoBehaviour
     private void Start()
     {
         SkillManager.Instance.OnSkillUnlocked += OnSkillUnlocked;
+        SkillManager.Instance.OnSkillRemoved += OnSkillRemoved;
+
     }
 
     private void Update()
@@ -41,6 +43,22 @@ public class PlayerSkillController : MonoBehaviour
             autoSkillTimers[autoSkill] = autoSkill.interval;
         }
     }
+
+private void OnSkillRemoved(BaseSkillData skill)
+    {
+        if (skill is ActiveSkillData activeSkill)
+        {
+            unlockedActiveSkills.Remove(activeSkill);
+            activeSkillCooldowns.Remove(activeSkill);
+            keyBindings.Remove(activeSkill);
+        }
+        else if (skill is AutoSkillData autoSkill)
+        {
+            unlockedAutoSkills.Remove(autoSkill);
+            autoSkillTimers.Remove(autoSkill);
+        }
+    }
+
 
     public void RequestBinding(ActiveSkillData skill)
     {
@@ -97,7 +115,7 @@ public class PlayerSkillController : MonoBehaviour
         }
     }
 
-    private void HandleAutoSkills()
+private void HandleAutoSkills()
     {
         foreach (var skill in unlockedAutoSkills)
         {
@@ -105,14 +123,16 @@ public class PlayerSkillController : MonoBehaviour
 
             if (autoSkillTimers[skill] <= 0f)
             {
-                // 범위 내 적 탐색
-                Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(
-                    transform.position,
-                    skill.range,
-                    enemyLayerMask
-                );
+                bool canProcess = true;
 
-                if (enemiesInRange.Length > 0 && skill.action != null)
+                if (skill.requiresTarget)
+                {
+                    Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(
+                        transform.position, skill.range, enemyLayerMask);
+                    canProcess = enemiesInRange.Length > 0;
+                }
+
+                if (canProcess && skill.action != null)
                     skill.action.Process(gameObject, skill);
 
                 autoSkillTimers[skill] = skill.interval;
@@ -123,6 +143,9 @@ public class PlayerSkillController : MonoBehaviour
     private void OnDestroy()
     {
         if (SkillManager.Instance != null)
+        {
             SkillManager.Instance.OnSkillUnlocked -= OnSkillUnlocked;
+            SkillManager.Instance.OnSkillRemoved -= OnSkillRemoved;
+        }
     }
 }
