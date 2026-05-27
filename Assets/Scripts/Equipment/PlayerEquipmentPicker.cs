@@ -7,13 +7,17 @@ public class PlayerEquipmentPicker : MonoBehaviour
     private readonly List<EquipmentPickup> nearbyEquipments = new List<EquipmentPickup>();
 
     [SerializeField] private EquipmentInventory equipmentInventory;
-    [SerializeField] private ItemInfoUI itemInfoUI;
+    [SerializeField] private DroppedEquipmentInfoUI droppedEquipmentInfoUI;
+    [SerializeField] private float maxSelectionDistance = 3f;
     private EquipmentPickup selectedEquipment;
 
     private void Update()
     {
+        removeInvalidNearbyEquipments();
+
         if (nearbyEquipments.Count <= 0)
         {
+            clearSelectedEquipment();
             return;
         }
         
@@ -61,9 +65,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
     {
         if (equipment == selectedEquipment)
         {
-            selectedEquipment.setOutline(false);
-            hideSelectedEquipmentInfo();
-            selectedEquipment = null;
+            clearSelectedEquipment();
         }
 
         nearbyEquipments.Remove(equipment);
@@ -73,6 +75,12 @@ public class PlayerEquipmentPicker : MonoBehaviour
     {
         EquipmentPickup closestEquipment = getClosestEquipment();
 
+        if (closestEquipment == null)
+        {
+            clearSelectedEquipment();
+            return;
+        }
+
         if (selectedEquipment == closestEquipment)
         {
             return;
@@ -80,8 +88,7 @@ public class PlayerEquipmentPicker : MonoBehaviour
 
         if (selectedEquipment != null)
         {
-            selectedEquipment.setOutline(false);
-            hideSelectedEquipmentInfo();
+            clearSelectedEquipment();
         }
 
         selectedEquipment = closestEquipment;
@@ -96,11 +103,15 @@ public class PlayerEquipmentPicker : MonoBehaviour
     private EquipmentPickup getClosestEquipment()
     {
         EquipmentPickup closestEquipment = null;
-        float closestDistance = 100f;
+        float closestDistance = maxSelectionDistance;
 
         for (int i = nearbyEquipments.Count - 1; i >= 0; i--)
         {
             EquipmentPickup equipment = nearbyEquipments[i];
+            if (equipment == null || equipment.gameObject.activeInHierarchy == false)
+            {
+                continue;
+            }
 
             float distance = Vector2.Distance(transform.position, equipment.transform.position);
 
@@ -116,30 +127,55 @@ public class PlayerEquipmentPicker : MonoBehaviour
 
     private void pickUpSelectedEquipment()
     {
-        nearbyEquipments.Remove(selectedEquipment);
+        EquipmentPickup equipmentToPickUp = selectedEquipment;
+        nearbyEquipments.Remove(equipmentToPickUp);
         
-        selectedEquipment.setOutline(false);
-        hideSelectedEquipmentInfo();
-        selectedEquipment.pickUp(equipmentInventory);
+        clearSelectedEquipment();
+        equipmentToPickUp.pickUp(equipmentInventory);
+    }
 
+    private void removeInvalidNearbyEquipments()
+    {
+        for (int i = nearbyEquipments.Count - 1; i >= 0; --i)
+        {
+            if (nearbyEquipments[i] == null || nearbyEquipments[i].gameObject.activeInHierarchy == false)
+            {
+                if (nearbyEquipments[i] == selectedEquipment)
+                {
+                    clearSelectedEquipment();
+                }
+
+                nearbyEquipments.RemoveAt(i);
+            }
+        }
+    }
+
+    private void clearSelectedEquipment()
+    {
+        if (selectedEquipment != null)
+        {
+            selectedEquipment.setOutline(false);
+        }
+
+        hideSelectedEquipmentInfo();
         selectedEquipment = null;
     }
 
     private void showSelectedEquipmentInfo()
     {
-        if (itemInfoUI == null || selectedEquipment == null || selectedEquipment.EquipmentData == null)
+        if (droppedEquipmentInfoUI == null || selectedEquipment == null || selectedEquipment.EquipmentData == null)
         {
             return;
         }
 
-        itemInfoUI.openEquipmentInfo(selectedEquipment.EquipmentData, selectedEquipment.transform);
+        droppedEquipmentInfoUI.openEquipmentInfo(selectedEquipment.EquipmentData, selectedEquipment.transform);
     }
 
     private void hideSelectedEquipmentInfo()
     {
-        if (itemInfoUI != null)
+        if (droppedEquipmentInfoUI != null)
         {
-            itemInfoUI.hideEquipmentInfo();
+            droppedEquipmentInfoUI.hideEquipmentInfo();
         }
     }
 }

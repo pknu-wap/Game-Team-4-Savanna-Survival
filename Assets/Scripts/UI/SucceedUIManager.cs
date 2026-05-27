@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class SucceedUIManager : MonoBehaviour
@@ -14,7 +15,8 @@ public class SucceedUIManager : MonoBehaviour
     [Header("Script")]
     [SerializeField] private EquipmentInventory equipmentInventory;
     [SerializeField] private SelectSucceedItem selectSucceedItem;
-    [SerializeField] private ItemInfoUI itemInfoUI;
+    [FormerlySerializedAs("itemInfoUI")]
+    [SerializeField] private ItemInfoUI inventoryItemInfoUI;
     [SerializeField] private MaxSucceedSelectionNotice maxSelectionNotice;
 
     [Header("Option")]
@@ -79,9 +81,9 @@ public class SucceedUIManager : MonoBehaviour
 
     public void closeSucceedUI()
     {
-        if (itemInfoUI != null)
+        if (inventoryItemInfoUI != null)
         {
-            itemInfoUI.hideEquipmentInfo();
+            inventoryItemInfoUI.hideEquipmentInfo();
         }
 
         if (succeedPanel != null)
@@ -98,19 +100,19 @@ public class SucceedUIManager : MonoBehaviour
 
     public void onSlotHover(SucceedUI slotUI)
     {
-        if (slotUI == null || slotUI.Equipment == null || itemInfoUI == null)
+        if (slotUI == null || slotUI.Equipment == null || inventoryItemInfoUI == null)
         {
             return;
         }
 
-        itemInfoUI.openEquipmentInfo(slotUI.Equipment);
+        inventoryItemInfoUI.openEquipmentInfo(slotUI.Equipment);
     }
 
     public void onSlotExit(SucceedUI slotUI)
     {
-        if (itemInfoUI != null)
+        if (inventoryItemInfoUI != null)
         {
-            itemInfoUI.hideEquipmentInfo();
+            inventoryItemInfoUI.hideEquipmentInfo();
         }
     }
 

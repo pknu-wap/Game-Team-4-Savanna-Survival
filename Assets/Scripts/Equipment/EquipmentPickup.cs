@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EquipmentPickup : MonoBehaviour
@@ -8,6 +9,8 @@ public class EquipmentPickup : MonoBehaviour
 
     // 장비 선택시 하이라이트 연결
     [SerializeField] private GameObject outlineObject;
+
+    private readonly List<PlayerEquipmentPicker> nearbyPickers = new List<PlayerEquipmentPicker>();
 
     public EquipmentData EquipmentData => equipmentData;
 
@@ -25,6 +28,11 @@ public class EquipmentPickup : MonoBehaviour
             return;
         }
 
+        if (nearbyPickers.Contains(playerEquipmentPicker) == false)
+        {
+            nearbyPickers.Add(playerEquipmentPicker);
+        }
+
         playerEquipmentPicker.addNearbyEquipment(this);
     }
 
@@ -38,6 +46,20 @@ public class EquipmentPickup : MonoBehaviour
         }
 
         playerEquipmentPicker.removeNearbyEquipment(this);
+        nearbyPickers.Remove(playerEquipmentPicker);
+    }
+
+    private void OnDisable()
+    {
+        for (int i = nearbyPickers.Count - 1; i >= 0; --i)
+        {
+            if (nearbyPickers[i] != null)
+            {
+                nearbyPickers[i].removeNearbyEquipment(this);
+            }
+        }
+
+        nearbyPickers.Clear();
     }
 
     public void setOutline(bool isActive)

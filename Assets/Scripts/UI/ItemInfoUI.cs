@@ -6,7 +6,6 @@ public class ItemInfoUI : MonoBehaviour
     [Header("Script")]
     [SerializeField] private EquipmentInventory equipmentInventory;
     [SerializeField] private GameObject ItemInfoPanel;
-    [SerializeField] private ItemInfoUIFollowMouse positionController;
 
     [Header("UI")]
     [SerializeField] private TMP_Text itemName;
@@ -23,34 +22,13 @@ public class ItemInfoUI : MonoBehaviour
     
     public void openEquipmentInfo(EquipmentData equipment)
     {
-        if (positionController != null)
-        {
-            positionController.followMouseMode();
-        }
-
         ItemInfoPanel.SetActive(true);
         setInfoText(equipment);
 
-    }
-
-    public void openEquipmentInfo(EquipmentData equipment, Transform worldTarget)
-    {
-        if (positionController != null)
-        {
-            positionController.followWorldTargetMode(worldTarget);
-        }
-
-        ItemInfoPanel.SetActive(true);
-        setInfoText(equipment);
     }
 
     public void hideEquipmentInfo()
     {
-        if (positionController != null)
-        {
-            positionController.followMouseMode();
-        }
-
         ItemInfoPanel.SetActive(false);
     }
 
