@@ -38,7 +38,11 @@ public class AugmentChoiceButton : MonoBehaviour
     {
         onSelected?.Invoke(augmentData);
         
-        // 실제 시스템 작동 코드 적용 필요.
-        
+        // 실제 시스템 작동 코드 적용 필요. SO 데이터 파일 들어와야 함. 스킬 제작 후 적용.
+
+        // SkillManager.Instance.ReplaceSkill();
+
+
+
     }
 }
