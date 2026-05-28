@@ -9,33 +9,25 @@ public class HungerMaxBuff : MonoBehaviour
     [SerializeField] private ParticleSystem buffActiveVfx;
 
     private PlayerStatManager statManager;
+    private PlayerHunger playerHunger;
     private bool buffActive = false;
     private float buffTimer = 0f;
-    private float prevHungerRatio = 0f;
 
     private void Start()
     {
         statManager = GetComponent<PlayerStatManager>();
+        playerHunger = GetComponent<PlayerHunger>();
+        if (playerHunger != null)
+            playerHunger.OnHungerFilled += TriggerBuff;
     }
 
     private void Update()
     {
-        float hunger = statManager.StatCore.getStat(StatType.HUNGER).rawValue;
-        float maxHunger = statManager.StatCore.getStat(StatType.MAX_HUNGER).rawValue;
-        float currentRatio = hunger / maxHunger;
+        if (!buffActive) return;
 
-        // PlayerHunger가 허기 100% 도달 시 60%로 리셋하는 타이밍 감지
-        if (prevHungerRatio >= 0.95f && currentRatio <= 0.65f)
-            TriggerBuff();
-
-        prevHungerRatio = currentRatio;
-
-        if (buffActive)
-        {
-            buffTimer -= Time.deltaTime;
-            if (buffTimer <= 0f)
-                EndBuff();
-        }
+        buffTimer -= Time.deltaTime;
+        if (buffTimer <= 0f)
+            EndBuff();
     }
 
     private void TriggerBuff()
@@ -48,6 +40,12 @@ public class HungerMaxBuff : MonoBehaviour
 
             if (buffActiveVfx != null)
                 buffActiveVfx.Play();
+
+            Debug.Log($"[HungerMax] 버프 발동 — DAMAGE+{damageBonus}, SPEED+{speedBonus}, {buffDuration}s");
+        }
+        else
+        {
+            Debug.Log($"[HungerMax] 재트리거 — 타이머 리셋 ({buffDuration}s)");
         }
 
         // 재트리거 시 타이머만 리셋 (스탯 중복 적용 없음)
@@ -63,10 +61,15 @@ public class HungerMaxBuff : MonoBehaviour
 
         if (buffActiveVfx != null)
             buffActiveVfx.Stop();
+
+        Debug.Log("[HungerMax] 버프 종료 — 스탯 원복");
     }
 
     private void OnDestroy()
     {
+        if (playerHunger != null)
+            playerHunger.OnHungerFilled -= TriggerBuff;
+
         if (buffActive)
             EndBuff();
     }

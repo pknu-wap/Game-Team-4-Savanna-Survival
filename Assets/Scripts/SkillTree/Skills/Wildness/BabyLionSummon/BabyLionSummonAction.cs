@@ -8,7 +8,11 @@ public class BabyLionSummonAction : AutoAction
     public override void Process(GameObject player, AutoSkillData data)
     {
         var petCtrl = player.GetComponent<PetController>();
-        if (petCtrl == null) return;
+        if (petCtrl == null)
+        {
+            Debug.LogWarning("[BabyLionSummon] PetController가 플레이어에 없습니다. 컴포넌트를 추가하세요.");
+            return;
+        }
 
         petCtrl.activePets.RemoveAll(p => p == null);
         if (petCtrl.activePets.Count >= petCtrl.maxPetCount) return;
@@ -24,8 +28,15 @@ public class BabyLionSummonAction : AutoAction
             var pet = Instantiate(petCtrl.petPrefab, spawnPos, Quaternion.identity);
             var ai = pet.GetComponent<BabyLionAI>();
             if (ai != null)
-                ai.damage = petCtrl.basePetDamage * petCtrl.petDamageMultiplier;
+            {
+                var statManager = player.GetComponent<PlayerStatManager>();
+                float skillDamage = statManager != null
+                    ? statManager.StatCore.getStat(StatType.SKILL_DAMAGE).calibratedValue
+                    : 1f;
+                ai.damage = skillDamage * petCtrl.petDamageMultiplier;
+            }
             petCtrl.activePets.Add(pet);
+            Debug.Log($"[BabyLionSummon] 소환 완료 — {petCtrl.activePets.Count}/{petCtrl.maxPetCount}, damage={ai?.damage:F1}");
         }
     }
 

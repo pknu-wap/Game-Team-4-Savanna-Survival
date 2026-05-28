@@ -9560,7 +9560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHunger
   isHungerDebuff: 0
-  playerHp: {fileID: 0}
+  playerHp: {fileID: 1526872022}
 --- !u!114 &1526872022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9576,7 +9576,7 @@ MonoBehaviour:
   currentHp: 0
   maxHp: 0
   hpRegen: 0
-  playerHunger: {fileID: 0}
+  playerHunger: {fileID: 1526872021}
 --- !u!114 &1526872023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9855,7 +9855,7 @@ MonoBehaviour:
   maxPetCount: 1
   basePetDamage: 5
   petDamageMultiplier: 1
-  petPrefab: {fileID: 0}
+  petPrefab: {fileID: 7270820640976640748, guid: 8b420aa80ecc3bc49903b1d9cb75f00f, type: 3}
   activePets: []
 --- !u!114 &1526872034
 MonoBehaviour:
