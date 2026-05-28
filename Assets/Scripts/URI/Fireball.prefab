@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1905504004118343584}
   - component: {fileID: 5234139378011351372}
   - component: {fileID: 5478646549490636236}
-  - component: {fileID: 3102892096183335311}
+  - component: {fileID: 5706775943837495209}
   m_Layer: 0
   m_Name: Fireball
   m_TagString: Untagged
@@ -113,7 +113,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3102892096183335311
+--- !u!114 &5706775943837495209
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,7 +122,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8758821022148112218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a39c8587113bebc41995acccb3c7783a, type: 3}
+  m_Script: {fileID: 11500000, guid: 96674793757f48442b4d8751dcaf615f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FireballProjectile
-  speed: 30
+  speed: 10
+  damage: 10

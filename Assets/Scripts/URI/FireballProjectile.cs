@@ -1,18 +1,33 @@
-using System;
 using UnityEngine;
 
 public class FireballProjectile : MonoBehaviour
 {
-    private object fireballPrefab;
-
     public float speed = 10f;
+    public float damage = 10f;
 
-void Update()
-{
-    transform.Translate(Vector2.right * speed * Time.deltaTime);
-}
-    private object Instantiate(object fireballPrefab, Vector3 spawnPos, Quaternion rotation)
+    private float direction = 1f;
+
+    public void Initialize(float direction, float speed)
     {
-        throw new NotImplementedException();
+        this.direction = direction;
+        this.speed = speed;
+    }
+
+    void Update()
+    {
+        transform.Translate(
+            Vector2.right * direction * speed * Time.deltaTime
+        );
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Enemy enemy = other.GetComponent<Enemy>();
+
+        if (enemy != null)
+        {
+            enemy.TakeDamage(damage);
+            Destroy(gameObject);
+        }
     }
 }
