@@ -40,7 +40,7 @@ public class PlayerSkillController : MonoBehaviour
         else if (skill is AutoSkillData autoSkill)
         {
             unlockedAutoSkills.Add(autoSkill);
-            autoSkillTimers[autoSkill] = autoSkill.interval;
+            autoSkillTimers[autoSkill] = 0f;
         }
     }
 
@@ -133,9 +133,11 @@ private void HandleAutoSkills()
                 }
 
                 if (canProcess && skill.action != null)
+                {
                     skill.action.Process(gameObject, skill);
-
-                autoSkillTimers[skill] = skill.interval;
+                    autoSkillTimers[skill] = skill.interval;
+                }
+                // 적이 없으면 타이머 0 유지 → 적 등장 즉시 발동
             }
         }
     }
