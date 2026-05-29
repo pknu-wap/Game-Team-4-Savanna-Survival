@@ -38,12 +38,6 @@ public class ScratchAction : ActiveAction
         if (animator != null && !string.IsNullOrEmpty(animTriggerName))
             animator.SetTrigger(animTriggerName);
 
-        if (vfxPrefab != null)
-        {
-            var vfx = Instantiate(vfxPrefab, player.transform.position, player.transform.rotation);
-            Object.Destroy(vfx, vfxDuration);
-        }
-
         float damage = 0f;
         var statManager = player.GetComponent<PlayerStatManager>();
         if (statManager != null)
@@ -74,7 +68,14 @@ public class ScratchAction : ActiveAction
         }
 
         if (nearest != null)
+        {
             nearest.TakeDamage(damage);
+            if (vfxPrefab != null)
+            {
+                var vfx = Instantiate(vfxPrefab, nearest.transform.position, player.transform.rotation);
+                Object.Destroy(vfx, vfxDuration);
+            }
+        }
 
 #if UNITY_EDITOR
         DrawDebugArc(player.transform.position, forward, range, arcAngle);
