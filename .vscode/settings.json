@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "unity.slnx",
+    "dotnet.defaultSolution": "Game-Team-4-Savanna-Survival.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }

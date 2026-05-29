@@ -72,12 +72,12 @@ public class EnemyBleed : Enemy
         if (!telegraph && attackTimer >= attackInterval - 1f)
         {
             ShowIndicator();
+            anim?.SetTrigger(ParamAttack); // 인디케이터와 함께 모션 시작
             telegraph = true;
         }
 
         if (attackTimer >= attackInterval)
         {
-            anim?.SetTrigger(ParamAttack);
             DamagePlayer(statManager.getStat(StatType.DAMAGE).calibratedValue);
             ApplyBleed();
             attackTimer = 0f;
@@ -90,7 +90,11 @@ public class EnemyBleed : Enemy
     {
         Entity target = player?.GetComponent<PlayerEffectTemp>();
         if (target == null) return;
-        target.ApplyEffect(new BleedEffectTemp(bleedStacks, bleedDotDamage, bleedDuration));
+
+        if (target.HasEffect<BleedEffectTemp>(out BleedEffectTemp existing))
+            existing.AddStacks(bleedStacks, bleedDuration);
+        else
+            target.ApplyEffect(new BleedEffectTemp(bleedStacks, bleedDotDamage, bleedDuration));
     }
 
     protected override void Die()
@@ -113,6 +117,7 @@ public class EnemyBleed : Enemy
         transform.localScale = s;
     }
 
+    // 적 자식으로 부착 — 적을 중심으로 attackRange 크기의 원형 표시
     private void ShowIndicator()
     {
         if (attackIndicatorPrefab == null) return;
