@@ -49,14 +49,14 @@ public class PlayerStatUiManager : MonoBehaviour
     float maxHunger = statCore.getStat(StatType.MAX_HUNGER).rawValue;
     // 스탯 코어에서 값들을 가져옴
 
-    damageText.text = $"데미지 : {statCore.getStat(StatType.DAMAGE).rawValue:0.##}";
-    healthText.text = $"체력 : {health:0} / {maxHealth:0}";
-    hungerText.text = $"배고픔 : {hunger:0} / {maxHunger:0}";
-    moveSpeedText.text = $"이동속도 : {statCore.getStat(StatType.MOVESPEED).rawValue:0.##}";
-    defenseText.text = $"방어력 : {statCore.getStat(StatType.DEFENSE).rawValue:0.##}";
-    healthRegenText.text = $"체력 재생 : {statCore.getStat(StatType.HEALTH_REGEN).rawValue:0.##}";
-    skillDamageText.text = $"스킬 데미지 : {statCore.getStat(StatType.SKILL_DAMAGE).rawValue:0.##}";
-    skillCooldownText.text = $"스킬 쿨타임 : {statCore.getStat(StatType.SKILL_COOLDOWN).rawValue:0.##}초";
+    damageText.text = $"Damage : {statCore.getStat(StatType.DAMAGE).rawValue:0.##}";
+    healthText.text = $"Health : {health:0} / {maxHealth:0}";
+    hungerText.text = $"Hunger : {hunger:0} / {maxHunger:0}";
+    moveSpeedText.text = $"Speed : {statCore.getStat(StatType.MOVESPEED).rawValue:0.##}";
+    defenseText.text = $"Defanse : {statCore.getStat(StatType.DEFENSE).rawValue:0.##}";
+    healthRegenText.text = $"Health Regen : {statCore.getStat(StatType.HEALTH_REGEN).rawValue:0.##}";
+    skillDamageText.text = $"Skill Damage : {statCore.getStat(StatType.SKILL_DAMAGE).rawValue:0.##}";
+    skillCooldownText.text = $"Skill CoolTime : {statCore.getStat(StatType.SKILL_COOLDOWN).rawValue:0.#}초";
         // 스탯코어의 값을 텍스트에 반영함
     }
 }
