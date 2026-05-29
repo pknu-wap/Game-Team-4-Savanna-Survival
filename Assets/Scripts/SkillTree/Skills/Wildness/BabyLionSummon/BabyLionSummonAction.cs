@@ -29,14 +29,12 @@ public class BabyLionSummonAction : AutoAction
             var ai = pet.GetComponent<BabyLionAI>();
             if (ai != null)
             {
-                var statManager = player.GetComponent<PlayerStatManager>();
-                float skillDamage = statManager != null
-                    ? statManager.StatCore.getStat(StatType.SKILL_DAMAGE).calibratedValue
-                    : 1f;
-                ai.damage = skillDamage * petCtrl.petDamageMultiplier;
+                ai.player = player.transform;
+                ai.statManager = player.GetComponent<PlayerStatManager>();
+                ai.petController = petCtrl;
             }
             petCtrl.activePets.Add(pet);
-            Debug.Log($"[BabyLionSummon] 소환 완료 — {petCtrl.activePets.Count}/{petCtrl.maxPetCount}, damage={ai?.damage:F1}");
+            Debug.Log($"[BabyLionSummon] 소환 완료 — {petCtrl.activePets.Count}/{petCtrl.maxPetCount}");
         }
     }
 
