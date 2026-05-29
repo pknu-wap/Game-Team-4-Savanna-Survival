@@ -2,16 +2,18 @@ using UnityEngine;
 
 public class HungerMaxBuff : MonoBehaviour
 {
-    public float damageBonus;
-    public float speedBonus;
+    public float damageBonusPercent;   // 예: 5 → 5%
+    public float speedBonusPercent;    // 예: 1 → 1%
     public float buffDuration;
 
-    [SerializeField] private ParticleSystem buffActiveVfx;
+    public ParticleSystem buffVfxPrefab;
 
     private PlayerStatManager statManager;
     private PlayerHunger playerHunger;
     private bool buffActive = false;
     private float buffTimer = 0f;
+    private float appliedDamageBonus;
+    private float appliedSpeedBonus;
 
     private void Start()
     {
@@ -34,33 +36,39 @@ public class HungerMaxBuff : MonoBehaviour
     {
         if (!buffActive)
         {
-            statManager.StatCore.addStat(StatType.DAMAGE, damageBonus);
-            statManager.StatCore.addStat(StatType.MOVESPEED, speedBonus);
+            float baseDamage = statManager.StatCore.getStat(StatType.DAMAGE).calibratedValue;
+            float baseSpeed  = statManager.StatCore.getStat(StatType.MOVESPEED).calibratedValue;
+            appliedDamageBonus = baseDamage * (damageBonusPercent / 100f);
+            appliedSpeedBonus  = baseSpeed  * (speedBonusPercent  / 100f);
+
+            statManager.StatCore.addStat(StatType.DAMAGE,    appliedDamageBonus);
+            statManager.StatCore.addStat(StatType.MOVESPEED, appliedSpeedBonus);
             buffActive = true;
 
-            if (buffActiveVfx != null)
-                buffActiveVfx.Play();
+            if (buffVfxPrefab != null)
+            {
+                var vfx = Instantiate(buffVfxPrefab, transform.position, Quaternion.identity, transform);
+                Object.Destroy(vfx.gameObject, vfx.main.duration + vfx.main.startLifetime.constantMax);
+            }
 
-            Debug.Log($"[HungerMax] 버프 발동 — DAMAGE+{damageBonus}, SPEED+{speedBonus}, {buffDuration}s");
+            Debug.Log($"[HungerMax] 버프 발동 — DAMAGE+{damageBonusPercent}%({appliedDamageBonus:F1}), SPEED+{speedBonusPercent}%({appliedSpeedBonus:F2}), {buffDuration}s");
         }
         else
         {
             Debug.Log($"[HungerMax] 재트리거 — 타이머 리셋 ({buffDuration}s)");
         }
 
-        // 재트리거 시 타이머만 리셋 (스탯 중복 적용 없음)
         buffTimer = buffDuration;
     }
 
     private void EndBuff()
     {
-        statManager.StatCore.addStat(StatType.DAMAGE, -damageBonus);
-        statManager.StatCore.addStat(StatType.MOVESPEED, -speedBonus);
+        statManager.StatCore.addStat(StatType.DAMAGE,    -appliedDamageBonus);
+        statManager.StatCore.addStat(StatType.MOVESPEED, -appliedSpeedBonus);
         buffActive = false;
         buffTimer = 0f;
-
-        if (buffActiveVfx != null)
-            buffActiveVfx.Stop();
+        appliedDamageBonus = 0f;
+        appliedSpeedBonus  = 0f;
 
         Debug.Log("[HungerMax] 버프 종료 — 스탯 원복");
     }

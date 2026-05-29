@@ -9853,9 +9853,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PetController
   maxPetCount: 1
-  basePetDamage: 5
   petDamageMultiplier: 1
-  petPrefab: {fileID: 7270820640976640748, guid: 8b420aa80ecc3bc49903b1d9cb75f00f, type: 3}
+  petPrefab: {fileID: 7270820640976640748, guid: 515ee9c2478d0d149823b8f04343e782, type: 3}
   activePets: []
 --- !u!114 &1526872034
 MonoBehaviour:

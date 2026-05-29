@@ -15,8 +15,7 @@ MonoBehaviour:
   id: wildness_hunger_max_lv2
   skillName: "\uBC30\uACE0\uD488 MAX Lv2"
   icon: {fileID: 0}
-  description: "\uBC30\uACE0\uD488 90% \uC774\uC0C1 \uC720\uC9C0 \uC2DC \uCD5C\uC885
-    \uB370\uBBF8\uC9C0 +10%, \uC774\uB3D9\uC18D\uB3C4 +0.5"
+  description: "\uACF5\uACA9\uB825 10%\n\uC774\uB3D9\uC18D\uB3C4 1%"
   cost: 1
   prerequisites:
   - {fileID: 11400000, guid: b4e3a8edc63906b43a64c15ebf31c430, type: 2}

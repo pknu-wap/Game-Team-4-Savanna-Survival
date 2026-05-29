@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc0ec06be5160846b3c401cccff7963, type: 3}
   m_Name: Effect_HungerMax_Lv5
   m_EditorClassIdentifier: Assembly-CSharp::HungerMaxEffect
-  damageBonus: 25
-  speedBonus: 1
-  buffDuration: 6
+  damageBonusPercent: 25
+  speedBonusPercent: 5
+  buffDuration: 5
+  hungerDecreaseReduction: 50
+  buffVfxPrefab: {fileID: 2272033567662803553, guid: 481827e929bb071499d4769383733a09, type: 3}
