@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f3f508e7b9fe4f498fb8d3a40f90a64, type: 3}
   m_Name: Skill_Leap
   m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
-  id: leap
+  id: wildness_leap
   skillName: "\uB3C4\uC57D"
   icon: {fileID: 2477024699797179518, guid: 0ff77ba5f72a28142ac0acb2a92dd631, type: 3}
   description: "\uBA40\uB9AC \uB3C4\uC57D\uD55C \uB4A4 \uCC29\uC9C0 \uC9C0\uC810
@@ -21,5 +21,9 @@ MonoBehaviour:
   prerequisites:
   - {fileID: 11400000, guid: 90b62e63529f4484b8e92582d123cda8, type: 2}
   treePosition: {x: -100, y: -180}
+  treeType: 1
+  unlockBehavior: 0
+  skillGroupId: wildness_leap
+  skillLevel: 1
   cooldown: 5
   action: {fileID: 11400000, guid: bfe2ee81d06345d49bda1e778fd80891, type: 2}

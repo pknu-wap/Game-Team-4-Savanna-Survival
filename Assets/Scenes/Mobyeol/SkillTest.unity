@@ -971,9 +971,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 1297119370}
     m_Modifications:
     - target: {fileID: 639125569276145185, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
+      propertyPath: iconImage
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 639125569276145185, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
       propertyPath: skillData
       value: 
-      objectReference: {fileID: 11400000, guid: ec4108ecd44137f4c9eb61fe2d4a54ad, type: 2}
+      objectReference: {fileID: 11400000, guid: 05824a320bd19bb4f9980374ea2d93e6, type: 2}
     - target: {fileID: 2046328831496363460, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
       propertyPath: m_Name
       value: Banana
@@ -17574,10 +17578,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de92646027e968e43b3eb2918f318ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHp
-  currentHp: 0
-  maxHp: 0
-  hpRegen: 0
-  playerHunger: {fileID: 1526872021}
 --- !u!114 &1526872023
 MonoBehaviour:
   m_ObjectHideFlags: 0

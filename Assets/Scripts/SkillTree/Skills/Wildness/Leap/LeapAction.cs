@@ -9,38 +9,28 @@ public class LeapAction : ActiveAction
     [SerializeField] private float duration = 0.32f;
     [SerializeField] private float landingRadius = 2f;
     [SerializeField] private float damageMultiplier = 1.6f;
+    [SerializeField] private GameObject vfxPrefab;
+    [SerializeField] private float vfxDuration = 0.2f;
     [SerializeField] private LayerMask enemyLayers;
 
     private readonly Dictionary<GameObject, Coroutine> activeRoutines = new();
 
     public override void Process(GameObject player, ActiveSkillData data)
     {
-        if (player == null) return;
-
-        PlayerSkillController controller = player.GetComponent<PlayerSkillController>();
-        if (controller == null) return;
-
+        var controller = player.GetComponent<PlayerSkillController>();
         StopCurrent(player, controller);
-        Coroutine routine = controller.StartCoroutine(LeapRoutine(player, CalculateDamage(player)));
-        activeRoutines[player] = routine;
+        activeRoutines[player] = controller.StartCoroutine(LeapRoutine(player, CalculateDamage(player)));
     }
 
     public override void Clear(GameObject player)
     {
-        if (player == null) return;
-
-        PlayerSkillController controller = player.GetComponent<PlayerSkillController>();
-        if (controller != null)
-            StopCurrent(player, controller);
+        StopCurrent(player, player.GetComponent<PlayerSkillController>());
     }
 
     private float CalculateDamage(GameObject player)
     {
-        PlayerStatManager statManager = player.GetComponent<PlayerStatManager>();
-        if (statManager == null) return damageMultiplier;
-
-        float skillDamage = statManager.StatCore.getStat(StatType.SKILL_DAMAGE).rawValue;
-        return Mathf.Max(1f, skillDamage * damageMultiplier);
+        return Mathf.Max(1f, player.GetComponent<PlayerStatManager>().StatCore
+            .getStat(StatType.SKILL_DAMAGE).calibratedValue * damageMultiplier);
     }
 
     private LayerMask GetEnemyLayers()
@@ -48,36 +38,24 @@ public class LeapAction : ActiveAction
         return enemyLayers.value == 0 ? LayerMask.GetMask("Enemy") : enemyLayers;
     }
 
-    private Vector2 GetDirection(GameObject player)
-    {
-        PlayerMovement movement = player.GetComponent<PlayerMovement>();
-        if (movement == null) return Vector2.right;
-
-        return movement.GetLastMoveDirection();
-    }
-
     private void StopCurrent(GameObject player, PlayerSkillController controller)
     {
-        if (activeRoutines.TryGetValue(player, out Coroutine routine))
-        {
-            controller.StopCoroutine(routine);
-            activeRoutines.Remove(player);
-        }
+        if (!activeRoutines.TryGetValue(player, out Coroutine routine)) return;
 
-        PlayerMovement movement = player.GetComponent<PlayerMovement>();
-        if (movement != null)
-            movement.reStartMove();
+        activeRoutines.Remove(player);
+        if (routine != null)
+            controller.StopCoroutine(routine);
+
+        player.GetComponent<PlayerMovement>().reStartMove();
     }
 
     private IEnumerator LeapRoutine(GameObject player, float damage)
     {
-        Vector2 direction = GetDirection(player);
-        PlayerMovement movement = player.GetComponent<PlayerMovement>();
-        if (movement != null)
-            movement.stopMove();
+        var movement = player.GetComponent<PlayerMovement>();
+        movement.stopMove();
 
         Vector2 startPosition = player.transform.position;
-        Vector2 endPosition = startPosition + direction * distance;
+        Vector2 endPosition = startPosition + movement.GetLastMoveDirection() * distance;
 
         float elapsed = 0f;
         while (elapsed < duration)
@@ -91,10 +69,7 @@ public class LeapAction : ActiveAction
 
         player.transform.position = endPosition;
         DamageLandingArea(endPosition, damage);
-
-        if (movement != null)
-            movement.reStartMove();
-
+        movement.reStartMove();
         activeRoutines.Remove(player);
     }
 
@@ -108,6 +83,11 @@ public class LeapAction : ActiveAction
             if (enemy == null || damagedEnemies.Contains(enemy)) continue;
 
             enemy.TakeDamage(damage);
+            if (vfxPrefab != null)
+            {
+                var vfx = Instantiate(vfxPrefab, enemy.transform.position, Quaternion.identity);
+                Object.Destroy(vfx, vfxDuration);
+            }
             damagedEnemies.Add(enemy);
         }
     }

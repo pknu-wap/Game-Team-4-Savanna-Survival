@@ -16,6 +16,8 @@ MonoBehaviour:
   duration: 0.32
   landingRadius: 2
   damageMultiplier: 1.6
+  vfxPrefab: {fileID: 2560156276862465191, guid: fd75401de139cb348b7e32dde572a449, type: 3}
+  vfxDuration: 0.2
   enemyLayers:
     serializedVersion: 2
     m_Bits: 67108864
