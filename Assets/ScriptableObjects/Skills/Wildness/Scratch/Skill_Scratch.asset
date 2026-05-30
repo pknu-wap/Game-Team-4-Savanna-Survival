@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3f508e7b9fe4f498fb8d3a40f90a64, type: 3}
+  m_Name: Skill_Scratch
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
+  id: wildness_scratch
+  skillName: "\uD560\uD034\uAE30"
+  icon: {fileID: -9182177788924653191, guid: b8c977ef0066ed044b114da73fe3859a, type: 3}
+  description: "\uC804\uBC29 \uBD80\uCC44\uAF34 \uBC94\uC704\uB97C \uBC1C\uD1B1\uC73C\uB85C
+    \uD560\uD034\uC5B4 \uB370\uBBF8\uC9C0\uB97C \uC785\uD78C\uB2E4."
+  cost: 1
+  prerequisites: []
+  treePosition: {x: -300, y: 100}
+  treeType: 1
+  unlockBehavior: 0
+  skillGroupId: wildness_scratch
+  skillLevel: 1
+  cooldown: 0.8
+  action: {fileID: 11400000, guid: 55d6faadfc73d8c4793ff0754bf3d468, type: 2}

@@ -46,6 +46,42 @@
             }
             
             throw new Exception("CalculateFailed");
-            
+
+        }
+
+        // 오브젝트와 가중치를 매핑해서 인자에 넣어주면, 가중치에 비례한 확률로 결과 값 리턴
+
+        public static Object runChanceWithWeight(Dictionary<Object, double> weightList)
+        {
+            double totalWeight = 0;
+
+            foreach (var key in weightList.Keys)
+            {
+                double weight = weightList[key];
+                if (weight < 0)
+                {
+                    throw new Exception("NegativeWeight");
+                }
+                totalWeight += weight;
+            }
+
+            if (totalWeight <= 0)
+            {
+                throw new Exception("NotEnoughWeight");
+            }
+
+            double randomValue = _random.NextDouble() * totalWeight;
+
+            double accumulated = 0;
+            foreach (var key in weightList.Keys)
+            {
+                accumulated += weightList[key];
+                if (randomValue <= accumulated)
+                {
+                    return key;
+                }
+            }
+
+            throw new Exception("CalculateFailed");
         }
     }
