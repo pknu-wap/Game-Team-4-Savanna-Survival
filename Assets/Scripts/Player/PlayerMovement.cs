@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private float speed;
     private Vector3 moveDirection;
+    private Vector2 lastMoveDirection = Vector2.right;
 
     private bool canMove = true;
 
@@ -36,6 +37,9 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = value.Get<Vector2>();
         moveDirection.Normalize();
 
+        if (moveDirection.sqrMagnitude > 0.01f)
+            lastMoveDirection = new Vector2(moveDirection.x, moveDirection.y);
+
         bool isMoving = moveDirection != Vector3.zero;
         animator.SetBool("isMoving", isMoving);
 
@@ -59,5 +63,10 @@ public class PlayerMovement : MonoBehaviour
     {
         canMove = true;
         animator.SetBool("isMoving", false);
+    }
+
+    public Vector2 GetLastMoveDirection()
+    {
+        return lastMoveDirection;
     }
 }
