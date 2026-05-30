@@ -18,3 +18,13 @@ MonoBehaviour:
     minGroupSize: 1
     maxGroupSize: 10
     preferredStructure: 0
+  - mobPrefab: {fileID: 7998373626830524074, guid: 7c192e6120e14e44fba13809b5201baf, type: 3}
+    weight: 1
+    minGroupSize: 1
+    maxGroupSize: 10
+    preferredStructure: 0
+  - mobPrefab: {fileID: 8239869998693550132, guid: 2395d71fb28ae124aa58f7ea09dac2f0, type: 3}
+    weight: 1
+    minGroupSize: 1
+    maxGroupSize: 10
+    preferredStructure: 0

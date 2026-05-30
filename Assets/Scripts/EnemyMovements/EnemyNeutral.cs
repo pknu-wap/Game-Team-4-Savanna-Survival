@@ -1,5 +1,6 @@
 using UnityEngine;
 
+/// 공격 패턴 로직을 EnemyNeutralAttacks.cs 에 있는 partial 클래스로 분리함.
 public partial class EnemyNeutral : Enemy
 {
     [Header("Config")]
@@ -25,12 +26,22 @@ public partial class EnemyNeutral : Enemy
     [SerializeField] private float waterTelegraph = 0.8f;
     [SerializeField] private float waterDamage    = 8f;
     [SerializeField] private float waterWidth     = 1.5f;
-    [Tooltip("물 분사 시작 위치를 몸 중앙에서 앞쪽으로 얼마나 밀지 설정 (월드 단위)")]
-    [SerializeField] private float waterSpawnOffset = 1f;
     [SerializeField] private GameObject waterZonePrefab;
+    [Tooltip("물 발사 기준점 오프셋 (코 끝 위치 등). 로컬 좌표 기준.")]
+    [SerializeField] private Vector2 waterOriginOffset = Vector2.zero;
 
     [Header("Animation")]
     [SerializeField] private string dieClipName = "Die";
+
+    internal Animator anim;
+    internal static readonly int ParamSpeed  = Animator.StringToHash("Speed");
+    internal static readonly int ParamAttack = Animator.StringToHash("Attack");
+    internal static readonly int ParamAoe    = Animator.StringToHash("Aoe");
+    internal static readonly int ParamWater  = Animator.StringToHash("Water");
+    internal static readonly int ParamIsAttacking = Animator.StringToHash("IsAttacking");
+    internal static readonly int ParamIsAoe       = Animator.StringToHash("IsAoe");
+    internal static readonly int ParamIsWater     = Animator.StringToHash("IsWater");
+    internal static readonly int ParamDie    = Animator.StringToHash("Die");
 
     private enum AttackState { Ready, AoeWaiting, AoeTelegraph, Aoe, Water, Melee }
     private AttackState state = AttackState.Ready;
@@ -40,15 +51,6 @@ public partial class EnemyNeutral : Enemy
     private float aoeTimer;
     private float waterTimer;
     private float patternTimer;
-
-    // EnemyNeutralAttacks.cs에서도 참조
-    protected Animator anim;
-
-    private static readonly int ParamSpeed        = Animator.StringToHash("Speed");
-    private static readonly int ParamIsMelee      = Animator.StringToHash("IsMelee");
-    private static readonly int ParamIsAoeTelegraph = Animator.StringToHash("IsAoeTelegraph");
-    private static readonly int ParamIsWater      = Animator.StringToHash("IsWater");
-    private static readonly int ParamDie          = Animator.StringToHash("Die");
 
     protected override void Awake()
     {
@@ -75,13 +77,11 @@ public partial class EnemyNeutral : Enemy
 
     protected override void Die()
     {
-        if (isDead) return;
+        DestroyWaterIndicator();
         isDead = true;
-
         rb.linearVelocity = Vector2.zero;
         ApplyDeathRewards();
         anim?.SetTrigger(ParamDie);
-        DestroyWaterIndicator();
         StartCoroutine(DieRoutine(GetDieClipLength(anim, dieClipName)));
     }
 
@@ -109,21 +109,11 @@ public partial class EnemyNeutral : Enemy
 
     private void UpdateReady(float dist)
     {
-        SetAttackBools(false, false, false);
-
         if      (aoeTimer >= aoeInterval)                           EnterAoeWaiting();
         else if (dist >= waterRange && waterTimer >= waterCooldown) EnterWater();
         else if (dist <= meleeRange)                                state = AttackState.Melee;
         else if (dist <= detectionRange)                            MoveSmooth((player.position - transform.position).normalized * moveSpeed);
         else                                                        Wander();
-    }
-
-    // 공격 상태 Bool을 한 번에 세팅 — Ready 전환 시 일괄 초기화에 사용
-    private void SetAttackBools(bool melee, bool aoe, bool water)
-    {
-        anim?.SetBool(ParamIsMelee,         melee);
-        anim?.SetBool(ParamIsAoeTelegraph,  aoe);
-        anim?.SetBool(ParamIsWater,         water);
     }
 
     private void UpdateFacing()

@@ -188,6 +188,7 @@ MonoBehaviour:
   disengageRange: 14
   indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
   projectilePrefab: {fileID: 5465070902174546490, guid: 4d40fbd9a2e91644982a6f80aaeaceeb, type: 3}
+  dieClipName: MonkeyDeath
 --- !u!95 &-6949406449637094705
 Animator:
   serializedVersion: 7
