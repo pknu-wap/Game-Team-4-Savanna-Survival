@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Action_Scratch
   m_EditorClassIdentifier: Assembly-CSharp::ScratchAction
   animTriggerName: Scratch
-  vfxPrefab: {fileID: 0}
-  range: 1.5
-  arcAngle: 120
+  vfxPrefab: {fileID: 2560156276862465191, guid: fd75401de139cb348b7e32dde572a449, type: 3}
+  range: 2
+  arcAngle: 60
   damageMultiplier: 1
+  vfxDuration: 0.2

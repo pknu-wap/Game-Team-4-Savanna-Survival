@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
   id: wildness_hunger_max_lv1
   skillName: "\uBC30\uACE0\uD488 MAX Lv1"
-  icon: {fileID: -4798825762170945512, guid: b8f8b584e4f37d948ad7ec41aa4bfe4d, type: 3}
-  description: "\uBC30\uACE0\uD514 100\uB2EC\uC131\uC2DC 4\uCD08\uAC04 \uACF5\uACA9\uB825
-    \uBC84\uD504"
+  icon: {fileID: -4174981060110720772, guid: 92525249b640e3b458ebf760cdcbcc6c, type: 3}
+  description: "\uBC30\uACE0\uD514 100\uB2EC\uC131 \uC2DC \uCD94\uAC00 \uACF5\uACA9\uB825/\uC774\uB3D9\uC18D\uB3C4
+    \uBD80\uC5EC\n\uACF5\uACA9\uB825 5%\n\uC774\uB3D9\uC18D\uB3C4 1%"
   cost: 1
   prerequisites: []
   treePosition: {x: 100, y: 100}
