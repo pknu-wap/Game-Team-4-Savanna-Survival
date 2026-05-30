@@ -6,6 +6,7 @@ public partial class EnemyNeutral
     private GameObject aoeIndicator;
     private GameObject waterIndicator;
     private bool       waterZoneSpawned;
+    private WaterZone  activeWaterZone;
 
     // ── AoE ──────────────────────────────────────────────────
 
@@ -26,8 +27,8 @@ public partial class EnemyNeutral
         state        = AttackState.AoeTelegraph;
         patternTimer = 0f;
         MoveSmooth(Vector2.zero);
-        anim?.SetBool(ParamIsAoeTelegraph, true);
         ShowAoeIndicator();
+        anim?.SetBool(ParamIsAoe, true);  // 예고 시작 — 모션 유지
     }
 
     private void UpdateAoeTelegraph()
@@ -36,8 +37,8 @@ public partial class EnemyNeutral
         patternTimer += Time.deltaTime;
         if (patternTimer >= aoeTelegraph)
         {
-            anim?.SetBool(ParamIsAoeTelegraph, false);
             HideAoeIndicator();
+            anim?.SetBool(ParamIsAoe, false); // 예고 종료
             state        = AttackState.Aoe;
             patternTimer = 0f;
         }
@@ -57,9 +58,10 @@ public partial class EnemyNeutral
         patternTimer     = 0f;
         waterTimer       = 0f;
         waterZoneSpawned = false;
+        activeWaterZone  = null;
         MoveSmooth(Vector2.zero);
-        anim?.SetBool(ParamIsWater, true);
         ShowWaterIndicator();
+        anim?.SetBool(ParamIsWater, true); // 예고 시작 — 모션 유지
     }
 
     private void UpdateWater()
@@ -80,7 +82,8 @@ public partial class EnemyNeutral
             waterZoneSpawned = true;
         }
 
-        if (patternTimer >= waterTelegraph + waterDuration)
+        // 워터존 소멸 감지 → 마지막 모션 해제 후 Ready
+        if (activeWaterZone == null)
         {
             anim?.SetBool(ParamIsWater, false);
             waterZoneSpawned = false;
@@ -91,11 +94,15 @@ public partial class EnemyNeutral
     private void SpawnWaterZone()
     {
         if (waterZonePrefab == null) return;
-        Vector2    dir    = (player.position - transform.position).normalized;
-        Vector2    origin = (Vector2)transform.position + dir * waterSpawnOffset;
-        Vector2    center = origin + dir * (waterRange * 0.5f);
-        GameObject go     = Instantiate(waterZonePrefab, center, Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg));
-        go.GetComponent<WaterZone>()?.Init(waterDamage, waterDuration, waterRange, waterWidth);
+        Vector2 dir    = (player.position - transform.position).normalized;
+        // 발사 기준점: 몸 중앙 + 로컬 오프셋(코 끝 등). 좌우 방향에 따라 X 오프셋 반전.
+        float   flipX  = transform.localScale.x > 0 ? 1f : -1f;
+        Vector2 origin = (Vector2)transform.position
+                       + new Vector2(waterOriginOffset.x * flipX, waterOriginOffset.y);
+        Vector2 center = origin + dir * (waterRange * 0.5f);
+        GameObject go  = Instantiate(waterZonePrefab, center, Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg));
+        activeWaterZone = go.GetComponent<WaterZone>();
+        activeWaterZone?.Init(waterDamage, waterDuration, waterRange, waterWidth);
     }
 
     // ── Melee ────────────────────────────────────────────────
@@ -105,8 +112,8 @@ public partial class EnemyNeutral
         if (dist > meleeRange)
         {
             meleeTimer = 0f;
-            anim?.SetBool(ParamIsMelee, false);
             HideMeleeIndicator();
+            anim?.SetBool(ParamIsAttacking, false);
             state = AttackState.Ready;
             return;
         }
@@ -116,22 +123,22 @@ public partial class EnemyNeutral
 
         if (meleeTimer >= meleeInterval - 0.5f)
         {
-            anim?.SetBool(ParamIsMelee, true);
             ShowMeleeIndicator();
+            anim?.SetBool(ParamIsAttacking, true); // 인디케이터와 함께 모션 시작
         }
 
         if (meleeTimer >= meleeInterval)
         {
             DamagePlayer(statManager.getStat(StatType.DAMAGE).calibratedValue);
             meleeTimer = 0f;
-            anim?.SetBool(ParamIsMelee, false);
             HideMeleeIndicator();
+            anim?.SetBool(ParamIsAttacking, false);
             if (aoeTimer >= aoeInterval) { EnterAoeWaiting(); return; }
             state = AttackState.Ready;
         }
     }
 
-    // ── 인디케이터 ────────────────────────────────────────────
+    // ── 인디케이터 헬퍼 ──────────────────────────────────────
 
     private void SetWorldScale(GameObject go, float diameter)
     {
@@ -140,8 +147,7 @@ public partial class EnemyNeutral
         go.transform.localScale = Vector3.one;
         float current = sr.bounds.size.x;
         if (current <= 0f) return;
-        float ratio = diameter / current;
-        go.transform.localScale = new Vector3(ratio, ratio, 1f);
+        go.transform.localScale = new Vector3(diameter / current, diameter / current, 1f);
     }
 
     private void ShowMeleeIndicator()
@@ -189,9 +195,8 @@ public partial class EnemyNeutral
     {
         if (waterIndicator == null || player == null) return;
         Vector2 dir    = (player.position - transform.position).normalized;
-        Vector2 origin = (Vector2)transform.position + dir * waterSpawnOffset;
-        float   dist   = Vector2.Distance(origin, player.position);
-        Vector2 center = origin + dir * (dist * 0.5f);
+        float   dist   = Vector2.Distance(transform.position, player.position);
+        Vector2 center = (Vector2)transform.position + dir * (dist * 0.5f);
         waterIndicator.transform.SetPositionAndRotation(center, Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg));
         waterIndicator.transform.localScale = new Vector3(dist, waterWidth, 1f);
     }
