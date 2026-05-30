@@ -16,6 +16,11 @@ public class ItemInfoUIFollowMouse : MonoBehaviour
 
     private void Update()
     {
+        followMouse();
+    }
+
+    private void followMouse()
+    {
         if (Mouse.current == null) return;
         Vector2 mousePos = Mouse.current.position.ReadValue();
 
@@ -26,8 +31,8 @@ public class ItemInfoUIFollowMouse : MonoBehaviour
         }
         else
         {
-        rectTransform.pivot = new Vector2(0f, 1f);
-        rectTransform.position = mousePos + leftTopOffset;
+            rectTransform.pivot = new Vector2(0f, 1f);
+            rectTransform.position = mousePos + leftTopOffset;
         }
     }
 }
