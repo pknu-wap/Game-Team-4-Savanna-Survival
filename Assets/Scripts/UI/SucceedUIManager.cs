@@ -18,6 +18,7 @@ public class SucceedUIManager : MonoBehaviour
     [FormerlySerializedAs("itemInfoUI")]
     [SerializeField] private ItemInfoUI inventoryItemInfoUI;
     [SerializeField] private MaxSucceedSelectionNotice maxSelectionNotice;
+    [SerializeField] private SucceedEquipmentDatabase succeedEquipmentDatabase;
 
     [Header("Option")]
     [SerializeField] private bool includeEquippedItems = true;
@@ -30,6 +31,11 @@ public class SucceedUIManager : MonoBehaviour
         {
             succeedPanel.SetActive(false);
         }
+    }
+
+    private void Start()
+    {
+        loadSucceedItems();
     }
 
     public void triggerSucceedUI()
@@ -81,6 +87,8 @@ public class SucceedUIManager : MonoBehaviour
 
     public void closeSucceedUI()
     {
+        saveSucceedItems();
+
         if (inventoryItemInfoUI != null)
         {
             inventoryItemInfoUI.hideEquipmentInfo();
@@ -113,6 +121,50 @@ public class SucceedUIManager : MonoBehaviour
         if (inventoryItemInfoUI != null)
         {
             inventoryItemInfoUI.hideEquipmentInfo();
+        }
+    }
+
+    private void loadSucceedItems()
+    {
+        List<string> equipmentIds = SucceedItemSaveStorage.loadIds();
+        if (equipmentIds.Count <= 0 || equipmentInventory == null)
+        {
+            return;
+        }
+
+        SucceedEquipmentDatabase database = getSucceedEquipmentDatabase();
+        if (database == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < equipmentIds.Count; ++i)
+        {
+            EquipmentData equipment = database.getEquipment(equipmentIds[i]);
+            if (equipment != null)
+            {
+                equipmentInventory.addInventoryEquipment(equipment);
+            }
+        }
+
+        SucceedItemSaveStorage.clearIds();
+    }
+
+    private SucceedEquipmentDatabase getSucceedEquipmentDatabase()
+    {
+        if (succeedEquipmentDatabase == null)
+        {
+            succeedEquipmentDatabase = Resources.Load<SucceedEquipmentDatabase>("SucceedEquipmentDatabase");
+        }
+
+        return succeedEquipmentDatabase;
+    }
+
+    private void saveSucceedItems()
+    {
+        if (selectSucceedItem != null)
+        {
+            SucceedItemSaveStorage.save(selectSucceedItem.SelectedEquipments);
         }
     }
 
