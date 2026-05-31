@@ -42,7 +42,6 @@ public class DeadUiManager : MonoBehaviour
             hpCheckedOnce = true;
             return;
         }// 처음 Hp 검사는 무시 / 처음 currentHp 값이 0이 나와서 처음은 무시해야함
-        Debug.Log("읽은 체력: " + currentHp);
 
         if (currentHp <= 0f)
         {
