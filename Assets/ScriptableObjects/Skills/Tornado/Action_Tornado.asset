@@ -9,13 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4880fdb7f13071d40807b619283d9f88, type: 3}
-  m_Name: Action_Pounce
-  m_EditorClassIdentifier: Assembly-CSharp::PounceAction
-  distance: 5
-  duration: 0.18
-  hitRadius: 0.8
-  damageMultiplier: 1
+  m_Script: {fileID: 11500000, guid: 51ac34352c8da4f48a841462759c0d45, type: 3}
+  m_Name: Action_Tornado
+  m_EditorClassIdentifier: Assembly-CSharp::TornadoAction
+  tornadoPrefab: {fileID: 7285873134494435453, guid: df51cc0b800edbd4e868abb311beb7be, type: 3}
+  damageTick: 0.5
+  baseDamage: 1
+  pullDistancePerSecond: 2
+  duration: 3
   vfxPrefab: {fileID: 2560156276862465191, guid: fd75401de139cb348b7e32dde572a449, type: 3}
   vfxDuration: 0.2
   enemyLayers:

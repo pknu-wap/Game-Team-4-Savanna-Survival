@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b01f55e3fd4fe4a83f36a4af67d901, type: 3}
   m_Name: Action_Leap
   m_EditorClassIdentifier: Assembly-CSharp::LeapAction
-  distance: 5
+  distance: 4
   duration: 0.32
   landingRadius: 2
   damageMultiplier: 1.6
