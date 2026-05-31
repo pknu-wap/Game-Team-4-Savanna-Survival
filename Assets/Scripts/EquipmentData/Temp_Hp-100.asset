@@ -15,5 +15,5 @@ MonoBehaviour:
   equipmentId: Temp_Hp-100
   equipmentName: SiNe
   equipmentStats:
-  - statType: 2
-    value: -100
+  - statType: 1
+    value: 10

@@ -5,6 +5,7 @@ public class PlayerInputRelay : MonoBehaviour
 {
     [SerializeField] private StatDetailPanel statDetailPanel;
     [SerializeField] private PlayerEquipmentPicker playerEquipmentPicker;
+    [SerializeField] private SucceedUIManager succeedUIManager;
 
     public void OnStatAndInventory(InputValue value)
     {
@@ -25,4 +26,14 @@ public class PlayerInputRelay : MonoBehaviour
 
         playerEquipmentPicker.toggleInteract();
     } 
+
+    public void OnStartSucceed(InputValue value)
+    {
+        if (value.isPressed == false)
+        {
+            return;
+        }
+
+        succeedUIManager.triggerSucceedUI();
+    }
 }

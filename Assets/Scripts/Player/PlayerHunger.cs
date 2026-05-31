@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class PlayerHunger : MonoBehaviour
 {
+    public event System.Action OnHungerFilled;
+
     private PlayerStatCore statCore;
     private float currentHunger;
     private float maxHunger;
     private float hungerDecraesePerSec;
     public bool isHungerDebuff;
     private float currntTime;
-    // public event Action hungerDebuff;
 
     [SerializeField] private PlayerHp playerHp;
 
@@ -31,22 +32,21 @@ public class PlayerHunger : MonoBehaviour
             currentHunger = statCore.getStat(StatType.HUNGER).rawValue;
             hungerDecraesePerSec = statCore.getStat(StatType.HUNGER_DECREASE).rawValue;
 
-            if (currentHunger <= 1)
+            currntTime = 0;
+
+            if (currentHunger >= maxHunger)
+            {
+                OnHungerFilled?.Invoke();
+                hungerBuff();
+                currentHunger = maxHunger * 0.6f;
+            }
+            else if (currentHunger <= 1)
             {
                 currentHunger = 0;
             }
             else
             {
                 currentHunger -= hungerDecraesePerSec;
-            }
-
-            currntTime = 0;
-            // Debug.Log("허기감소");
-
-            if (currentHunger >= maxHunger)
-            {
-                hungerBuff();
-                currentHunger = maxHunger * 0.6f;
             }
         
             statCore.registerStat(StatType.HUNGER, currentHunger);

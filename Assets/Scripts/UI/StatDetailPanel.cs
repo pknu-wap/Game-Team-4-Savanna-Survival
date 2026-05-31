@@ -11,6 +11,7 @@ public class StatDetailPanel : MonoBehaviour
     [SerializeField] private PlayerStatManager playerStatManager;
     [SerializeField] private GameObject statDetailPanel;
     [SerializeField] private GameObject inventoryPanel;
+    [SerializeField] private ItemInfoUI itemInfoUI;
 
     [Header("스탯 텍스트")]
     [SerializeField] private TMP_Text damageText;
@@ -62,6 +63,13 @@ public class StatDetailPanel : MonoBehaviour
         if (isPanelOpen) //창열때 스탯갱신
         {
             refreshAllStatTexts();
+        }
+        else
+        {
+            if (itemInfoUI != null)
+            {
+                itemInfoUI.hideEquipmentInfo();
+            }
         }
     }
 

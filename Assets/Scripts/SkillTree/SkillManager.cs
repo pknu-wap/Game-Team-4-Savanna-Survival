@@ -7,6 +7,10 @@ public class SkillManager : MonoBehaviour
     public static SkillManager Instance { get; private set; }
 
     private HashSet<BaseSkillData> unlockedSkills = new();
+    private int wildnessUnlockedCount = 0;
+    private int fantasyUnlockedCount = 0;
+    public event Action<BaseSkillData> OnSkillRemoved;
+
     private PlayerStatManager playerStatManager;
     
     public event Action<BaseSkillData> OnSkillUnlocked;
@@ -31,43 +35,98 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    public bool TryUnlockSkill(BaseSkillData skill)
+public bool TryUnlockSkill(BaseSkillData skill)
     {
         if (skill == null) return false;
         if (unlockedSkills.Contains(skill)) return false;
 
-        // 선행 스킬 확인
         foreach (var prerequisite in skill.prerequisites)
         {
             if (!unlockedSkills.Contains(prerequisite))
-            {
                 return false;
-            }
         }
 
-        // 포인트 확인
         int currentPoints = GetCurrentPoints();
         if (currentPoints < skill.cost) return false;
 
-        // 포인트 소모
         playerStatManager.StatCore.addStat(StatType.SKILL_POINTS, -skill.cost);
 
-        // 해금 목록에 추가
-        unlockedSkills.Add(skill);
+        GameObject player = playerStatManager.gameObject;
 
-        // 패시브 효과 적용
-        if (skill is PassiveSkillData passiveSkill)
+        if (skill.unlockBehavior == SkillUnlockBehavior.ReplaceGroup && !string.IsNullOrEmpty(skill.skillGroupId))
         {
-            GameObject player = playerStatManager.gameObject;
-            foreach (var effect in passiveSkill.effects)
+            BaseSkillData toRemove = null;
+            foreach (var s in unlockedSkills)
             {
-                effect.Apply(player);
+                if (s.skillGroupId == skill.skillGroupId)
+                {
+                    toRemove = s;
+                    break;
+                }
+            }
+            if (toRemove != null)
+            {
+                if (toRemove is PassiveSkillData oldPassive)
+                    foreach (var effect in oldPassive.effects)
+                        effect.Remove(player);
+                if (toRemove is ActiveSkillData oldActive)
+                    oldActive.action?.Clear(player);
+                if (toRemove is AutoSkillData oldAuto)
+                    oldAuto.action?.Clear(player);
+
+                OnSkillRemoved?.Invoke(toRemove);
+                unlockedSkills.Remove(toRemove);
             }
         }
+
+        unlockedSkills.Add(skill);
+
+        if (skill is PassiveSkillData passiveSkill)
+            foreach (var effect in passiveSkill.effects)
+                effect.Apply(player);
+
+        if (skill.treeType == SkillTreeType.Wildness) wildnessUnlockedCount++;
+        else if (skill.treeType == SkillTreeType.Fantasy) fantasyUnlockedCount++;
 
         OnSkillUnlocked?.Invoke(skill);
         return true;
     }
+
+public bool ReplaceSkill(BaseSkillData oldSkill, BaseSkillData newSkill)
+    {
+        if (!unlockedSkills.Contains(oldSkill)) return false;
+        if (newSkill == null) return false;
+
+        GameObject player = playerStatManager.gameObject;
+
+        if (oldSkill is PassiveSkillData oldPassive)
+            foreach (var effect in oldPassive.effects)
+                effect.Remove(player);
+        if (oldSkill is ActiveSkillData oldActive)
+            oldActive.action?.Clear(player);
+        if (oldSkill is AutoSkillData oldAuto)
+            oldAuto.action?.Clear(player);
+
+        OnSkillRemoved?.Invoke(oldSkill);
+        unlockedSkills.Remove(oldSkill);
+
+        unlockedSkills.Add(newSkill);
+
+        if (newSkill is PassiveSkillData newPassive)
+            foreach (var effect in newPassive.effects)
+                effect.Apply(player);
+
+        OnSkillUnlocked?.Invoke(newSkill);
+        return true;
+    }
+
+public SkillTreeType GetDominantSkillTree()
+    {
+        if (wildnessUnlockedCount > fantasyUnlockedCount) return SkillTreeType.Wildness;
+        if (fantasyUnlockedCount > wildnessUnlockedCount) return SkillTreeType.Fantasy;
+        return SkillTreeType.None;
+    }
+
 
     public bool IsUnlocked(BaseSkillData skill)
     {
@@ -90,39 +149,28 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    public void ResetRun()
+public void ResetRun()
     {
-        // 모든 패시브 효과 제거
         if (playerStatManager != null)
         {
             GameObject player = playerStatManager.gameObject;
             foreach (var skill in unlockedSkills)
             {
                 if (skill is PassiveSkillData passiveSkill)
-                {
                     foreach (var effect in passiveSkill.effects)
-                    {
                         effect.Remove(player);
-                    }
-                }
-                
-                if (skill is ActiveSkillData activeSkill && activeSkill.action != null)
-                {
-                    activeSkill.action.Clear(player);
-                }
-                
-                if (skill is AutoSkillData autoSkill && autoSkill.action != null)
-                {
-                    autoSkill.action.Clear(player);
-                }
+                if (skill is ActiveSkillData activeSkill)
+                    activeSkill.action?.Clear(player);
+                if (skill is AutoSkillData autoSkill)
+                    autoSkill.action?.Clear(player);
             }
         }
 
         unlockedSkills.Clear();
-        
+        wildnessUnlockedCount = 0;
+        fantasyUnlockedCount = 0;
+
         if (playerStatManager != null)
-        {
             playerStatManager.StatCore.registerStat(StatType.SKILL_POINTS, playerStatManager.startSkillPoints);
-        }
     }
 }

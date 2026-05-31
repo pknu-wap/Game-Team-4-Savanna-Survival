@@ -2,71 +2,58 @@ using UnityEngine;
 
 public class PlayerHp : MonoBehaviour
 {
-    private PlayerStatCore statCore;
-    public float currentHp;
-    public float maxHp;
-    public float hpRegen;
-    private float currentTime;
+    private PlayerStatCore  statCore;
+    private Animator        animator;
+    private PlayerMovement  playerMovement;
 
-    private Animator animator;
-    private PlayerMovement playerMovement;
-    [SerializeField] private PlayerHunger playerHunger;
-
-    private bool isDead = false;
+    internal float currentHp;
+    internal float maxHp;
+    private float  hpRegen;
+    private float  currentTime;
+    private bool   isDead;
 
     private void Start()
     {
-        PlayerStatManager playerStatManager = GetComponent<PlayerStatManager>();
-        statCore = playerStatManager.StatCore;
-
-        animator = GetComponent<Animator>();
+        PlayerStatManager psm = GetComponent<PlayerStatManager>();
+        if (psm == null)
+        {
+            Debug.LogError("[PlayerHp] PlayerStatManager 컴포넌트를 찾을 수 없습니다.", this);
+            enabled = false;
+            return;
+        }
+        statCore       = psm.StatCore;
+        animator       = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
     }
 
     private void Update()
     {
-        if (isDead) return;
+        if (isDead || statCore == null) return;
 
-        maxHp = statCore.getStat(StatType.MAX_HEALTH).rawValue;
+        maxHp     = statCore.getStat(StatType.MAX_HEALTH).rawValue;
         currentHp = statCore.getStat(StatType.HEALTH).rawValue;
-        hpRegen = statCore.getStat(StatType.HEALTH_REGEN).rawValue;
+        hpRegen   = statCore.getStat(StatType.HEALTH_REGEN).rawValue;
         currentTime += Time.deltaTime;
 
-        if(currentHp <= 0)
+        if (currentHp <= 0) { onDeath(); return; }
+
+        if (currentTime >= 2)
         {
-            onDeath();
-            return;
-        }
-        if (playerHunger.isHungerDebuff)
-        {
-            currentTime = 0;
-            return;
-        }
-        if(currentTime >= 2)
-        {
-            if (currentHp + hpRegen*2 >= maxHp)
-            {
-               currentHp = maxHp;
-            }
-            else
-            {
-                currentHp += hpRegen * 2; 
-            }
+            currentHp = Mathf.Min(currentHp + hpRegen * 2, maxHp);
             statCore.registerStat(StatType.HEALTH, currentHp);
             currentTime = 0;
-            // Debug.Log("현재 체력: " + currentHp);    
+            Debug.Log("현재 체력: " + currentHp);
         }
     }
 
     private void onDeath()
     {
-        isDead = true;
-
+        isDead    = true;
         currentHp = 0;
         statCore.registerStat(StatType.HEALTH, currentHp);
 
-        animator.SetBool("isMoving", false);
-        animator.SetBool("isDead", true);
+        animator?.SetBool("isMoving", false);
+        animator?.SetBool("isDead",   true);
 
         if (playerMovement != null)
         {
@@ -75,7 +62,6 @@ public class PlayerHp : MonoBehaviour
         }
 
         Debug.Log("죽었습니다.");
-
         // 사망 event 호출
     }
 }

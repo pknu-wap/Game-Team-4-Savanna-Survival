@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 9062789451909170583}
   - component: {fileID: 5206642659328545224}
   - component: {fileID: -540846851745556853}
-  m_Layer: 0
+  m_Layer: 26
   m_Name: EnemyCheetar
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,7 +179,7 @@ MonoBehaviour:
   arriveDistance: 0.2
   idleChance: 0.2
   moveSpeed: 10
-  maxHp: 100
+  maxHp: 150
   damage: 10
   attackRange: 2
   attackInterval: 1
@@ -187,7 +187,7 @@ MonoBehaviour:
   bleedStacks: 1
   bleedDotDamage: 3
   bleedDuration: 4
-  dieClipName: Die
+  dieClipName: CheetahDie
 --- !u!95 &-540846851745556853
 Animator:
   serializedVersion: 7
