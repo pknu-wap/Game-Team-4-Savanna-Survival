@@ -6,6 +6,7 @@ public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 {
     [SerializeField] private BaseSkillData skillData;
     [SerializeField] private Image iconImage;
+    [SerializeField] private Image fillImage;
     [SerializeField] private Text skillNameText;
     [SerializeField] private Color lockedColor = Color.gray;
     [SerializeField] private Color unlockedColor = Color.white;
@@ -52,6 +53,9 @@ public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
             ShakeNode();
             ScaleNode();
+
+            if (fillImage != null)
+                fillImage.fillAmount = Mathf.Clamp01(holdTime / HOLD_DURATION);
 
             if (holdTime >= HOLD_DURATION)
             {
@@ -185,6 +189,9 @@ public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         transform.localPosition = originalLocalPosition;
         transform.localScale = Vector3.one;
+
+        if (fillImage != null)
+            fillImage.fillAmount = 0f;
     }
 
     private void FlashRed()

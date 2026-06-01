@@ -7484,7 +7484,8 @@ Transform:
   m_LocalPosition: {x: 402.30988, y: 97.800186, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2028296620}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &510529766
@@ -17433,6 +17434,7 @@ MonoBehaviour:
   selectSucceedItem: {fileID: 1516259076}
   inventoryItemInfoUI: {fileID: 490452156}
   maxSelectionNotice: {fileID: 2138908984}
+  succeedEquipmentDatabase: {fileID: 0}
   includeEquippedItems: 1
 --- !u!4 &1516259078
 Transform:
@@ -17539,10 +17541,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de92646027e968e43b3eb2918f318ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHp
-  currentHp: 0
-  maxHp: 0
-  hpRegen: 0
-  playerHunger: {fileID: 1526872021}
 --- !u!114 &1526872023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24237,7 +24235,6 @@ SceneRoots:
   - {fileID: 837841058}
   - {fileID: 504593606}
   - {fileID: 944635103}
-  - {fileID: 2028296620}
   - {fileID: 1674018338}
   - {fileID: 1707215517}
   - {fileID: 1303007072}
