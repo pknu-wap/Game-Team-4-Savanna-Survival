@@ -30,14 +30,14 @@ public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         tooltip = GetComponentInParent<SkillTreeWindow>()?.GetComponentInChildren<SkillTooltip>(true);
         if (tooltip == null)
             tooltip = FindObjectOfType<SkillTooltip>(true);
+
+        if (skillData != null)
+            GetComponent<RectTransform>().anchoredPosition = skillData.treePosition;
     }
 
     private void Start()
     {
         skillController = FindObjectOfType<PlayerSkillController>();
-
-        if (skillData != null)
-            GetComponent<RectTransform>().anchoredPosition = skillData.treePosition;
 
         originalLocalPosition = transform.localPosition;
         UpdateVisualState();
