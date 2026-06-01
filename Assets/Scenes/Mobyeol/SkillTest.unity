@@ -15928,6 +15928,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: "\uBC14\uB098\uB098\uB97C \uB358\uC9D1\uB2C8\uB2E4."
       objectReference: {fileID: 0}
+    - target: {fileID: 7516242857438219066, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8735055180023975678, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
