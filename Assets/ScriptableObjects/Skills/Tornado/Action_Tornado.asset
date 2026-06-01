@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Action_Tornado
   m_EditorClassIdentifier: Assembly-CSharp::TornadoAction
   tornadoPrefab: {fileID: 7285873134494435453, guid: df51cc0b800edbd4e868abb311beb7be, type: 3}
-  damageTick: 0.5
-  baseDamage: 1
-  pullDistancePerSecond: 2
-  duration: 3
+  spawnDistance: 3
+  hungerCost: 10
+  damageTick: 1
+  baseDamage: 0.05
+  pullDistancePerSecond: 5
+  duration: 4
   vfxPrefab: {fileID: 2560156276862465191, guid: fd75401de139cb348b7e32dde572a449, type: 3}
   vfxDuration: 0.2
   enemyLayers:

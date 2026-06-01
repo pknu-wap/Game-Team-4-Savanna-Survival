@@ -106,7 +106,7 @@ private void OnSkillRemoved(BaseSkillData skill)
 
             if (Input.GetKeyDown(key) && activeSkillCooldowns[skill] <= 0f)
             {
-                if (skill.action != null)
+                if (skill.action != null && skill.action.CanProcess(gameObject, skill))
                 {
                     skill.action.Process(gameObject, skill);
                     activeSkillCooldowns[skill] = skill.cooldown;

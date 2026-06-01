@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class TornadoAction : ActiveAction
 {
     [SerializeField] private GameObject tornadoPrefab;
+    [SerializeField] private float spawnDistance = 2f;
+    [SerializeField] private float hungerCost = 5f;
     [SerializeField] private float damageTick = 0.5f;
     [SerializeField] private float baseDamage = 1f;
     [SerializeField] private float pullDistancePerSecond = 2f;
@@ -17,11 +19,20 @@ public class TornadoAction : ActiveAction
     private readonly Dictionary<GameObject, Coroutine> activeRoutines = new();
     private readonly Dictionary<GameObject, GameObject> activeTornadoes = new();
 
+    public override bool CanProcess(GameObject player, ActiveSkillData data)
+    {
+        return HasEnoughHunger(player);
+    }
+
     public override void Process(GameObject player, ActiveSkillData data)
     {
         var controller = player.GetComponent<PlayerSkillController>();
+        if (!TryConsumeHunger(player))
+        {
+            Debug.Log("토네이도: 허기 부족");
+            return;
+        }
         StopCurrent(player, controller);
-
         activeRoutines[player] = controller.StartCoroutine(
             TornadoRoutine(player, CalculateDamage(player)));
     }
@@ -42,6 +53,25 @@ public class TornadoAction : ActiveAction
         return enemyLayers.value == 0 ? LayerMask.GetMask("Enemy") : enemyLayers;
     }
 
+    private bool HasEnoughHunger(GameObject player)
+    {
+        PlayerStatCore statCore = player.GetComponent<PlayerStatManager>().StatCore;
+        return statCore.getStat(StatType.HUNGER).rawValue >= hungerCost;
+    }
+
+    private bool TryConsumeHunger(GameObject player)
+    {
+        if (!HasEnoughHunger(player)) 
+        {
+            return false;
+        }
+
+        PlayerStatCore statCore = player.GetComponent<PlayerStatManager>().StatCore;
+        float hunger = statCore.getStat(StatType.HUNGER).rawValue;
+        statCore.registerStat(StatType.HUNGER, hunger - hungerCost);
+        return true;
+    }
+
     private void StopCurrent(GameObject player, PlayerSkillController controller)
     {
         if (activeRoutines.TryGetValue(player, out Coroutine routine))
@@ -60,7 +90,9 @@ public class TornadoAction : ActiveAction
 
     private IEnumerator TornadoRoutine(GameObject player, float damage)
     {
-        GameObject tornado = Instantiate(tornadoPrefab, player.transform.position, Quaternion.identity);
+        Vector2 spawnPosition = (Vector2)player.transform.position
+            + player.GetComponent<PlayerMovement>().GetLastMoveDirection() * spawnDistance;
+        GameObject tornado = Instantiate(tornadoPrefab, spawnPosition, Quaternion.identity);
         activeTornadoes[player] = tornado;
 
         Collider2D area = tornado.GetComponent<Collider2D>();
