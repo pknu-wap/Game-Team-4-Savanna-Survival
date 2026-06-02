@@ -20,6 +20,9 @@ public abstract class Enemy : Entity
     protected EnemyStatManager statManager;
     protected float            currentHp;
 
+    public float CurrentHp => currentHp;
+    public float MaxHp     => statManager.getStat(StatType.HEALTH).rawValue;
+
     private float contactTimer;
 
     protected Vector2 velocity;
@@ -35,6 +38,7 @@ public abstract class Enemy : Entity
     [SerializeField] protected float moveSpeed      = 3f;
 
     protected bool isDead;
+    public bool IsDead => isDead;
 
     protected virtual void Awake()
     {
@@ -121,6 +125,12 @@ public abstract class Enemy : Entity
         if (isDead) return;
         currentHp -= damage;
         if (currentHp <= 0) Die();
+    }
+
+    // velocity 필드를 직접 세팅해 MoveSmooth 자연 감쇠로 넉백 표현
+    public virtual void ApplyKnockback(Vector2 force)
+    {
+        velocity = force;
     }
 
     protected virtual void Die()

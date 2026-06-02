@@ -7,6 +7,7 @@ public class SkillManager : MonoBehaviour
     public static SkillManager Instance { get; private set; }
 
     private HashSet<BaseSkillData> unlockedSkills = new();
+    private HashSet<BaseSkillData> completedSkills = new();
     private int wildnessUnlockedCount = 0;
     private int fantasyUnlockedCount = 0;
     public event Action<BaseSkillData> OnSkillRemoved;
@@ -38,11 +39,11 @@ public class SkillManager : MonoBehaviour
 public bool TryUnlockSkill(BaseSkillData skill)
     {
         if (skill == null) return false;
-        if (unlockedSkills.Contains(skill)) return false;
+        if (completedSkills.Contains(skill)) return false;
 
         foreach (var prerequisite in skill.prerequisites)
         {
-            if (!unlockedSkills.Contains(prerequisite))
+            if (!completedSkills.Contains(prerequisite))
                 return false;
         }
 
@@ -80,10 +81,14 @@ public bool TryUnlockSkill(BaseSkillData skill)
         }
 
         unlockedSkills.Add(skill);
+        completedSkills.Add(skill);
 
         if (skill is PassiveSkillData passiveSkill)
             foreach (var effect in passiveSkill.effects)
                 effect.Apply(player);
+
+        if (skill is ActiveSkillData newActive)
+            newActive.action?.OnUnlock(player);
 
         if (skill.treeType == SkillTreeType.Wildness) wildnessUnlockedCount++;
         else if (skill.treeType == SkillTreeType.Fantasy) fantasyUnlockedCount++;
@@ -111,6 +116,7 @@ public bool ReplaceSkill(BaseSkillData oldSkill, BaseSkillData newSkill)
         unlockedSkills.Remove(oldSkill);
 
         unlockedSkills.Add(newSkill);
+        completedSkills.Add(newSkill);
 
         if (newSkill is PassiveSkillData newPassive)
             foreach (var effect in newPassive.effects)
@@ -130,7 +136,7 @@ public SkillTreeType GetDominantSkillTree()
 
     public bool IsUnlocked(BaseSkillData skill)
     {
-        return unlockedSkills.Contains(skill);
+        return completedSkills.Contains(skill);
     }
 
     public int GetCurrentPoints()
@@ -167,6 +173,7 @@ public void ResetRun()
         }
 
         unlockedSkills.Clear();
+        completedSkills.Clear();
         wildnessUnlockedCount = 0;
         fantasyUnlockedCount = 0;
 

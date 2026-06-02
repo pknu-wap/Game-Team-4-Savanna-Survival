@@ -95,11 +95,16 @@ private void OnSkillRemoved(BaseSkillData skill)
 
     private void HandleActiveSkills()
     {
+        bool isStackModeActive = GetComponent<StackSlaughterController>() != null;
+
         foreach (var skill in unlockedActiveSkills)
         {
             // 쿨다운 업데이트
             if (activeSkillCooldowns[skill] > 0f)
                 activeSkillCooldowns[skill] -= Time.deltaTime;
+
+            if (isStackModeActive && skill.skillGroupId != "wildness_scratch")
+                continue;
 
             if (!keyBindings.TryGetValue(skill, out KeyCode key)) continue;
             if (key == KeyCode.None) continue;
@@ -117,8 +122,11 @@ private void OnSkillRemoved(BaseSkillData skill)
 
 private void HandleAutoSkills()
     {
+        bool isStackModeActive = GetComponent<StackSlaughterController>() != null;
+
         foreach (var skill in unlockedAutoSkills)
         {
+            if (isStackModeActive) continue;
             autoSkillTimers[skill] -= Time.deltaTime;
 
             if (autoSkillTimers[skill] <= 0f)
