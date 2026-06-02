@@ -12,6 +12,7 @@ public class LightningAction : AutoAction
     [SerializeField] float strikeVfxDuration = 0.3f;
     [SerializeField] float strikeRadius = 1f;
     [SerializeField] float hungerCost;
+    [SerializeField] float damageMultiplier = 1.0f;
 
     public override void Process(GameObject player, AutoSkillData data)
     {
@@ -53,12 +54,12 @@ public class LightningAction : AutoAction
         // 타격 판정 + 피격 적마다 strike VFX 스폰
         int enemyLayerMask = LayerMask.GetMask("Enemy");
         Collider2D[] hits = Physics2D.OverlapCircleAll(pos, strikeRadius, enemyLayerMask);
-        float dmg = statCore.getStat(StatType.SKILL_DAMAGE).calibratedValue;
+        float dmg = statCore.getStat(StatType.SKILL_DAMAGE).calibratedValue * damageMultiplier;
 
         foreach (var hit in hits)
         {
             hit.GetComponent<Enemy>()?.TakeDamage(dmg);
-            SpawnStrikeVfx(hit.transform.position);
+            SpawnStrikeVfx(hit.transform);
         }
 
         if (chainState == null || !chainState.isChainEnabled || chainState.maxChainCount <= 0) yield break;
@@ -68,8 +69,9 @@ public class LightningAction : AutoAction
         foreach (var h in hits) hitTargets.Add(h.gameObject);
 
         Vector3 lastPos = pos;
-        float chainDmg = dmg;
-        const float chainDamageDecay = 0.7f;
+        float chainDmg = statCore.getStat(StatType.SKILL_DAMAGE).calibratedValue
+                       * (damageMultiplier + chainState.chainDamageBonus);
+        float chainDamageDecay = chainState.chainDamageDecay;
 
         for (int i = 0; i < chainState.maxChainCount; i++)
         {
@@ -86,16 +88,16 @@ public class LightningAction : AutoAction
             hitTargets.Add(nearest.gameObject);
             chainDmg *= chainDamageDecay;
             nearest.GetComponent<Enemy>()?.TakeDamage(chainDmg);
-            SpawnStrikeVfx(nearest.transform.position);
+            SpawnStrikeVfx(nearest.transform);
 
             lastPos = nearest.transform.position;
         }
     }
 
-    void SpawnStrikeVfx(Vector3 pos)
+    void SpawnStrikeVfx(Transform enemyTransform)
     {
         if (lightningVfxPrefab == null) return;
-        var vfx = Object.Instantiate(lightningVfxPrefab, pos, Quaternion.identity);
+        var vfx = Object.Instantiate(lightningVfxPrefab, enemyTransform.position, Quaternion.identity, enemyTransform);
         Object.Destroy(vfx, strikeVfxDuration);
     }
 

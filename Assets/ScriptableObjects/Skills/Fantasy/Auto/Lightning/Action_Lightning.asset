@@ -19,3 +19,4 @@ MonoBehaviour:
   strikeVfxDuration: 0.6
   strikeRadius: 2
   hungerCost: 2
+  damageMultiplier: 1.5

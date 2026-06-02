@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Effect_ChainLightning
   m_EditorClassIdentifier: Assembly-CSharp::ChainLightningEffect
   chainCount: 7
+  chainDamageBonus: 1
+  chainDamageDecay: 0.7
