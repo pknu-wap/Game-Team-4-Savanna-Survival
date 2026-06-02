@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3c3188048beaf7b41b48a984c1281857
+guid: 4c0e51191d0c11a4ea70a50100d4175f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2105305842262875611
-    second: Tornado_0
+      213: 4687906494181083203
+    second: Leap_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tornado_0
+      name: Leap_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1254
-        height: 1254
+        width: 1101
+        height: 1120
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 522ed58ad7378c2e0800000000000000
-      internalID: -2105305842262875611
+      spriteID: 34809ed6e1ace0140800000000000000
+      internalID: 4687906494181083203
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Tornado_0: -2105305842262875611
+      Leap_0: 4687906494181083203
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

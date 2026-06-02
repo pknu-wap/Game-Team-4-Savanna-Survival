@@ -4523,8 +4523,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -92.797325, y: 46.5357}
-  m_SizeDelta: {x: -191.98409, y: -107.22801}
+  m_AnchoredPosition: {x: -94.395, y: 46.286}
+  m_SizeDelta: {x: -188.79, y: -106.73}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &221678967
 MonoBehaviour:
@@ -7563,7 +7563,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 110, y: -74.38191}
+  m_AnchoredPosition: {x: 110, y: -76.5}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &390096110
@@ -11830,7 +11830,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 110, y: -223.14574}
+  m_AnchoredPosition: {x: 110, y: -229.5}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &749737818
@@ -15406,7 +15406,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 110, y: -24.79397}
+  m_AnchoredPosition: {x: 110, y: -25.5}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1004972941
@@ -17029,7 +17029,7 @@ PrefabInstance:
     - target: {fileID: 639125569276145185, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
       propertyPath: skillData
       value: 
-      objectReference: {fileID: 11400000, guid: 66074dd4ff2ae114d924996ae10b51ed, type: 2}
+      objectReference: {fileID: 11400000, guid: a42938d8299b44d497d020a8e75df156, type: 2}
     - target: {fileID: 2046328831496363460, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
       propertyPath: m_Name
       value: Jump
@@ -23933,7 +23933,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 110, y: -123.96985}
+  m_AnchoredPosition: {x: 110, y: -127.5}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1585555842
@@ -27594,7 +27594,7 @@ PrefabInstance:
     - target: {fileID: 639125569276145185, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
       propertyPath: skillData
       value: 
-      objectReference: {fileID: 11400000, guid: 66074dd4ff2ae114d924996ae10b51ed, type: 2}
+      objectReference: {fileID: 11400000, guid: 90b62e63529f4484b8e92582d123cda8, type: 2}
     - target: {fileID: 2046328831496363460, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
       propertyPath: m_Name
       value: Run
@@ -28573,7 +28573,7 @@ PrefabInstance:
     - target: {fileID: 639125569276145185, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
       propertyPath: skillData
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 0b417a9e098e0e24eabe03e955f23664, type: 2}
     - target: {fileID: 2046328831496363460, guid: 2ed51b16012f835488abdcdf08ae32b4, type: 3}
       propertyPath: m_Name
       value: Tornado
@@ -28979,7 +28979,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 110, y: -173.5578}
+  m_AnchoredPosition: {x: 110, y: -178.5}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1905089539
