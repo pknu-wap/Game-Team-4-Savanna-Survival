@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3996d3a53e1b7864aa6f2d1385b80c28
+guid: 60385e267f0f0504bbc7e61e946e2091
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4785101079703770956
-    second: babyLionSummon_0
+      213: -7027653440247301625
+    second: satellite_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: babyLionSummon_0
+      name: satellite_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 928
-        height: 944
+        width: 978
+        height: 936
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4b82be9abe7e79db0800000000000000
-      internalID: -4785101079703770956
+      spriteID: 70af1812e62c87e90800000000000000
+      internalID: -7027653440247301625
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      babyLionSummon_0: -4785101079703770956
+      satellite_0: -7027653440247301625
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

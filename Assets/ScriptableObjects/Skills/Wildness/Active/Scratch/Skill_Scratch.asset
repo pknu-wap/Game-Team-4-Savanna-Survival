@@ -19,7 +19,7 @@ MonoBehaviour:
     \uD560\uD034\uC5B4 \uB370\uBBF8\uC9C0\uB97C \uC785\uD78C\uB2E4."
   cost: 1
   prerequisites: []
-  treePosition: {x: -300, y: 100}
+  treePosition: {x: -200, y: 100}
   treeType: 1
   unlockBehavior: 0
   skillGroupId: wildness_scratch

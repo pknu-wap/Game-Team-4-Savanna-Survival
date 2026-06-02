@@ -19,7 +19,7 @@ MonoBehaviour:
     \uC801\uC744 \uC790\uB3D9 \uACF5\uACA9\uD569\uB2C8\uB2E4."
   cost: 1
   prerequisites: []
-  treePosition: {x: 300, y: 100}
+  treePosition: {x: 600, y: 100}
   treeType: 1
   unlockBehavior: 0
   skillGroupId: wildness_baby_lion

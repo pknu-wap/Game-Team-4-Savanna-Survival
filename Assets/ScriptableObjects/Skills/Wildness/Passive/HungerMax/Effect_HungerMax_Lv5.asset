@@ -15,5 +15,5 @@ MonoBehaviour:
   damageBonusPercent: 25
   speedBonusPercent: 5
   buffDuration: 5
-  hungerDecreaseReduction: 50
+  hungerDecreaseReduction: 5
   buffVfxPrefab: {fileID: 2272033567662803553, guid: 481827e929bb071499d4769383733a09, type: 3}

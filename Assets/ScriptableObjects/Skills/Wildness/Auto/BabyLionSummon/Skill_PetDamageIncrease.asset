@@ -19,7 +19,7 @@ MonoBehaviour:
   cost: 1
   prerequisites:
   - {fileID: 11400000, guid: 5e60ea955282b22438f9420d46f8dd3b, type: 2}
-  treePosition: {x: 0, y: 0}
+  treePosition: {x: 700, y: -200}
   treeType: 1
   unlockBehavior: 2
   skillGroupId: wildness_pet_damage
