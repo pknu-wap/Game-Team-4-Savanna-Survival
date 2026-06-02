@@ -28,9 +28,9 @@ public static class EnemyEvents
 
     public static void PublishDeath(EnemyDeathEvent e)
     {
-        Debug.Log($"[EnemyEventBus] 사망 이벤트 — 피해자: {e.getVictim().name}" +
-                  $" / 처치자: {e.getKiller()?.name ?? "없음"}" +
-                  $" / 위치: {e.getPosition()}");
+        // Debug.Log($"[EnemyEventBus] 사망 이벤트 — 피해자: {e.getVictim().name}" +
+        //           $" / 처치자: {e.getKiller()?.name ?? "없음"}" +
+        //           $" / 위치: {e.getPosition()}");
         OnDeath?.Invoke(e);
     }
 }

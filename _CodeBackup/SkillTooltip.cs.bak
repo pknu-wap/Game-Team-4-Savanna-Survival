@@ -27,13 +27,6 @@ public class SkillTooltip : MonoBehaviour
 
     public void Show(BaseSkillData skillData, RectTransform nodeRect)
     {
-        // skillData가 없는(빈) 노드면 툴팁을 띄우지 않는다 (NRE 방지)
-        if (skillData == null)
-        {
-            Hide();
-            return;
-        }
-
         gameObject.SetActive(true);
         UpdateTooltipContent(skillData);
 
