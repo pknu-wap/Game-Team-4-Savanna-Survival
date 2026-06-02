@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c822b1514ba1e49b6249e7c10c0f25, type: 3}
+  m_Name: ExecuteAction
+  m_EditorClassIdentifier: Assembly-CSharp::ExecuteAction
+  animTriggerName: wild_skill
+  fanAngle: 60
+  range: 3
+  damageMultiplier: 1.5
+  executeThreshold: 0.3
+  executeDamageMultiplier: 2
+  vfxPrefab: {fileID: 2560156276862465191, guid: fd75401de139cb348b7e32dde572a449, type: 3}
+  executeVfxPrefab: {fileID: 525820867989444780, guid: 7712c69b358cef3428c1d50a329c8ee1, type: 3}
+  vfxDuration: 0.2

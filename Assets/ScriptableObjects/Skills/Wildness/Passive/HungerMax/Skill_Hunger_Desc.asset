@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2484643deb87746b99a9ca76ae92bc, type: 3}
+  m_Name: Skill_Hunger_Desc
+  m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
+  id: 
+  skillName: "\uBC30\uACE0\uD488 MAX"
+  icon: {fileID: 0}
+  description: "\uBC30\uACE0\uD514 100\uB2EC\uC131 \uC2DC \uCD94\uAC00 \uACF5\uACA9\uB825/\uC774\uB3D9\uC18D\uB3C4
+    \uBD80\uC5EC"
+  cost: 0
+  prerequisites: []
+  treePosition: {x: -690, y: 200}
+  treeType: 0
+  unlockBehavior: 0
+  skillGroupId: 
+  skillLevel: 0
+  effects: []

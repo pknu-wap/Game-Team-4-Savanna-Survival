@@ -21,6 +21,9 @@ public abstract class Enemy : Entity
     protected EnemyStatManager statManager;
     protected float            currentHp;
 
+    public float CurrentHp => currentHp;
+    public float MaxHp     => statManager.getStat(StatType.HEALTH).rawValue;
+
     private float contactTimer;
 
     // ── 공통 배회(Wander) 상태 ─────────────────────────────────
@@ -38,7 +41,8 @@ public abstract class Enemy : Entity
     [SerializeField] protected float idleChance     = 0.2f;
     [SerializeField] protected float moveSpeed      = 3f;
 
-    // ──────────────────────────────────────────────────────────
+    protected bool isDead;
+    public bool IsDead => isDead;
 
     protected virtual void Awake()
     {
@@ -120,8 +124,6 @@ public abstract class Enemy : Entity
 
     // ── 피격 / 사망 ───────────────────────────────────────────
 
-    protected bool isDead;
-
     public override void TakeDamage(float damage)
     {
         if (isDead) return;
@@ -141,6 +143,12 @@ public abstract class Enemy : Entity
 
         currentHp -= dmgEvent.getDamage();
         if (currentHp <= 0) Die();
+    }
+
+    // velocity 필드를 직접 세팅해 MoveSmooth 자연 감쇠로 넉백 표현
+    public virtual void ApplyKnockback(Vector2 force)
+    {
+        velocity = force;
     }
 
     protected virtual void Die()
