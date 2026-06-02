@@ -113,6 +113,7 @@ private void OnSkillRemoved(BaseSkillData skill)
             {
                 if (skill.action != null)
                 {
+                    SkillEvents.PublishSkillUse(skill);
                     skill.action.Process(gameObject, skill);
                     activeSkillCooldowns[skill] = skill.cooldown;
                 }
