@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
   id: wildness_rend
   skillName: "\uCC22\uC5B4\uBC1C\uAE30\uAE30"
-  icon: {fileID: 0}
+  icon: {fileID: 6048716020302219014, guid: bb3e19fbcffbfc3418d1b5b5bde5f738, type: 3}
   description: "\uC804\uBC29 \uB113\uC740 \uBD80\uCC44\uAF34 \uBC94\uC704\uB97C \uBC1C\uD1B1\uC73C\uB85C
     \uAC15\uB825\uD788 \uCC22\uC5B4 \uD574\uB2F9 \uBC94\uC704\uC758 \uBAA8\uB4E0
     \uC801\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C \uC785\uD78C\uB2E4."

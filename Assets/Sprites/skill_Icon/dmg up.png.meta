@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 60385e267f0f0504bbc7e61e946e2091
+guid: 85060c3cf964c184d9211d25441adc5b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7027653440247301625
-    second: satellite_0
+      213: -6569169561876776893
+    second: dmg up_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: satellite_0
+      name: dmg up_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1254
-        height: 1254
+        width: 665
+        height: 678
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 70af1812e62c87e90800000000000000
-      internalID: -7027653440247301625
+      spriteID: 348b603a61f95d4a0800000000000000
+      internalID: -6569169561876776893
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      satellite_0: -7027653440247301625
+      dmg up_0: -6569169561876776893
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
