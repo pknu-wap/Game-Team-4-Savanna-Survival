@@ -9,21 +9,24 @@ public class HomingMissile : MonoBehaviour
 
     private bool hasExplosion;
     private float explosionRadius;
+    private float damageMultiplier;
+    private float explosionDamageBonus;
     private Transform target;
     private PlayerStatManager statManager;
     private bool dead;
     private Vector2 lastTargetPos;
     private Rigidbody2D rb;
 
-    public void Init(Transform t, PlayerStatManager sm, bool explosion, float explosionRad)
+    public void Init(Transform t, PlayerStatManager sm, bool explosion, float explosionRad, float dmgMultiplier = 1f, float explosionDmgBonus = 0f)
     {
         target = t;
         statManager = sm;
         hasExplosion = explosion;
         explosionRadius = explosionRad;
+        damageMultiplier = dmgMultiplier;
+        explosionDamageBonus = explosionDmgBonus;
         lastTargetPos = t != null ? (Vector2)t.position : (Vector2)transform.position;
         rb = GetComponent<Rigidbody2D>();
-        Debug.Log($"[Missile] Init: target={t?.name ?? "null"}, rb={rb != null}, hasExplosion={explosion}");
     }
 
     private void FixedUpdate()
@@ -33,7 +36,6 @@ public class HomingMissile : MonoBehaviour
         lifetime -= Time.fixedDeltaTime;
         if (lifetime <= 0f)
         {
-            Debug.Log("[Missile] FixedUpdate: lifetime 만료 → Destroy");
             Destroy(gameObject);
             return;
         }
@@ -49,7 +51,6 @@ public class HomingMissile : MonoBehaviour
             Vector2 toLastPos = lastTargetPos - (Vector2)transform.position;
             if (toLastPos.magnitude < 0.15f)
             {
-                Debug.Log("[Missile] FixedUpdate: 마지막 위치 도달 → Destroy");
                 Destroy(gameObject);
                 return;
             }
@@ -63,25 +64,18 @@ public class HomingMissile : MonoBehaviour
 
         transform.up = dir;
 
-        // Physics 2D 레이어 매트릭스와 무관하게 적 충돌 수동 체크
         var col = GetComponent<CircleCollider2D>();
         if (col != null)
         {
             float checkRadius = col.radius * Mathf.Max(transform.lossyScale.x, transform.lossyScale.y);
             Collider2D hit = Physics2D.OverlapCircle((Vector2)transform.position, checkRadius, LayerMask.GetMask("Enemy"));
             if (hit != null)
-            {
-                Debug.Log($"[Missile] OverlapCircle hit: {hit.gameObject.name}");
                 Die(hit);
-            }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        int enemyLayer = LayerMask.NameToLayer("Enemy");
-        Debug.Log($"[Missile] OnTriggerEnter2D: hit={other.gameObject.name}, layer={other.gameObject.layer}(Enemy={enemyLayer}), dead={dead}, hasEnemy={other.GetComponent<Enemy>() != null}");
-
         if (dead) return;
         if (other.GetComponent<Enemy>() == null) return;
 
@@ -91,36 +85,32 @@ public class HomingMissile : MonoBehaviour
     private void Die(Collider2D hitCollider)
     {
         dead = true;
-        Debug.Log($"[Missile] Die: pos={transform.position}, hasExplosion={hasExplosion}");
 
         var sr = GetComponent<SpriteRenderer>();
         if (sr != null) sr.enabled = false;
         var col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
-        float dmg = 0f;
+        float baseDmg = 0f;
         if (statManager != null)
-            dmg = statManager.StatCore.getStat(StatType.SKILL_DAMAGE).calibratedValue;
-
-        Debug.Log($"[Missile] Die: dmg={dmg}");
-
-        int enemyLayerMask = LayerMask.GetMask("Enemy");
+            baseDmg = statManager.StatCore.getStat(StatType.SKILL_DAMAGE).calibratedValue;
 
         if (!hasExplosion)
         {
-            var enemy = hitCollider.GetComponent<Enemy>();
-            Debug.Log($"[Missile] Die: 단일 타격 → enemy={enemy?.name ?? "null"}");
-            enemy?.TakeDamage(dmg);
+            hitCollider.GetComponent<Enemy>()?.TakeDamage(baseDmg * damageMultiplier);
         }
         else
         {
-            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius, enemyLayerMask);
-            Debug.Log($"[Missile] Die: 폭발 → 범위 내 적 {hits.Length}체");
+            float explosionDmg = baseDmg * (damageMultiplier + explosionDamageBonus);
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius, LayerMask.GetMask("Enemy"));
             foreach (var hit in hits)
-                hit.GetComponent<Enemy>()?.TakeDamage(dmg);
+                hit.GetComponent<Enemy>()?.TakeDamage(explosionDmg);
 
             if (explosionVfxPrefab != null)
-                Instantiate(explosionVfxPrefab, transform.position, Quaternion.identity);
+            {
+                var vfxObj = Instantiate(explosionVfxPrefab, transform.position, Quaternion.identity);
+                vfxObj.GetComponent<MissileExplosionVfxController>()?.Init(explosionRadius);
+            }
         }
 
         if (hitVfxPrefab != null)

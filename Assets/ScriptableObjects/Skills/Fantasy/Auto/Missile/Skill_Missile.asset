@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AutoSkillData
   id: fantasy_missile
   skillName: "\uC720\uB3C4\uBBF8\uC0AC\uC77C"
-  icon: {fileID: 0}
+  icon: {fileID: -5890828503606760369, guid: 28f54ca7cb352094991aae1c8c9584fd, type: 3}
   description: "\uAC00\uC7A5 \uAC00\uAE4C\uC6B4 \uC801\uC744 \uD5A5\uD574 \uC720\uB3C4\uBBF8\uC0AC\uC77C\uC744
     \uBC1C\uC0AC\uD55C\uB2E4."
   cost: 1
   prerequisites: []
-  treePosition: {x: -300, y: 100}
+  treePosition: {x: 400, y: 100}
   treeType: 2
   unlockBehavior: 0
   skillGroupId: fantasy_missile
-  skillLevel: 1
+  skillLevel: 2
   interval: 3
   range: 10
   requiresTarget: 1

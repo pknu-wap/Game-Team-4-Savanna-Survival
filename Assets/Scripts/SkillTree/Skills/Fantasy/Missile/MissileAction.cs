@@ -5,6 +5,7 @@ public class MissileAction : AutoAction
 {
     [SerializeField] GameObject missilePrefab;
     [SerializeField] float hungerCost;
+    [SerializeField] float damageMultiplier = 1f;
 
     public override void Process(GameObject player, AutoSkillData data)
     {
@@ -39,11 +40,12 @@ public class MissileAction : AutoAction
         var missileCtrl = player.GetComponent<MissileController>();
         bool explosion = missileCtrl != null && missileCtrl.hasExplosion;
         float explosionRad = missileCtrl != null ? missileCtrl.explosionRadius : 0f;
+        float explosionDmgBonus = missileCtrl != null ? missileCtrl.explosionDamageBonus : 0f;
 
         GameObject missileObj = Object.Instantiate(missilePrefab, player.transform.position, Quaternion.identity);
         var homing = missileObj.GetComponent<HomingMissile>();
         if (homing != null)
-            homing.Init(target, player.GetComponent<PlayerStatManager>(), explosion, explosionRad);
+            homing.Init(target, player.GetComponent<PlayerStatManager>(), explosion, explosionRad, damageMultiplier, explosionDmgBonus);
     }
 
 #if UNITY_EDITOR

@@ -20,7 +20,7 @@ MonoBehaviour:
   cost: 1
   prerequisites:
   - {fileID: 11400000, guid: 59c6110e0cfb7de4ab809f463bada50d, type: 2}
-  treePosition: {x: -300, y: -200}
+  treePosition: {x: 400, y: -200}
   treeType: 2
   unlockBehavior: 2
   skillGroupId: fantasy_missile_explosion

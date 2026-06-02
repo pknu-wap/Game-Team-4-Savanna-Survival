@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2325244417819360778}
   - component: {fileID: 8680811850413209902}
   - component: {fileID: 1641976946406580456}
+  - component: {fileID: 8525622063407265976}
   m_Layer: 0
   m_Name: MissileExplosionVFX
   m_TagString: Untagged
@@ -4894,3 +4895,15 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &8525622063407265976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5993157830864391845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0accc23e994cbbc4091a4d4de7d54309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissileExplosionVfxController
