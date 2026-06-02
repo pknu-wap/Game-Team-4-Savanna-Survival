@@ -144,7 +144,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SatelliteOrbit
   orbitRadius: 4
   orbitSpeed: 180
-  hitVfxPrefab: {fileID: 3225677813560903735, guid: cd20f4c21ea85434481df54c7a315ff3, type: 3}
+  hitRadius: 0.3
+  hitCooldown: 0.5
+  hitVfxPrefab: {fileID: 0}
 --- !u!50 &7568899598107072110
 Rigidbody2D:
   serializedVersion: 5

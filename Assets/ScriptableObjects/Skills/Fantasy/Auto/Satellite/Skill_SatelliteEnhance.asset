@@ -20,7 +20,7 @@ MonoBehaviour:
   cost: 1
   prerequisites:
   - {fileID: 11400000, guid: 006849066bc9ab74d889dd30ebe2f9be, type: 2}
-  treePosition: {x: 100, y: -200}
+  treePosition: {x: 600, y: -200}
   treeType: 2
   unlockBehavior: 2
   skillGroupId: fantasy_satellite_enhance

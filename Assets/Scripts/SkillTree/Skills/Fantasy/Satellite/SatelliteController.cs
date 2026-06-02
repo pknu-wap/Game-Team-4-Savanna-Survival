@@ -38,7 +38,7 @@ public class SatelliteController : MonoBehaviour
         statCore.addStat(StatType.HUNGER, -hungerDrainPerSecond * Time.deltaTime);
     }
 
-    // 현재 위성 수가 maxSatelliteCount 미만이면 부족한 수만큼 즉시 소환
+    // 현재 위성 수가 maxSatelliteCount 미만이면 부족한 수만큼 즉시 소환 후 균등 배분
     public void SpawnMissing(Transform playerTransform)
     {
         if (satellitePrefab == null) return;
@@ -51,9 +51,24 @@ public class SatelliteController : MonoBehaviour
             if (orbit != null) orbit.Init(playerTransform, this);
             activeSatellites.Add(sat);
         }
+
+        RedistributeAngles();
     }
 
-    // maxSatelliteCount 초과분 위성을 제거
+    // 활성 위성 전체 각도를 균등하게 재배분
+    public void RedistributeAngles()
+    {
+        int count = activeSatellites.Count;
+        if (count == 0) return;
+        float step = 360f / count;
+        for (int i = 0; i < count; i++)
+        {
+            var orbit = activeSatellites[i]?.GetComponent<SatelliteOrbit>();
+            orbit?.SetAngle(i * step);
+        }
+    }
+
+    // maxSatelliteCount 초과분 위성을 제거 후 균등 재배분
     public void TrimExcess()
     {
         activeSatellites.RemoveAll(s => s == null);
@@ -63,5 +78,6 @@ public class SatelliteController : MonoBehaviour
             if (activeSatellites[last] != null) Destroy(activeSatellites[last]);
             activeSatellites.RemoveAt(last);
         }
+        RedistributeAngles();
     }
 }
