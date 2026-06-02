@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1caf96a3920cc0489f80e5f4885c547, type: 3}
+  m_Name: Skill_Missile
+  m_EditorClassIdentifier: Assembly-CSharp::AutoSkillData
+  id: fantasy_missile
+  skillName: "\uC720\uB3C4\uBBF8\uC0AC\uC77C"
+  icon: {fileID: -5890828503606760369, guid: 28f54ca7cb352094991aae1c8c9584fd, type: 3}
+  description: "\uAC00\uC7A5 \uAC00\uAE4C\uC6B4 \uC801\uC744 \uD5A5\uD574 \uC720\uB3C4\uBBF8\uC0AC\uC77C\uC744
+    \uBC1C\uC0AC\uD55C\uB2E4."
+  cost: 1
+  prerequisites: []
+  treePosition: {x: 400, y: 100}
+  treeType: 2
+  unlockBehavior: 0
+  skillGroupId: fantasy_missile
+  skillLevel: 2
+  interval: 3
+  range: 10
+  requiresTarget: 1
+  action: {fileID: 11400000, guid: 64520a0448bc9d340af913b761ba6555, type: 2}
