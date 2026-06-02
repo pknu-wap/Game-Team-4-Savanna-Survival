@@ -124,8 +124,6 @@ public abstract class Enemy : Entity
 
     // ── 피격 / 사망 ───────────────────────────────────────────
 
-    protected bool isDead;
-
     public override void TakeDamage(float damage)
     {
         if (isDead) return;
