@@ -30,6 +30,14 @@ public class InventoryUiManager : MonoBehaviour, IBeginDragHandler, IDragHandler
     private EquipmentData currentEquipment;
     private static InventoryUiManager currentDragging;
 
+    private void Awake()
+    {
+        if (ItemInfoUI == null)
+        {
+            ItemInfoUI = FindObjectOfType<ItemInfoUI>(true);
+        }
+    }
+
     public void setSlot(EquipmentData equipment)
     {
         currentEquipment = equipment;
@@ -47,11 +55,13 @@ public class InventoryUiManager : MonoBehaviour, IBeginDragHandler, IDragHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (currentEquipment == null) return;
+        if (ItemInfoUI == null) return;
         ItemInfoUI.openEquipmentInfo(currentEquipment);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (ItemInfoUI == null) return;
         ItemInfoUI.hideEquipmentInfo();
     }
 

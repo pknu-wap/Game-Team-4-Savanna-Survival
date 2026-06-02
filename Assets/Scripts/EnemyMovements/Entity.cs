@@ -19,6 +19,24 @@ public abstract class Entity : MonoBehaviour
         activeEffects.Remove(effect);
     }
 
+    public bool HasEffect<T>() where T : StatusEffectBaseTemp
+    {
+        foreach (StatusEffectBaseTemp effect in activeEffects)
+            if (effect is T) return true;
+        return false;
+    }
+
+    // 이미 걸린 효과를 꺼내 갱신할 때 사용 (PoisonEffectTemp.Refresh 등)
+    public bool HasEffect<T>(out T found) where T : StatusEffectBaseTemp
+    {
+        foreach (StatusEffectBaseTemp effect in activeEffects)
+        {
+            if (effect is T t) { found = t; return true; }
+        }
+        found = null;
+        return false;
+    }
+
     protected void TickEffects()
     {
         for (int i = activeEffects.Count - 1; i >= 0; i--)

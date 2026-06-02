@@ -40,7 +40,7 @@ public class PlayerSkillController : MonoBehaviour
         else if (skill is AutoSkillData autoSkill)
         {
             unlockedAutoSkills.Add(autoSkill);
-            autoSkillTimers[autoSkill] = autoSkill.interval;
+            autoSkillTimers[autoSkill] = 0f;
         }
     }
 
@@ -95,11 +95,16 @@ private void OnSkillRemoved(BaseSkillData skill)
 
     private void HandleActiveSkills()
     {
+        bool isStackModeActive = GetComponent<StackSlaughterController>() != null;
+
         foreach (var skill in unlockedActiveSkills)
         {
             // 쿨다운 업데이트
             if (activeSkillCooldowns[skill] > 0f)
                 activeSkillCooldowns[skill] -= Time.deltaTime;
+
+            if (isStackModeActive && skill.skillGroupId != "wildness_scratch")
+                continue;
 
             if (!keyBindings.TryGetValue(skill, out KeyCode key)) continue;
             if (key == KeyCode.None) continue;
@@ -108,6 +113,7 @@ private void OnSkillRemoved(BaseSkillData skill)
             {
                 if (skill.action != null)
                 {
+                    SkillEvents.PublishSkillUse(skill);
                     skill.action.Process(gameObject, skill);
                     activeSkillCooldowns[skill] = skill.cooldown;
                 }
@@ -117,8 +123,11 @@ private void OnSkillRemoved(BaseSkillData skill)
 
 private void HandleAutoSkills()
     {
+        bool isStackModeActive = GetComponent<StackSlaughterController>() != null;
+
         foreach (var skill in unlockedAutoSkills)
         {
+            if (isStackModeActive) continue;
             autoSkillTimers[skill] -= Time.deltaTime;
 
             if (autoSkillTimers[skill] <= 0f)
@@ -133,9 +142,11 @@ private void HandleAutoSkills()
                 }
 
                 if (canProcess && skill.action != null)
+                {
                     skill.action.Process(gameObject, skill);
-
-                autoSkillTimers[skill] = skill.interval;
+                    autoSkillTimers[skill] = skill.interval;
+                }
+                // 적이 없으면 타이머 0 유지 → 적 등장 즉시 발동
             }
         }
     }

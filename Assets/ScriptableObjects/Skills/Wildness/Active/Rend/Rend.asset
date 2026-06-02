@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3f508e7b9fe4f498fb8d3a40f90a64, type: 3}
+  m_Name: Rend
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
+  id: wildness_rend
+  skillName: "\uCC22\uC5B4\uBC1C\uAE30\uAE30"
+  icon: {fileID: 6048716020302219014, guid: bb3e19fbcffbfc3418d1b5b5bde5f738, type: 3}
+  description: "\uC804\uBC29 \uB113\uC740 \uBD80\uCC44\uAF34 \uBC94\uC704\uB97C \uBC1C\uD1B1\uC73C\uB85C
+    \uAC15\uB825\uD788 \uCC22\uC5B4 \uD574\uB2F9 \uBC94\uC704\uC758 \uBAA8\uB4E0
+    \uC801\uC5D0\uAC8C \uB370\uBBF8\uC9C0\uB97C \uC785\uD78C\uB2E4."
+  cost: 1
+  prerequisites:
+  - {fileID: 11400000, guid: 05824a320bd19bb4f9980374ea2d93e6, type: 2}
+  treePosition: {x: -300, y: -200}
+  treeType: 1
+  unlockBehavior: 0
+  skillGroupId: wildness_rend
+  skillLevel: 0
+  cooldown: 4
+  action: {fileID: 11400000, guid: 1f53f1f65ac764543909f78fa9d57f31, type: 2}

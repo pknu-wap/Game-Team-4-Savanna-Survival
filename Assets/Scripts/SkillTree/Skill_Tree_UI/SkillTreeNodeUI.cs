@@ -15,6 +15,7 @@ public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     private bool isHolding = false;
     private bool holdCompleted = false;
     private Vector2 originalLocalPosition;
+    private Vector3 originalLocalScale;
     private const float HOLD_DURATION = 2f;
 
     private SkillTooltip tooltip;
@@ -30,16 +31,17 @@ public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         tooltip = GetComponentInParent<SkillTreeWindow>()?.GetComponentInChildren<SkillTooltip>(true);
         if (tooltip == null)
             tooltip = FindObjectOfType<SkillTooltip>(true);
+
+        if (skillData != null)
+            GetComponent<RectTransform>().anchoredPosition = skillData.treePosition;
     }
 
     private void Start()
     {
         skillController = FindObjectOfType<PlayerSkillController>();
 
-        if (skillData != null)
-            GetComponent<RectTransform>().anchoredPosition = skillData.treePosition;
-
         originalLocalPosition = transform.localPosition;
+        originalLocalScale = transform.localScale;
         UpdateVisualState();
 
     }
@@ -178,13 +180,13 @@ public class SkillTreeNodeUI : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     private void ScaleNode()
     {
         float scale = 1f + (holdTime / HOLD_DURATION) * 0.2f;
-        transform.localScale = Vector3.one * scale;
+        transform.localScale = originalLocalScale * scale;
     }
 
     private void ResetScale()
     {
         transform.localPosition = originalLocalPosition;
-        transform.localScale = Vector3.one;
+        transform.localScale = originalLocalScale;
     }
 
     private void FlashRed()

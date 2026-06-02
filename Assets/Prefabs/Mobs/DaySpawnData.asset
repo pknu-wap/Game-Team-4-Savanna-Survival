@@ -28,3 +28,8 @@ MonoBehaviour:
     minGroupSize: 1
     maxGroupSize: 1
     preferredStructure: 2
+  - mobPrefab: {fileID: 7270820640976640748, guid: 8b420aa80ecc3bc49903b1d9cb75f00f, type: 3}
+    weight: 1
+    minGroupSize: 1
+    maxGroupSize: 1
+    preferredStructure: 0

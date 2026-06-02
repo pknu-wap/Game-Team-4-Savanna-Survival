@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d34fcffc57634cd4e9b91d8773fe4adc, type: 3}
   m_Name: Temp_Hp-100
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentData
-  equipmentId: Temp_Hp-100
-  equipmentName: SiNe
+  equipmentId: PowerOverwhelming
+  equipmentName: PowerOverwhelming
   equipmentStats:
-  - statType: 2
-    value: -100
+  - statType: 11
+    value: 100

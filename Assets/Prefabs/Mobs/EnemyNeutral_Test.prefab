@@ -117,7 +117,7 @@ MonoBehaviour:
   moveSpeed: 4
   maxHp: 200
   damage: 25
-  detectionRange: 8
+  detectionRange: 30
   meleeRange: 3
   meleeInterval: 1.5
   indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
@@ -132,6 +132,7 @@ MonoBehaviour:
   waterDamage: 10
   waterWidth: 1.5
   waterZonePrefab: {fileID: 298413470088328658, guid: 7c37a0aac33857c40a3435f3e6d6dbaa, type: 3}
+  dieClipName: ElephantDeath
 --- !u!50 &-6656869047474873328
 Rigidbody2D:
   serializedVersion: 5

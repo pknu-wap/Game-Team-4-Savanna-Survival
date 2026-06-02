@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3f508e7b9fe4f498fb8d3a40f90a64, type: 3}
+  m_Name: Execute
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
+  id: wildness_execute
+  skillName: "\uC228\uD1B5\uB04A\uAE30"
+  icon: {fileID: -3943296411657477942, guid: deca9ffe75c16f642a5abc3868421de4, type: 3}
+  description: "\uB2E8\uC77C \uC801\uC5D0\uAC8C \uAC15\uB825\uD55C \uB370\uBBF8\uC9C0\uB97C
+    \uC785\uD78C\uB2E4. \uCD94\uAC00\uB85C \uCCB4\uB825\uC774 30%\uC774\uD558\uC778
+    \uC801\uC5D0\uAC90 \uB450 \uBC30\uC758 \uB370\uBBF8\uC9C0\uB97C \uC785\uD78C\uB2E4. "
+  cost: 1
+  prerequisites:
+  - {fileID: 11400000, guid: 05824a320bd19bb4f9980374ea2d93e6, type: 2}
+  treePosition: {x: -100, y: -200}
+  treeType: 1
+  unlockBehavior: 0
+  skillGroupId: wildness_execute
+  skillLevel: 0
+  cooldown: 4
+  action: {fileID: 11400000, guid: 0b2c900ce1eb9ec4b9ab3fedd3f85142, type: 2}

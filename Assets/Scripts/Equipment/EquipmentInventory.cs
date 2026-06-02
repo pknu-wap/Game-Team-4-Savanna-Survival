@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class EquipmentInventory : MonoBehaviour
 {
@@ -31,6 +32,66 @@ public class EquipmentInventory : MonoBehaviour
             return null;
         }
         return equippedItems[index].equipmentData;
+    }
+
+    public int getBagSlotCount()
+    {
+        return bagItems.Length;
+    }
+
+    public int getEquippedSlotCount()
+    {
+        return equippedItems.Length;
+    }
+
+    public bool tryGetBag(int index, out EquipmentData equipment)
+    {
+        equipment = null;
+        if (index < 0 || index >= bagItems.Length || bagItems[index] == null)
+        {
+            return false;
+        }
+
+        equipment = bagItems[index].equipmentData;
+        return equipment != null;
+    }
+
+    public bool tryGetEquipped(int index, out EquipmentData equipment)
+    {
+        equipment = null;
+        if (index < 0 || index >= equippedItems.Length || equippedItems[index] == null)
+        {
+            return false;
+        }
+
+        equipment = equippedItems[index].equipmentData;
+        return equipment != null;
+    }
+
+    public List<EquipmentData> getCurrentEquipments(bool includeEquippedItems)
+    {
+        List<EquipmentData> equipments = new List<EquipmentData>();
+
+        if (includeEquippedItems)
+        {
+            for (int i = 0; i < equippedItems.Length; ++i)
+            {
+                if (tryGetEquipped(i, out EquipmentData equipment))
+                {
+                    equipments.Add(equipment);
+                }
+            }
+        }
+
+        for (int i = 0; i < bagItems.Length; ++i)
+        {
+            if (tryGetBag(i, out EquipmentData equipment))
+            {
+                equipments.Add(equipment);
+            }
+        }
+
+        return equipments;
     }
 
     public void setBag(int index, EquipmentData equipment)
