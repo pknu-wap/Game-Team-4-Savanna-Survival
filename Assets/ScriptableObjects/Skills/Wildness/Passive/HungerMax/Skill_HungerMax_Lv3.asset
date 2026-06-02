@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2484643deb87746b99a9ca76ae92bc, type: 3}
+  m_Name: Skill_HungerMax_Lv3
+  m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
+  id: wildness_hunger_max_lv3
+  skillName: "\uBC30\uACE0\uD488 MAX Lv3"
+  icon: {fileID: 0}
+  description: "\uACF5\uACA9\uB825 15%\n\uC774\uB3D9\uC18D\uB3C4 3%"
+  cost: 1
+  prerequisites:
+  - {fileID: 11400000, guid: 025cf3b66c595e34fafcb93706857126, type: 2}
+  treePosition: {x: -690, y: 120}
+  treeType: 1
+  unlockBehavior: 1
+  skillGroupId: wildness_hunger_max
+  skillLevel: 3
+  effects:
+  - {fileID: 11400000, guid: 5daa81f673a75204c8604b29fd93ce06, type: 2}

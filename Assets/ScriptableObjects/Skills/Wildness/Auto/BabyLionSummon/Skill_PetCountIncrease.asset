@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2484643deb87746b99a9ca76ae92bc, type: 3}
+  m_Name: Skill_PetCountIncrease
+  m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
+  id: wildness_pet_count
+  skillName: "\uD3AB \uAC1C\uC218 \uC99D\uAC00"
+  icon: {fileID: 0}
+  description: "\uC18C\uD658\uD560 \uC218 \uC788\uB294 \uC544\uAE30 \uC0AC\uC790\uC758
+    \uCD5C\uB300 \uB9C8\uB9AC \uC218 +1"
+  cost: 1
+  prerequisites:
+  - {fileID: 11400000, guid: 5e60ea955282b22438f9420d46f8dd3b, type: 2}
+  treePosition: {x: 500, y: -200}
+  treeType: 1
+  unlockBehavior: 2
+  skillGroupId: wildness_pet_count
+  skillLevel: 1
+  effects:
+  - {fileID: 11400000, guid: 3b39ceb6c7ac80c42808e0075fed36ef, type: 2}
