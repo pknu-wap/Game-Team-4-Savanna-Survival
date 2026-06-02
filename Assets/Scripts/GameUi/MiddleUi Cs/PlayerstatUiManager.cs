@@ -56,7 +56,7 @@ public class PlayerStatUiManager : MonoBehaviour
     defenseText.text = $"Defanse : {statCore.getStat(StatType.DEFENSE).rawValue:0.##}";
     healthRegenText.text = $"Health Regen : {statCore.getStat(StatType.HEALTH_REGEN).rawValue:0.##}";
     skillDamageText.text = $"Skill Damage : {statCore.getStat(StatType.SKILL_DAMAGE).rawValue:0.##}";
-    skillCooldownText.text = $"Skill CoolTime : {statCore.getStat(StatType.SKILL_COOLDOWN).rawValue:0.#}초";
+    skillCooldownText.text = $"Skill CoolTime : {statCore.getStat(StatType.SKILL_COOLDOWN).rawValue:0.#}s";
         // 스탯코어의 값을 텍스트에 반영함
     }
 }

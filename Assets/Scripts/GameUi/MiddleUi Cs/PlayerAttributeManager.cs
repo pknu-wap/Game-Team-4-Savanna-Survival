@@ -9,17 +9,53 @@ public class PlayerAttributeManager : MonoBehaviour
 
     private PlayerAttribute attribute;
 
-    public PlayerAttribute Attribute => attribute;
+    public PlayerAttribute Attribute
+    {
+        get
+        {
+            if (attribute == null)
+                Initialize();
+
+            return attribute;
+        }
+    }
 
     private void Awake()
     {
+        Initialize();
+    }
+
+    private void Start()
+    {
+        Initialize();
+    }
+
+    private bool Initialize()
+    {
+        if (attribute != null)
+            return true;
+
         if (playerStatManager == null)
             playerStatManager = FindObjectOfType<PlayerStatManager>();
 
-        attribute = new PlayerAttribute(playerStatManager.StatCore);
+        if (playerStatManager == null)
+        {
+            Debug.LogError("PlayerAttributeManager: PlayerStatManager를 찾지 못했습니다.");
+            return false;
+        }
 
-        // 테스트용 시작 포인트 지급
+        if (playerStatManager.StatCore == null)
+        {
+            Debug.LogError("PlayerAttributeManager: PlayerStatManager.StatCore가 null입니다.");
+            return false;
+        }
+
+        attribute = new PlayerAttribute(playerStatManager.StatCore);
         attribute.grantPoints(startPoints);
+
+        Debug.Log($"PlayerAttributeManager 초기화 완료 / 시작 포인트: {startPoints}");
+
+        return true;
     }
 
     public class PlayerAttribute : AttributeManager
