@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class FireballProjectile : MonoBehaviour
 {
-    public float speed = 10f;
-    public float damage = 10f;
-
     private float direction = 1f;
+    private float speed;
+    private float damage;
 
-    public void Initialize(float direction, float speed)
+    public void Initialize(float direction, float speed, float damage)
     {
         this.direction = direction;
         this.speed = speed;
+        this.damage = damage;
     }
 
-    void Update()
+    private void Update()
     {
         transform.Translate(
             Vector2.right * direction * speed * Time.deltaTime
@@ -27,6 +27,9 @@ public class FireballProjectile : MonoBehaviour
         if (enemy != null)
         {
             enemy.TakeDamage(damage);
+
+            Debug.Log($"파이어볼 적중! 피해: {damage}");
+
             Destroy(gameObject);
         }
     }

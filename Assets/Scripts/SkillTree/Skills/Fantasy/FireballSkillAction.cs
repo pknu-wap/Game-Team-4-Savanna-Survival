@@ -12,6 +12,8 @@ public class FireballSkillData : ActiveAction
 
     public override void Process(GameObject player, ActiveSkillData data)
     {
+        Debug.Log("파이어볼 Process 실행!");
+
         if (fireballPrefab == null || player == null)
             return;
 
@@ -34,9 +36,20 @@ public class FireballSkillData : ActiveAction
         scale.x = Mathf.Abs(scale.x) * direction;
         fireball.transform.localScale = scale;
 
+        PlayerStatManager statManager =
+            player.GetComponent<PlayerStatManager>();
+
+        if (statManager == null)
+            return;
+
+        float damage =
+            statManager.StatCore
+            .getStat(StatType.SKILL_DAMAGE)
+            .rawValue;
+
         if (fireball.TryGetComponent<FireballProjectile>(out var projectile))
         {
-            projectile.Initialize(direction, speed);
+            projectile.Initialize(direction, speed, damage);
         }
     }
 
