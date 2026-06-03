@@ -159,4 +159,14 @@ private void HandleAutoSkills()
             SkillManager.Instance.OnSkillRemoved -= OnSkillRemoved;
         }
     }
+
+
+public void TriggerAutoSkillGroup(string groupId)
+    {
+        foreach (var skill in unlockedAutoSkills)
+        {
+            if (skill.skillGroupId == groupId)
+                autoSkillTimers[skill] = 0f;
+        }
+    }
 }

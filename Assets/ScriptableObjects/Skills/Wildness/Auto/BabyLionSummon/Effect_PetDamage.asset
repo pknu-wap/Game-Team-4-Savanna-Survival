@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dac9c198c3d2e164a921fe9e13cc6e7c, type: 3}
   m_Name: Effect_PetDamage
   m_EditorClassIdentifier: Assembly-CSharp::PetDamageIncreaseEffect
-  bonusMultiplier: 0.15
+  bonusMultiplier: 0.5
