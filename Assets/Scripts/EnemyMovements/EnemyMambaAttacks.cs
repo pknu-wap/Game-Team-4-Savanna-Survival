@@ -55,12 +55,19 @@ public partial class EnemyMamba
 
     internal void ApplyPoisonToPlayer()
     {
-        PlayerEffectTemp target = player?.GetComponent<PlayerEffectTemp>();
+        if (player == null) return;
+
+        Entity target = player.GetComponent<Entity>();
         if (target == null) return;
-        if (target.HasEffect<PoisonEffectTemp>(out PoisonEffectTemp existing))
+
+        if (target.HasEffect<PoisonEffect>(out PoisonEffect existing))
+        {
             existing.Refresh(poisonDuration);
+        }
         else
-            target.ApplyEffect(new PoisonEffectTemp(poisonPercent, poisonTickInterval, poisonDuration));
+        {
+            target.ApplyEffect(new PoisonEffect(poisonPercent, poisonTickInterval, poisonDuration));
+        }
     }
 
     private void ShowBiteIndicator()

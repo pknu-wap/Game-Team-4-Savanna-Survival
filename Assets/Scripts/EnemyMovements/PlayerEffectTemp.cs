@@ -1,24 +1,25 @@
 using UnityEngine;
 
-/// 플레이어 루트 Entity. 상태이상 틱 처리 담당.
-/// 플레이어 오브젝트에 이 컴포넌트를 추가하면 출혈 등 상태이상을 받을 수 있습니다.
+/// 플레이어 상태이상 처리 컴포넌트.
+/// StatCore를 외부(PoisonEffect 등)에서 참조할 수 있도록 프로퍼티로 노출.
 public class PlayerEffectTemp : Entity
 {
-    private PlayerStatCore statCore;
+    public PlayerStatCore StatCore { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
-        statCore = GetComponent<PlayerStatManager>().StatCore;
+        StatCore = GetComponent<PlayerStatManager>().StatCore;
     }
 
     private void Update()
     {
+        // 스턴 중에도 상태이상 틱은 계속 진행 (출혈, 중독 등은 스턴과 무관하게 지속)
         TickEffects();
     }
 
     public override void TakeDamage(float damage)
     {
-        float current = statCore.getStat(StatType.HEALTH).rawValue;
-        statCore.registerStat(StatType.HEALTH, Mathf.Max(0f, current - damage));
+        float current = StatCore.getStat(StatType.HEALTH).rawValue;
+        StatCore.registerStat(StatType.HEALTH, Mathf.Max(0f, current - damage));
     }
 }

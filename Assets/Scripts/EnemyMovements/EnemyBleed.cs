@@ -91,10 +91,10 @@ public class EnemyBleed : Enemy
         Entity target = player?.GetComponent<PlayerEffectTemp>();
         if (target == null) return;
 
-        if (target.HasEffect<BleedEffectTemp>(out BleedEffectTemp existing))
+        if (target.HasEffect<BleedEffect>(out BleedEffect existing))
             existing.AddStacks(bleedStacks, bleedDuration);
         else
-            target.ApplyEffect(new BleedEffectTemp(bleedStacks, bleedDotDamage, bleedDuration));
+            target.ApplyEffect(new BleedEffect(bleedStacks, bleedDotDamage, bleedDuration));
     }
 
     protected override void Die()

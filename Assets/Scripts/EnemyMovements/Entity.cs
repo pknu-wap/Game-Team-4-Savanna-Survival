@@ -5,31 +5,37 @@ public abstract class Entity : MonoBehaviour
 {
     public abstract void TakeDamage(float damage);
 
-    private readonly List<StatusEffectBaseTemp> activeEffects = new();
+    /// 스턴 상태 여부. Enemy 이동, PlayerMovement에서 참조합니다.
+    public bool IsStunned { get; private set; }
 
-    public void ApplyEffect(StatusEffectBaseTemp effect)
+    private readonly List<StatusEffectBase> activeEffects = new();
+
+    public void ApplyEffect(StatusEffectBase effect)
     {
         effect.OnApply(this);
         activeEffects.Add(effect);
+        if (effect is StunEffect) IsStunned = true;
+        EffectEventBus.PublishApplied(this, effect);
     }
 
-    public void RemoveEffect(StatusEffectBaseTemp effect)
+    public void RemoveEffect(StatusEffectBase effect)
     {
         effect.OnRemove(this);
         activeEffects.Remove(effect);
+        if (effect is StunEffect) RefreshStunState();
+        EffectEventBus.PublishRemoved(this, effect);
     }
 
-    public bool HasEffect<T>() where T : StatusEffectBaseTemp
+    public bool HasEffect<T>() where T : StatusEffectBase
     {
-        foreach (StatusEffectBaseTemp effect in activeEffects)
+        foreach (StatusEffectBase effect in activeEffects)
             if (effect is T) return true;
         return false;
     }
 
-    // 이미 걸린 효과를 꺼내 갱신할 때 사용 (PoisonEffectTemp.Refresh 등)
-    public bool HasEffect<T>(out T found) where T : StatusEffectBaseTemp
+    public bool HasEffect<T>(out T found) where T : StatusEffectBase
     {
-        foreach (StatusEffectBaseTemp effect in activeEffects)
+        foreach (StatusEffectBase effect in activeEffects)
         {
             if (effect is T t) { found = t; return true; }
         }
@@ -42,11 +48,21 @@ public abstract class Entity : MonoBehaviour
         for (int i = activeEffects.Count - 1; i >= 0; i--)
         {
             activeEffects[i].OnTick(this, Time.deltaTime);
+            EffectEventBus.PublishTicked(this, activeEffects[i]);
+
             if (activeEffects[i].IsExpired)
             {
-                activeEffects[i].OnRemove(this);
+                StatusEffectBase expired = activeEffects[i];
+                expired.OnRemove(this);
                 activeEffects.RemoveAt(i);
+                if (expired is StunEffect) RefreshStunState();
+                EffectEventBus.PublishRemoved(this, expired);
             }
         }
+    }
+
+    private void RefreshStunState()
+    {
+        IsStunned = HasEffect<StunEffect>();
     }
 }

@@ -27,12 +27,17 @@ public class PoisonZone : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-        PlayerEffectTemp target = other.GetComponent<PlayerEffectTemp>();
+
+        Entity target = other.GetComponent<Entity>();
         if (target == null) return;
 
-        if (target.HasEffect<PoisonEffectTemp>(out PoisonEffectTemp existing))
+        if (target.HasEffect<PoisonEffect>(out PoisonEffect existing))
+        {
             existing.Refresh(poisonDuration);
+        }
         else
-            target.ApplyEffect(new PoisonEffectTemp(poisonPercent, poisonTickInterval, poisonDuration));
+        {
+            target.ApplyEffect(new PoisonEffect(poisonPercent, poisonTickInterval, poisonDuration));
+        }
     }
 }
