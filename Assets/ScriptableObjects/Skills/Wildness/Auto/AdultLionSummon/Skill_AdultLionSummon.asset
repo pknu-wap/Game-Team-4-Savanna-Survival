@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1caf96a3920cc0489f80e5f4885c547, type: 3}
+  m_Name: Skill_AdultLionSummon
+  m_EditorClassIdentifier: Assembly-CSharp::AutoSkillData
+  id: wildness_adult_lion
+  skillName: 
+  icon: {fileID: 0}
+  description: "\uC544\uAE30\uC0AC\uC790\uAC00 \uC131\uC7A5\uD558\uC5EC, \uC131\uCCB4\uB85C
+    \uBCC0\uD569\uB2C8\uB2E4. \uB2E4\uC591\uD55C \uC2A4\uD15F\uC774 \uC62C\uB77C\uAC11\uB2C8\uB2E4."
+  cost: 1
+  prerequisites:
+  - {fileID: 11400000, guid: 5e60ea955282b22438f9420d46f8dd3b, type: 2}
+  treePosition: {x: 800, y: 100}
+  treeType: 1
+  unlockBehavior: 1
+  skillGroupId: wildness_baby_lion
+  skillLevel: 2
+  interval: 5
+  range: 8
+  requiresTarget: 0
+  action: {fileID: 11400000, guid: a92b85effce433049b239008009f24f1, type: 2}
