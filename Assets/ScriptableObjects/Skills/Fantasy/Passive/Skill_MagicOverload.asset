@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
   id: fantasy_magic_overload
   skillName: "\uB9C8\uB825 \uACFC\uBD80\uD558"
-  icon: {fileID: -5890828503606760369, guid: 28f54ca7cb352094991aae1c8c9584fd, type: 3}
+  icon: {fileID: -6832838606806383480, guid: fdcaddce7f2dc8b47a8784c99b86d4bc, type: 3}
   description: "\uACF5\uACA9\uB825\uC774 \uC0C1\uC2B9\uD558\uC9C0\uB9CC \uBC30\uACE0\uD488\uC774
     \uB354 \uBE68\uB9AC \uC18C\uBE44\uB41C\uB2E4.\n\uACF5\uACA9\uB825 +10\n\uBC30\uACE0\uD488
     \uC18C\uBE44\uC728 +0.5\n(\uCFE8\uD0C0\uC784 \uC99D\uAC00\uB294 \uCD94\uD6C4
     \uC801\uC6A9)"
   cost: 1
   prerequisites: []
-  treePosition: {x: -690, y: 0}
+  treePosition: {x: -690, y: -300}
   treeType: 2
   unlockBehavior: 0
   skillGroupId: fantasy_magic_overload
