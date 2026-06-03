@@ -1,5 +1,7 @@
 using UnityEngine;
 
+/// 물소 컨셉 적. 근접 공격 + 쿨타임 돌진 패턴.
+/// 공격 로직은 EnemyBisonAttacks.cs(partial) 에 분리.
 public partial class EnemyBison : Enemy
 {
     [Header("Config")]
@@ -26,21 +28,20 @@ public partial class EnemyBison : Enemy
     [Header("Animation")]
     [SerializeField] private string dieClipName = "Die";
 
-    protected Animator anim;
-
+    private Animator anim;
     private static readonly int ParamSpeed  = Animator.StringToHash("Speed");
     private static readonly int ParamAttack = Animator.StringToHash("Attack");
-    private static readonly int ParamCharge = Animator.StringToHash("Charge");
+    private static readonly int ParamCharge = Animator.StringToHash("Rush");
     private static readonly int ParamDie    = Animator.StringToHash("Die");
 
-    private enum BisonState { Wander, Chase, Melee, ChargeTelegraph, Charging, ChargeRecovery }
-    private BisonState state = BisonState.Wander;
+    internal enum State { Wander, Chase, Melee, ChargeTelegraph, Charging, ChargeRecovery }
+    internal State state = State.Wander;
 
-    private float   meleeTimer;
-    private float   chargeTimer;
-    private float   patternTimer;
-    private Vector2 chargeDir;
-    private bool    chargeDamageDealt;
+    internal float meleeTimer;
+    internal float chargeTimer;
+    internal float patternTimer;
+    internal Vector2 chargeDir;
+    internal bool chargeDamageDealt;
 
     protected override void Awake()
     {
@@ -55,7 +56,7 @@ public partial class EnemyBison : Enemy
     protected override void Update()
     {
         base.Update();
-        anim?.SetFloat(ParamSpeed, rb.linearVelocity.magnitude);
+        if (anim != null) anim.SetFloat(ParamSpeed, rb.linearVelocity.magnitude);
         UpdateFacing();
     }
 
@@ -65,36 +66,35 @@ public partial class EnemyBison : Enemy
     {
         if (player == null || !player.gameObject.activeInHierarchy) { Wander(); return; }
 
-        bool inChargePattern = state == BisonState.ChargeTelegraph
-                            || state == BisonState.Charging
-                            || state == BisonState.ChargeRecovery;
+        bool inChargePattern = state == State.ChargeTelegraph
+                            || state == State.Charging
+                            || state == State.ChargeRecovery;
         if (!inChargePattern) chargeTimer += Time.deltaTime;
 
         float dist = Vector2.Distance(transform.position, player.position);
-
         switch (state)
         {
-            case BisonState.Wander:          UpdateWander(dist);      break;
-            case BisonState.Chase:           UpdateChase(dist);       break;
-            case BisonState.Melee:           UpdateMelee(dist);       break;
-            case BisonState.ChargeTelegraph: UpdateChargeTelegraph(); break;
-            case BisonState.Charging:        UpdateCharging();        break;
-            case BisonState.ChargeRecovery:  UpdateChargeRecovery(); break;
+            case State.Wander:          UpdateWander(dist);         break;
+            case State.Chase:           UpdateChase(dist);          break;
+            case State.Melee:           UpdateMelee(dist);          break;
+            case State.ChargeTelegraph: UpdateChargeTelegraph();    break;
+            case State.Charging:        UpdateCharging();           break;
+            case State.ChargeRecovery:  UpdateChargeRecovery();     break;
         }
     }
 
     private void UpdateWander(float dist)
     {
         if (chargeTimer >= chargeCooldown && dist <= chargeDetectionRange) { EnterChargeTelegraph(); return; }
-        if (dist <= detectionRange) { state = BisonState.Chase; return; }
+        if (dist <= detectionRange) { state = State.Chase; return; }
         Wander();
     }
 
     private void UpdateChase(float dist)
     {
         if (chargeTimer >= chargeCooldown && dist <= chargeDetectionRange) { EnterChargeTelegraph(); return; }
-        if (dist <= meleeRange) { state = BisonState.Melee; meleeTimer = 0f; return; }
-        if (dist > detectionRange) { state = BisonState.Wander; SetNewWanderTarget(); return; }
+        if (dist <= meleeRange) { state = State.Melee; meleeTimer = 0f; return; }
+        if (dist > detectionRange) { state = State.Wander; SetNewWanderTarget(); return; }
         MoveSmooth((player.position - transform.position).normalized * moveSpeed);
     }
 
@@ -102,7 +102,6 @@ public partial class EnemyBison : Enemy
     {
         if (isDead) return;
         isDead = true;
-
         rb.linearVelocity = Vector2.zero;
         ApplyDeathRewards();
         anim?.SetTrigger(ParamDie);
@@ -113,7 +112,7 @@ public partial class EnemyBison : Enemy
 
     private void UpdateFacing()
     {
-        float xDir = state == BisonState.Charging ? chargeDir.x : velocity.x;
+        float xDir = state == State.Charging ? chargeDir.x : velocity.x;
         if (Mathf.Abs(xDir) < 0.05f) return;
         Vector3 s = transform.localScale;
         s.x = xDir > 0 ? -Mathf.Abs(s.x) : Mathf.Abs(s.x);

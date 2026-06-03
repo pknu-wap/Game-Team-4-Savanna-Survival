@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2484643deb87746b99a9ca76ae92bc, type: 3}
+  m_Name: Skill_PredationMagic
+  m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
+  id: fantasy_predation_magic
+  skillName: "\uD3EC\uC2DD\uC758 \uB9C8\uBC95"
+  icon: {fileID: -1360995754837970213, guid: f3933a3f80fe9c7408c25557ce58434b, type: 3}
+  description: "\uC801 \uCC98\uCE58 \uC2DC \uBC30\uACE0\uD488\uC744 \uCD94\uAC00\uB85C
+    \uD68C\uBCF5\uD55C\uB2E4.\n\uCC98\uCE58\uB2F9 \uBC30\uACE0\uD488 +15"
+  cost: 1
+  prerequisites: []
+  treePosition: {x: -690, y: -100}
+  treeType: 2
+  unlockBehavior: 0
+  skillGroupId: fantasy_predation_magic
+  skillLevel: 1
+  effects:
+  - {fileID: 11400000, guid: e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8, type: 2}
