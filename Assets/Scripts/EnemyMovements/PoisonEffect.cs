@@ -1,14 +1,18 @@
 using UnityEngine;
 
-public class PoisonEffectTemp : StatusEffectBaseTemp
+/// 중독 상태이상.
+/// tickInterval마다 최대 체력의 healthPercent% 데미지 적용.
+/// 중첩 시 Refresh()로 지속 시간만 갱신.
+public class PoisonEffect : StatusEffectBase
 {
     private readonly float healthPercent;
     private readonly float tickInterval;
     private float duration;
     private float tickTimer;
 
-    public PoisonEffectTemp(float healthPercent, float tickInterval, float duration)
+    public PoisonEffect(float healthPercent, float tickInterval, float duration)
     {
+        EffectName         = "Poison";
         this.healthPercent = healthPercent;
         this.tickInterval  = tickInterval;
         this.duration      = duration;

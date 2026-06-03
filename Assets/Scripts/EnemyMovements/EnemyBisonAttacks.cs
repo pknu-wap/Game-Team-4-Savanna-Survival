@@ -19,7 +19,7 @@ public partial class EnemyBison
         if (dist > meleeRange)
         {
             HideMeleeIndicator();
-            state = BisonState.Chase;
+            state = State.Chase;
             return;
         }
 
@@ -41,7 +41,7 @@ public partial class EnemyBison
 
     private void EnterChargeTelegraph()
     {
-        state        = BisonState.ChargeTelegraph;
+        state        = State.ChargeTelegraph;
         patternTimer = 0f;
         chargeTimer  = 0f;
         chargeDir    = (player.position - transform.position).normalized;
@@ -59,7 +59,7 @@ public partial class EnemyBison
         if (patternTimer >= chargeTelegraph)
         {
             HideChargeIndicator();
-            state             = BisonState.Charging;
+            state             = State.Charging;
             patternTimer      = 0f;
             chargeDamageDealt = false;
         }
@@ -77,12 +77,12 @@ public partial class EnemyBison
     {
         MoveSmooth(Vector2.zero);
         patternTimer += Time.deltaTime;
-        if (patternTimer >= chargeRecoveryTime) state = BisonState.Chase;
+        if (patternTimer >= chargeRecoveryTime) state = State.Chase;
     }
 
     private void EnterChargeRecovery()
     {
-        state             = BisonState.ChargeRecovery;
+        state             = State.ChargeRecovery;
         patternTimer      = 0f;
         rb.linearVelocity = Vector2.zero;
         velocity          = Vector2.zero;
@@ -90,7 +90,7 @@ public partial class EnemyBison
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (state != BisonState.Charging || chargeDamageDealt) return;
+        if (state != State.Charging || chargeDamageDealt) return;
         if (!col.gameObject.CompareTag("Player")) return;
         chargeDamageDealt = true;
         DamagePlayer(chargeDamage);
