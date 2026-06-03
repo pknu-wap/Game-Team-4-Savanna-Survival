@@ -10,6 +10,9 @@ public class PetController : MonoBehaviour
     [HideInInspector]
     public List<GameObject> activePets = new();
 
+    [HideInInspector]
+    public List<Vector2> lastPetPositions = new();
+
     public void ClearAllPets()
     {
         foreach (var pet in activePets)

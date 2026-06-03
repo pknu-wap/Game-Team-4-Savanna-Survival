@@ -1,12 +1,13 @@
 using UnityEngine;
 
-public class BabyLionAI : MonoBehaviour
+public class AdultLionAI : MonoBehaviour
 {
-    public float attackRange = 0.8f;
-    public float chaseRange = 8f;    // 플레이어 기준 적 탐색 반경
-    public float leashRange = 6f;    // 플레이어로부터 이탈 허용 최대 거리
-    public float moveSpeed = 3f;
-    public float attackCooldown = 1f;
+    public float attackRange = 1.0f;
+    public float chaseRange = 10f;
+    public float leashRange = 6f;
+    public float moveSpeed = 7f;
+    public float attackCooldown = 1.2f;
+    public float damageMultiplier = 2f;
 
     [HideInInspector] public Transform player;
     [HideInInspector] public PlayerStatManager statManager;
@@ -19,7 +20,7 @@ public class BabyLionAI : MonoBehaviour
     private float wanderTimer;
     private const float WanderRadius = 2.5f;
     private const float WanderInterval = 2.5f;
-private const float SeparationRadius = 1.2f;
+private const float SeparationRadius = 1.5f;
     private const float SeparationForce = 4f;
 
 
@@ -85,8 +86,8 @@ private void Update()
         float skillDamage = statManager != null
             ? statManager.StatCore.getStat(StatType.SKILL_DAMAGE).calibratedValue
             : 1f;
-        float multiplier = petController != null ? petController.petDamageMultiplier : 1f;
-        return skillDamage * multiplier;
+        float petMultiplier = petController != null ? petController.petDamageMultiplier : 1f;
+        return skillDamage * petMultiplier * damageMultiplier;
     }
 
 private void MoveToward(Vector3 dest)

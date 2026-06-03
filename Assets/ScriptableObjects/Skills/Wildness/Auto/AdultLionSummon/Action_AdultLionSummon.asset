@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d07d2d6b2092e4d4eac57dce4c775ccb, type: 3}
+  m_Name: Action_AdultLionSummon
+  m_EditorClassIdentifier: Assembly-CSharp::AdultLionSummonAction
+  adultLionPrefab: {fileID: 7270820640976640748, guid: 5c6dd43a5f8be7146b40bbd284d65f3e, type: 3}
+  summonVfxPrefab: {fileID: 525820867989444780, guid: 952dcf9caf6ddbf4e842aac111469835, type: 3}
+  adultDamageMultiplier: 2
+  moveSpeed: 6
+  chaseRange: 10
+  leashRange: 6
+  attackRange: 1
+  attackCooldown: 1.2
