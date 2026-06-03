@@ -21087,8 +21087,8 @@ MonoBehaviour:
   startHealth: 50
   startMaxHealth: 100
   startLevel: 1
-  startHunger: 50
-  startMaxHunger: 50
+  startHunger: 800
+  startMaxHunger: 1000
   startExp: 0
   startMaxExp: 100
   startMoveSpeed: 10
