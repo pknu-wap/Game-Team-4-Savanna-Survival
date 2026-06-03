@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4880fdb7f13071d40807b619283d9f88, type: 3}
   m_Name: Action_Pounce
   m_EditorClassIdentifier: Assembly-CSharp::PounceAction
-  distance: 3
+  distance: 5
   duration: 0.18
   hitRadius: 0.8
   damageMultiplier: 1
