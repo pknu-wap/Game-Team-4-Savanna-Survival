@@ -1,73 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LightUiManager: MonoBehaviour
+public class LightUiManager : MonoBehaviour
 {
+    [Serializable]
+    public class DayNightDuration
+    {
+        public CycleDuration dayTime = new CycleDuration(1, 0);
+        public CycleDuration nightTime = new CycleDuration(1, 0);
+    }
+
     [Header("References")]
     [SerializeField] private Image nightPanel;
 
-    [Header("Time Settings")]
-    [SerializeField] private float dayTime = 60f;
-    [SerializeField] private float nightTime = 40f;
-    [SerializeField] private float transitionTime = 10f;
+    [Header("Duration Settings")]
+    [SerializeField] private List<DayNightDuration> durations = new()
+    {
+        new DayNightDuration()
+    };
 
     [Header("Color Settings")]
     [SerializeField] private Color dayColor = new Color(0, 0, 0, 0);
     [SerializeField] private Color nightColor = new Color(0, 0, 0, 0.7f);
 
-    private float timer;
-
-    private enum State
+    private void Update()
     {
-        Day,
-        ToNight,
-        Night,
-        ToDay
-    }
+        if (nightPanel == null) return;
+        if (TimeManager.Instance == null) return;
+        if (durations == null || durations.Count == 0) return;
 
-    private State currentState = State.Day;
+        bool isDay = TimeManager.Instance.IsDay;
 
-    void Update()
-    {
-        timer += Time.deltaTime;
-
-        switch (currentState)
-        {
-            case State.Day:
-                nightPanel.color = dayColor;
-                if (timer >= dayTime)
-                {
-                    timer = 0f;
-                    currentState = State.ToNight;
-                }
-                break;
-
-            case State.ToNight:
-                nightPanel.color = Color.Lerp(dayColor, nightColor, timer / transitionTime);
-                if (timer >= transitionTime)
-                {
-                    timer = 0f;
-                    currentState = State.Night;
-                }
-                break;
-
-            case State.Night:
-                nightPanel.color = nightColor;
-                if (timer >= nightTime)
-                {
-                    timer = 0f;
-                    currentState = State.ToDay;
-                }
-                break;
-
-            case State.ToDay:
-                nightPanel.color = Color.Lerp(nightColor, dayColor, timer / transitionTime);
-                if (timer >= transitionTime)
-                {
-                    timer = 0f;
-                    currentState = State.Day;
-                }
-                break;
-        }
+        nightPanel.color = isDay
+            ? dayColor
+            : nightColor;
     }
 }
