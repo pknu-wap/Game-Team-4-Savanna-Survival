@@ -14,25 +14,23 @@ public class AugmentPowerDTO
 public class AugmentDTO
 {
     public int ID;
-    public string Name;
+    public string originPath;
+    public string newPath;
     public string Description;
-    public string Stat;
-    public List<AugmentPowerDTO> Power;
+    public string Name;
 }
 
 public class AugmentRepository : MonoBehaviour
 {
-
     public void Awake()
     {
         LoadAll();
-        
     }
+
     private static readonly Dictionary<int, AugmentDTO> augments = new();
 
     public static void LoadAll()
     {
-        
         string directoryPath = Application.dataPath + "/Data/Augments/";
         augments.Clear();
 
@@ -46,8 +44,11 @@ public class AugmentRepository : MonoBehaviour
         {
             string json = File.ReadAllText(filePath);
             AugmentDTO dto = JsonUtility.FromJson<AugmentDTO>(json);
+
             if (dto != null)
             {
+                Debug.Log($"originPath: " + dto.originPath);
+                Debug.Log($"newPath: " + dto.newPath);
                 augments[dto.ID] = dto;
             }
         }

@@ -60,11 +60,6 @@ public class AugmentManager : MonoBehaviour
     /// 플레이어가 증강을 선택했을 때 호출된다.
     private void OnAugmentSelected(AugmentDTO selected)
     {
-        AugmentPowerDTO power = selected.Power.Find(p => p.Level == currentLevel);
-        if (power != null)
-        {
-            Debug.Log($"증강 선택: {selected.Name} (Lv{currentLevel}, +{power.Amount})");
-        }
 
         augmentPanel.SetActive(false);
         isOpen = false;
