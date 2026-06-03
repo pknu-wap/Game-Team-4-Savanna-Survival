@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
   id: fantasy_satellite_enhance
   skillName: "\uC704\uC131 \uAC15\uD654"
-  icon: {fileID: 0}
+  icon: {fileID: 200621404328831721, guid: b61f8f713bff60d408d1e10b3495680d, type: 3}
   description: "\uC704\uC131 \uAC1C\uC218\uAC00 2\uAC1C \uC99D\uAC00\uD558\uC5EC
     \uCD5C\uB300 5\uAC1C\uC758 \uC704\uC131\uC774 \uACF5\uC804\uD569\uB2C8\uB2E4."
   cost: 1

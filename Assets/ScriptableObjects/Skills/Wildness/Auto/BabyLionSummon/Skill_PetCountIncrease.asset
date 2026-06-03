@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
   id: wildness_pet_count
   skillName: "\uD3AB \uAC1C\uC218 \uC99D\uAC00"
-  icon: {fileID: 0}
+  icon: {fileID: 2352286825001573152, guid: ae9bbf50e98fef44f95794e4a2e7d4ea, type: 3}
   description: "\uC18C\uD658\uD560 \uC218 \uC788\uB294 \uC544\uAE30 \uC0AC\uC790\uC758
     \uCD5C\uB300 \uB9C8\uB9AC \uC218 +1"
   cost: 1
