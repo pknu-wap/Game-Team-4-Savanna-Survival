@@ -19,5 +19,5 @@ MonoBehaviour:
   executeThreshold: 0.3
   executeDamageMultiplier: 2
   vfxPrefab: {fileID: 2560156276862465191, guid: fd75401de139cb348b7e32dde572a449, type: 3}
-  executeVfxPrefab: {fileID: 525820867989444780, guid: 7712c69b358cef3428c1d50a329c8ee1, type: 3}
+  executeVfxPrefab: {fileID: 525820867989444780, guid: 1019fdc531b1d1f44813840c842d3056, type: 3}
   vfxDuration: 0.2
