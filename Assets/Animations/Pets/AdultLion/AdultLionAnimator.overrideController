@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AdultLionAnimator
+  m_Controller: {fileID: 9100000, guid: 47e86e07dc22202478829d312c0da63c, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: fa3dfb78e25b32743a53730303851cc4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 78fec89cb3cc01c4c8dc6a616e91f868, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a0e8cbbb6ce049647accc558cef3dd3a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: efca30f403c92cf419d9e48f2b4997d5, type: 2}

@@ -97,7 +97,7 @@ public class LightningAction : AutoAction
     void SpawnStrikeVfx(Transform enemyTransform)
     {
         if (lightningVfxPrefab == null) return;
-        var vfx = Object.Instantiate(lightningVfxPrefab, enemyTransform.position, Quaternion.identity, enemyTransform);
+        var vfx = Object.Instantiate(lightningVfxPrefab, enemyTransform.position, Quaternion.identity);
         Object.Destroy(vfx, strikeVfxDuration);
     }
 

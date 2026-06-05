@@ -72,12 +72,6 @@ public class ExecuteAction : ActiveAction
 
         if (nearest == null) return;
 
-        if (vfxPrefab != null)
-        {
-            var vfx = Instantiate(vfxPrefab, player.transform.position, player.transform.rotation);
-            Object.Destroy(vfx, vfxDuration);
-        }
-
         float hpRatio = nearest.MaxHp > 0f ? nearest.CurrentHp / nearest.MaxHp : 1f;
 
         if (hpRatio <= executeThreshold)
@@ -90,6 +84,11 @@ public class ExecuteAction : ActiveAction
         else
         {
             nearest.TakeDamage(baseDmg);
+            if (vfxPrefab != null)
+            {
+                var vfx = Instantiate(vfxPrefab, nearest.transform.position, player.transform.rotation);
+                Object.Destroy(vfx, vfxDuration);
+            }
             Debug.Log($"[Execute] 발동 — damage={baseDmg:F1}, hpRatio={hpRatio:P0}");
         }
 

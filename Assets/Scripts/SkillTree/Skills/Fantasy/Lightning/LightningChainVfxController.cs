@@ -13,7 +13,7 @@ public class LightningChainVfxController : MonoBehaviour
         lr.startWidth = 0.05f;
         lr.endWidth = 0.05f;
         lr.material = new Material(Shader.Find("Sprites/Default"));
-        var chainColor = new Color(1f, 0.9f, 0.2f);
+        var chainColor = new Color(0.01f, 0.53f, 0.84f);
         lr.startColor = chainColor;
         lr.endColor = chainColor;
         lr.sortingLayerName = "Effect";

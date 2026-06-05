@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b6710f448864d44093d584db9f1b90c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HomingMissile
-  moveSpeed: 8
+  moveSpeed: 10
   lifetime: 5
   hitVfxPrefab: {fileID: 6657985699718722652, guid: c93d9a8d419297e40b61924f9b720e7c, type: 3}
   explosionVfxPrefab: {fileID: 5993157830864391845, guid: 901b14a81c8682e4fae3c15f2cc5690c, type: 3}

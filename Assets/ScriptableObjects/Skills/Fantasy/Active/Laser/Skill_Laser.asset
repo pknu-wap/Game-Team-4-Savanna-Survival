@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3f508e7b9fe4f498fb8d3a40f90a64, type: 3}
+  m_Name: Skill_Laser
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
+  id: fantasy_laser
+  skillName: Laser
+  icon: {fileID: -3027044318737440797, guid: 0c081a4bfc3b9d24ab6d365c405942e9, type: 3}
+  description: "\uB808\uC774\uC800\uB97C \uBC1C\uC0AC\uD558\uC5EC \uD53C\uD574\uB97C
+    \uC90D\uB2C8\uB2E4."
+  cost: 1
+  prerequisites: []
+  treePosition: {x: -100, y: 100}
+  treeType: 2
+  unlockBehavior: 0
+  skillGroupId: fantasy_laser
+  skillLevel: 1
+  cooldown: 1
+  action: {fileID: 11400000, guid: 4da224d1b8334419b1679114337ba2ca, type: 2}
