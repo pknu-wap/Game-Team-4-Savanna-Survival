@@ -69,6 +69,9 @@ public partial class BossLion : Enemy
 
         float dist = Vector2.Distance(transform.position, player.position);
 
+        // 마법 트리 긴급 인터럽트 — HP 임계값 도달 시 진행 중 패턴 취소 후 M2 강제 발동
+        if (activeTree == SkillTree.Magic) CheckMagicInterrupt();
+
         switch (state)
         {
             case State.Chase:   UpdateChase(dist);  break;
