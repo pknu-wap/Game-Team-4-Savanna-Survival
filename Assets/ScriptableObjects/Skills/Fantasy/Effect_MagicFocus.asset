@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f0c2a3b4d5e6f70819a2b3c4d5e6f70, type: 3}
   m_Name: Effect_MagicFocus
-  m_EditorClassIdentifier: Assembly-CSharp::StatModifierEffect
-  modifiers:
-  - statType: 9
-    value: 15
+  m_EditorClassIdentifier: Assembly-CSharp::MagicFocusEffect
+  skillDamageBonus: 15

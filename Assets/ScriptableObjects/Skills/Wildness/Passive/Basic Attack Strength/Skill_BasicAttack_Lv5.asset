@@ -18,10 +18,11 @@ MonoBehaviour:
   description: "\uB370\uBBF8\uC9C0\uC0C1\uC218 +5 / \uACF5\uACA9\uBC94\uC704 +0.25"
   cost: 1
   prerequisites:
-  - {fileID: 11400000}
+  - {fileID: 11400000, guid: 38d303a19623b24468f4a4b4905d321e, type: 2}
   treePosition: {x: -570, y: -50}
   treeType: 0
   unlockBehavior: 0
   skillGroupId: 
   skillLevel: 0
-  effects: []
+  effects:
+  - {fileID: 11400000, guid: 3926e77d7f75dda4ca3126850159f25e, type: 2}
