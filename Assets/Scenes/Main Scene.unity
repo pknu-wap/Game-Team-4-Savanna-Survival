@@ -16582,7 +16582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttributeManager
   playerStatManager: {fileID: 0}
-  startPoints: 20
+  startPoints: 30
 --- !u!4 &986663102
 Transform:
   m_ObjectHideFlags: 0
