@@ -17,8 +17,9 @@ MonoBehaviour:
   icon: {fileID: 6937817954938267909, guid: f0eac0477e6b2fb4b8587554b735a461, type: 3}
   description: "\uACF5\uACA9\uB825 +2 / \uC774\uB3D9\uC18D\uB3C4 +1.5 "
   cost: 1
-  prerequisites: []
-  treePosition: {x: 0, y: 0}
+  prerequisites:
+  - {fileID: 11400000, guid: aa1b54b663ab6564c8740e3b7b58e9aa, type: 2}
+  treePosition: {x: -750, y: -230}
   treeType: 0
   unlockBehavior: 0
   skillGroupId: 
