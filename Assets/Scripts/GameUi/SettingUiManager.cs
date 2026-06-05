@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SettingUiManager : MonoBehaviour
@@ -15,7 +15,8 @@ public class SettingUiManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.LeftControl) ||
+            Input.GetKeyDown(KeyCode.RightControl))
         {
             ToggleSetting();
         }
