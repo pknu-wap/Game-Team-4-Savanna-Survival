@@ -15,6 +15,14 @@ MonoBehaviour:
   guaranteedDrops:
   - itemPrefab: {fileID: 962449065283664708, guid: 6fa1a4a7cea6d0843bdaf9e7b3c5e84d, type: 3}
     dropChance: 1
+    minAmount: 0
+    maxAmount: 1
+  randomDrops:
+  - itemPrefab: {fileID: 5706241576210739001, guid: bb11223344556677889900aabbccee05, type: 3}
+    dropChance: 0.094
     minAmount: 1
     maxAmount: 1
-  randomDrops: []
+  - itemPrefab: {fileID: 8351796021765284001, guid: aa11223344556677889900aabbccdd05, type: 3}
+    dropChance: 0.122
+    minAmount: 1
+    maxAmount: 1

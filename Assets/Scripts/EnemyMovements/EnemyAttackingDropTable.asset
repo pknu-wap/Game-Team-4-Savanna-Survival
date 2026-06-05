@@ -17,4 +17,12 @@ MonoBehaviour:
     dropChance: 1
     minAmount: 1
     maxAmount: 1
-  randomDrops: []
+  randomDrops:
+  - itemPrefab: {fileID: 1362807132876395001, guid: bb11223344556677889900aabbccee01, type: 3}
+    dropChance: 0.114
+    minAmount: 1
+    maxAmount: 1
+  - itemPrefab: {fileID: 4917352687321840001, guid: aa11223344556677889900aabbccdd01, type: 3}
+    dropChance: 0.114
+    minAmount: 0
+    maxAmount: 0
