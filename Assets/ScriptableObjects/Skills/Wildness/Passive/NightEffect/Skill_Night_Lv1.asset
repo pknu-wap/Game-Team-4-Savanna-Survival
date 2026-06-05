@@ -18,7 +18,7 @@ MonoBehaviour:
   description: "\uACF5\uACA9\uB825 +1 / \uC774\uB3D9\uC18D\uB3C4 +1 "
   cost: 1
   prerequisites: []
-  treePosition: {x: 0, y: 0}
+  treePosition: {x: -810, y: -230}
   treeType: 0
   unlockBehavior: 0
   skillGroupId: 

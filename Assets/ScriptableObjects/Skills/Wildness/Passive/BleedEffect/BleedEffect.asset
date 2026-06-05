@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a2484643deb87746b99a9ca76ae92bc, type: 3}
-  m_Name: Skill_BasicAttack_Lv1
+  m_Name: BleedEffect
   m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
-  id: wildness_basic_attack_Lv1
-  skillName: "\uAE30\uBCF8\uACF5\uACA9 \uAC15\uD654 LV1"
-  icon: {fileID: -855298285791758126, guid: d2ca69e0a36e0de4fb497d1b1a55a413, type: 3}
-  description: "\uB370\uBBF8\uC9C0\uC0C1\uC218 +1 / \uACF5\uACA9\uBC94\uC704 +0.05"
-  cost: 1
+  id: 
+  skillName: "\uCD9C\uD608 \uBD80\uC5EC"
+  icon: {fileID: -4798391138835998086, guid: 422bdff6d5cad3e4bb3381cf4c8a0de1, type: 3}
+  description: "\uBBF8\uAD6C\uD604"
+  cost: 0
   prerequisites: []
-  treePosition: {x: -810, y: -50}
+  treePosition: {x: -690, y: -320}
   treeType: 0
   unlockBehavior: 0
   skillGroupId: 

@@ -199,8 +199,8 @@ MonoBehaviour:
   startRadius: 50
   minRadius: 5
   shrinkOverTime: 1
-  shrinkDelay: 10
-  shrinkSpeed: 0.5
+  shrinkDelay: 10000
+  shrinkSpeed: 0.001
   circleSegments: 180
   lineWidth: 0.3
   circleColor: {r: 1, g: 0, b: 0, a: 0.8}
