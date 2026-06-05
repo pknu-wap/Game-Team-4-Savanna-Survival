@@ -111,6 +111,7 @@ MonoBehaviour:
   contactDamage: 5
   contactCooldown: 1
   hungerReward: 50
+  scoreValue: 200
   wanderRadius: 3
   arriveDistance: 0.1
   idleChance: 0.1
@@ -132,6 +133,7 @@ MonoBehaviour:
   waterDamage: 10
   waterWidth: 1.5
   waterZonePrefab: {fileID: 298413470088328658, guid: 7c37a0aac33857c40a3435f3e6d6dbaa, type: 3}
+  waterOriginOffset: {x: -1.5, y: 0.5}
   dieClipName: ElephantDeath
 --- !u!50 &-6656869047474873328
 Rigidbody2D:

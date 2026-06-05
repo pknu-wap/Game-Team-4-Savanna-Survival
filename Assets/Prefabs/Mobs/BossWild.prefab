@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 5656537448114066788}
   - component: {fileID: 7549809793813654606}
   - component: {fileID: 918589627294415648}
+  - component: {fileID: 8055360633495132514}
+  - component: {fileID: -4664231597140639825}
+  - component: {fileID: 9106792332580887976}
   m_Layer: 26
   m_Name: BossWild
   m_TagString: Enemy
@@ -174,6 +177,7 @@ MonoBehaviour:
   contactDamage: 5
   contactCooldown: 1
   hungerReward: 10
+  scoreValue: 1000
   wanderRadius: 3
   arriveDistance: 0.2
   idleChance: 0.2
@@ -181,17 +185,17 @@ MonoBehaviour:
   activeTree: 0
   maxHp: 2000
   damage: 30
-  detectionRange: 15
   meleeRange: 2.2
   meleeInterval: 1.8
+  meleeTelegraphRatio: 0.5
   meleeIndicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
   m1Radius: 1.5
-  m1Delay: 0.8
   m1FuseTime: 1.5
-  m1Damage: 35
   m1Count: 3
+  m1Interval: 0.3
+  m1Damage: 35
   m1IndicatorPrefab: {fileID: 2560156276862465191, guid: 73a7eed3b968083479016ac5ac2e9e9b, type: 3}
-  m1ExplosionPrefab: {fileID: 0}
+  m1ExplosionPrefab: {fileID: 621684957901441354, guid: cc0fb4b946ea33a409dc47eff2636350, type: 3}
   m2HpThreshold: 0.5
   m2DamageRatio: 0.7
   m2Telegraph: 2.5
@@ -199,8 +203,15 @@ MonoBehaviour:
   m2ZoneRadius: 2
   m2SafeZoneCount: 3
   m2MapRadius: 12
-  m2IndicatorPrefab: {fileID: 2560156276862465191, guid: 73a7eed3b968083479016ac5ac2e9e9b, type: 3}
+  m2DangerIndicatorPrefab: {fileID: 2560156276862465191, guid: 73a7eed3b968083479016ac5ac2e9e9b, type: 3}
+  m2SafeIndicatorPrefab: {fileID: 2560156276862465191, guid: 73a7eed3b968083479016ac5ac2e9e9b, type: 3}
+  magicSkillPatternChance: 0.4
   magicBaseCooldown: 8
+  m1AttackVfxPrefab: {fileID: 621684957901441354, guid: cc0fb4b946ea33a409dc47eff2636350, type: 3}
+  m1VfxDuration: 0.4
+  m2AttackVfxPrefab: {fileID: 1885474518447271456, guid: 1775f4f55e0587f45aa1211b8e341ff0, type: 3}
+  m2VfxDuration: 0.5
+  m2VfxHeightOffset: 5
   w1Telegraph: 2
   w1SwipeAngle: 120
   w1Range: 3.5
@@ -214,4 +225,123 @@ MonoBehaviour:
   w2StunDuration: 2
   w2Telegraph: 1
   w2IndicatorPrefab: {fileID: 2560156276862465191, guid: 73a7eed3b968083479016ac5ac2e9e9b, type: 3}
+  wildSkillPatternChance: 0.4
   wildBaseCooldown: 7
+  w1AttackVfxPrefab: {fileID: 8664807343668388468, guid: 848d432d0c653b74c8d225d276f3da2b, type: 3}
+  w1VfxDuration: 0.3
+  w2AttackVfxPrefab: {fileID: 7847302782323417921, guid: 38d269fa06b21284fbbdd4dde09adaa4, type: 3}
+  w2VfxDuration: 0.5
+--- !u!114 &8055360633495132514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4775182314131949542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddada63f8f0bc4a4b9648b541dd1f751, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossSkillRegistry
+  slots:
+  - slotType: 0
+    activeSkill: {fileID: 11400000, guid: 4cedf94c9c12d6e42a6ad7356dea7615, type: 2}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 0}
+    cooldown: 15
+    telegraph: 4
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 0
+    activeSkill: {fileID: 11400000, guid: dcba289dba81ccc4c8350a4dd99f5546, type: 2}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 0}
+    cooldown: 10
+    telegraph: 3
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 0
+    activeSkill: {fileID: 11400000, guid: a42938d8299b44d497d020a8e75df156, type: 2}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 0}
+    cooldown: 15
+    telegraph: 3
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 0
+    activeSkill: {fileID: 11400000, guid: 90b62e63529f4484b8e92582d123cda8, type: 2}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 0}
+    cooldown: 6
+    telegraph: 2
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 0
+    activeSkill: {fileID: 11400000, guid: 05824a320bd19bb4f9980374ea2d93e6, type: 2}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 0}
+    cooldown: 4
+    telegraph: 1
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 2
+    activeSkill: {fileID: 0}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 11400000, guid: 051da3ec53cddaa41adec82cfce3171e, type: 2}
+    cooldown: 0
+    telegraph: 0
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 4194304
+  projectileLayerName: PlayerProjectile
+--- !u!95 &-4664231597140639825
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4775182314131949542}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1c8fc51bde5c0dc4489e4535b9ab30d5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9106792332580887976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4775182314131949542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f96978b1f19ce4480c2d1eb81d0cec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossWildController
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 4194304
