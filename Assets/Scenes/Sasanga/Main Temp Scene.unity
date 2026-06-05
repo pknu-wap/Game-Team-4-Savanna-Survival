@@ -25471,7 +25471,6 @@ MonoBehaviour:
   petDamageMultiplier: 1
   petPrefab: {fileID: 7270820640976640748, guid: 515ee9c2478d0d149823b8f04343e782, type: 3}
   activePets: []
-  lastPetPositions: []
 --- !u!1 &1533501833
 GameObject:
   m_ObjectHideFlags: 0
