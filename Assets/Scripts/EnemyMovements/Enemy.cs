@@ -12,6 +12,7 @@ public abstract class Enemy : Entity
 
     [Header("Kill Reward")]
     [SerializeField] private float hungerReward = 10f;
+    [SerializeField] private int   scoreValue  = 10;
 
     // ── 공통 컴포넌트 ──────────────────────────────────────────
     protected Rigidbody2D    rb;
@@ -20,9 +21,6 @@ public abstract class Enemy : Entity
 
     protected EnemyStatManager statManager;
     protected float            currentHp;
-
-    public float CurrentHp => currentHp;
-    public float MaxHp     => statManager.getStat(StatType.HEALTH).rawValue;
 
     private float contactTimer;
 
@@ -41,8 +39,7 @@ public abstract class Enemy : Entity
     [SerializeField] protected float idleChance     = 0.2f;
     [SerializeField] protected float moveSpeed      = 3f;
 
-    protected bool isDead;
-    public bool IsDead => isDead;
+    // ──────────────────────────────────────────────────────────
 
     protected virtual void Awake()
     {
@@ -124,6 +121,13 @@ public abstract class Enemy : Entity
 
     // ── 피격 / 사망 ───────────────────────────────────────────
 
+    protected bool isDead;
+
+    // ── 외부 접근용 프로퍼티 ─────────────────────────────────
+    public bool  IsDead    => isDead;
+    public float CurrentHp => currentHp;
+    public float MaxHp     => statManager.getStat(StatType.HEALTH).rawValue;
+
     public override void TakeDamage(float damage)
     {
         if (isDead) return;
@@ -145,12 +149,6 @@ public abstract class Enemy : Entity
         if (currentHp <= 0) Die();
     }
 
-    // velocity 필드를 직접 세팅해 MoveSmooth 자연 감쇠로 넉백 표현
-    public virtual void ApplyKnockback(Vector2 force)
-    {
-        velocity = force;
-    }
-
     protected virtual void Die()
     {
         if (isDead) return;
@@ -164,7 +162,8 @@ public abstract class Enemy : Entity
             victim:   this,
             killer:   player?.GetComponent<Entity>(),
             position: transform.position,
-            maxHp:    statManager.getStat(StatType.HEALTH).rawValue
+            maxHp:    statManager.getStat(StatType.HEALTH).rawValue,
+            score:    scoreValue
         );
         EnemyEvents.PublishDeath(deathEvent);
 
@@ -191,6 +190,14 @@ public abstract class Enemy : Entity
         foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips)
             if (clip.name == clipName) return clip.length;
         return 0f;
+    }
+
+    // ── 넉백 ─────────────────────────────────────────────────
+
+    public void ApplyKnockback(Vector2 direction, float force = 5f)
+    {
+        if (isDead) return;
+        rb.AddForce(direction.normalized * force, ForceMode2D.Impulse);
     }
 
     // ── 접촉 데미지 ───────────────────────────────────────────

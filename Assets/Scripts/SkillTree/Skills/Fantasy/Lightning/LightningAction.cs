@@ -19,16 +19,30 @@ public class LightningAction : AutoAction
         var statCore = player.GetComponent<PlayerStatManager>()?.StatCore;
         if (statCore == null) return;
 
-        float currentHunger = statCore.getStat(StatType.HUNGER).rawValue;
-        if (currentHunger < hungerCost) return;
-        statCore.addStat(StatType.HUNGER, -hungerCost);
+        // ✅ 보스 여부 확인
+        var bossCtrl = player.GetComponent<BossLightningController>();
+        bool isBoss  = bossCtrl != null;
 
-        int enemyLayerMask = LayerMask.GetMask("Enemy");
-        Collider2D[] enemies = Physics2D.OverlapCircleAll(player.transform.position, data.range, enemyLayerMask);
-        if (enemies.Length == 0) return;
+        // 허기 체크 — 보스는 스킵
+        if (!isBoss)
+        {
+            float currentHunger = statCore.getStat(StatType.HUNGER).rawValue;
+            if (currentHunger < hungerCost) return;
+            statCore.addStat(StatType.HUNGER, -hungerCost);
+        }
 
-        Collider2D target = enemies[Random.Range(0, enemies.Length)];
-        Vector3 strikePos = target.transform.position;
+        // ✅ 타겟 탐색 레이어 분기
+        //    보스 → Player 레이어, 플레이어 → Enemy 레이어
+        int searchLayer = isBoss
+            ? (int)bossCtrl.PlayerLayer
+            : LayerMask.GetMask("Enemy");
+
+        Collider2D[] candidates = Physics2D.OverlapCircleAll(
+            player.transform.position, data.range, searchLayer);
+        if (candidates.Length == 0) return;
+
+        Collider2D target    = candidates[Random.Range(0, candidates.Length)];
+        Vector3    strikePos = target.transform.position;
 
 #if UNITY_EDITOR
         DrawDebugCircle(player.transform.position, data.range, Color.yellow, 0.3f);
@@ -36,75 +50,102 @@ public class LightningAction : AutoAction
 #endif
 
         var chainState = player.GetComponent<LightningAugmentState>();
+
+        // ✅ 코루틴 실행자 — 보스는 BossSkillController, 플레이어는 PlayerSkillController
+        //    둘 다 PlayerSkillController를 상속하므로 GetComponent<PlayerSkillController>()로 통일
         var controller = player.GetComponent<PlayerSkillController>();
-        controller.StartCoroutine(StrikeCoroutine(strikePos, statCore, data.range, chainState));
+        if (controller == null) return;
+
+        controller.StartCoroutine(StrikeCoroutine(
+            strikePos, statCore, data.range, chainState, searchLayer));
     }
 
-    private IEnumerator StrikeCoroutine(Vector3 pos, PlayerStatCore statCore, float chainSearchRange, LightningAugmentState chainState)
+    private IEnumerator StrikeCoroutine(Vector3 pos, PlayerStatCore statCore,
+                                        float chainSearchRange,
+                                        LightningAugmentState chainState,
+                                        int searchLayer)
     {
-        // 경고 표시 — strikeRadius 크기의 빨간 원, warningDuration 후 자동 소멸
         if (warningVfxPrefab != null)
         {
             var warningVfx = Object.Instantiate(warningVfxPrefab, pos, Quaternion.identity);
-            warningVfx.GetComponent<LightningWarningVfxController>()?.Init(strikeRadius, warningDuration);
+            warningVfx.GetComponent<LightningWarningVfxController>()
+                      ?.Init(strikeRadius, warningDuration);
         }
 
         yield return new WaitForSeconds(warningDuration);
 
-        // 타격 판정 + 피격 적마다 strike VFX 스폰
-        int enemyLayerMask = LayerMask.GetMask("Enemy");
-        Collider2D[] hits = Physics2D.OverlapCircleAll(pos, strikeRadius, enemyLayerMask);
+        // ✅ searchLayer로 타격 — 보스면 Player, 플레이어면 Enemy
+        Collider2D[] hits = Physics2D.OverlapCircleAll(pos, strikeRadius, searchLayer);
         float dmg = statCore.getStat(StatType.SKILL_DAMAGE).calibratedValue * damageMultiplier;
 
         foreach (var hit in hits)
         {
-            hit.GetComponent<Enemy>()?.TakeDamage(dmg);
+            // ✅ 보스가 쏜 번개는 플레이어 피해 처리
+            DamageTarget(hit, dmg);
             SpawnStrikeVfx(hit.transform);
         }
 
-        if (chainState == null || !chainState.isChainEnabled || chainState.maxChainCount <= 0) yield break;
+        if (chainState == null || !chainState.isChainEnabled || chainState.maxChainCount <= 0)
+            yield break;
 
         // 연쇄 번개
         var hitTargets = new HashSet<GameObject>();
         foreach (var h in hits) hitTargets.Add(h.gameObject);
 
-        Vector3 lastPos = pos;
-        float chainDmg = statCore.getStat(StatType.SKILL_DAMAGE).calibratedValue
-                       * (damageMultiplier + chainState.chainDamageBonus);
-        float chainDamageDecay = chainState.chainDamageDecay;
+        Vector3 lastPos    = pos;
+        float   chainDmg   = statCore.getStat(StatType.SKILL_DAMAGE).calibratedValue
+                           * (damageMultiplier + chainState.chainDamageBonus);
+        float   chainDecay = chainState.chainDamageDecay;
 
         for (int i = 0; i < chainState.maxChainCount; i++)
         {
-            Collider2D nearest = FindNearest(lastPos, chainSearchRange, enemyLayerMask, hitTargets);
+            Collider2D nearest = FindNearest(lastPos, chainSearchRange, searchLayer, hitTargets);
             if (nearest == null) break;
 
-            // 연결선 VFX
             if (chainVfxPrefab != null)
             {
                 var chainVfx = Object.Instantiate(chainVfxPrefab, Vector3.zero, Quaternion.identity);
-                chainVfx.GetComponent<LightningChainVfxController>()?.Init(lastPos, nearest.transform.position, strikeVfxDuration);
+                chainVfx.GetComponent<LightningChainVfxController>()
+                        ?.Init(lastPos, nearest.transform.position, strikeVfxDuration);
             }
 
             hitTargets.Add(nearest.gameObject);
-            chainDmg *= chainDamageDecay;
-            nearest.GetComponent<Enemy>()?.TakeDamage(chainDmg);
+            chainDmg *= chainDecay;
+            DamageTarget(nearest, chainDmg);
             SpawnStrikeVfx(nearest.transform);
-
             lastPos = nearest.transform.position;
         }
     }
 
-    void SpawnStrikeVfx(Transform enemyTransform)
+    /// Enemy면 Enemy.TakeDamage, 플레이어면 PlayerEffectTemp 경유
+    private void DamageTarget(Collider2D hit, float dmg)
+    {
+        var enemy = hit.GetComponent<Enemy>();
+        if (enemy != null) { enemy.TakeDamage(dmg); return; }
+
+        // 보스가 쏜 번개가 플레이어를 맞힌 경우
+        var playerEffect = hit.GetComponent<PlayerEffectTemp>();
+        if (playerEffect != null) { playerEffect.TakeDamage(dmg); return; }
+
+        var statManager = hit.GetComponent<PlayerStatManager>();
+        if (statManager == null) return;
+        float current = statManager.StatCore.getStat(StatType.HEALTH).rawValue;
+        statManager.StatCore.registerStat(StatType.HEALTH, Mathf.Max(0f, current - dmg));
+    }
+
+    void SpawnStrikeVfx(Transform target)
     {
         if (lightningVfxPrefab == null) return;
-        var vfx = Object.Instantiate(lightningVfxPrefab, enemyTransform.position, Quaternion.identity);
+        var vfx = Object.Instantiate(lightningVfxPrefab, target.position,
+                                     Quaternion.identity, target);
         Object.Destroy(vfx, strikeVfxDuration);
     }
 
-    static Collider2D FindNearest(Vector3 origin, float range, int layerMask, HashSet<GameObject> exclude)
+    static Collider2D FindNearest(Vector3 origin, float range, int layerMask,
+                                  HashSet<GameObject> exclude)
     {
-        Collider2D nearest = null;
-        float nearestDist = float.MaxValue;
+        Collider2D nearest     = null;
+        float      nearestDist = float.MaxValue;
         foreach (var c in Physics2D.OverlapCircleAll(origin, range, layerMask))
         {
             if (exclude.Contains(c.gameObject)) continue;
@@ -117,11 +158,11 @@ public class LightningAction : AutoAction
 #if UNITY_EDITOR
     static void DrawDebugCircle(Vector2 origin, float radius, Color color, float duration)
     {
-        int segments = 24;
-        Vector2 prev = origin + Vector2.right * radius;
+        int     segments = 24;
+        Vector2 prev     = origin + Vector2.right * radius;
         for (int i = 1; i <= segments; i++)
         {
-            float a = (360f / segments) * i * Mathf.Deg2Rad;
+            float   a    = (360f / segments) * i * Mathf.Deg2Rad;
             Vector2 next = origin + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * radius;
             Debug.DrawLine(prev, next, color, duration);
             prev = next;

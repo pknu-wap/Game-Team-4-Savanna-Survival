@@ -53,19 +53,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void stopMove()
+    public virtual void stopMove()
     {
         canMove = false;
         moveDirection = Vector3.zero;
     }
 
-    public void reStartMove()
+    public virtual void reStartMove()
     {
         canMove = true;
         animator.SetBool("isMoving", false);
     }
 
-    public Vector2 GetLastMoveDirection()
+    public virtual Vector2 GetLastMoveDirection()
     {
         return lastMoveDirection;
     }

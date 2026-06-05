@@ -19,7 +19,7 @@ public class SatelliteController : MonoBehaviour
         statCore = GetComponent<PlayerStatManager>()?.StatCore;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         activeSatellites.RemoveAll(s => s == null);
         if (activeSatellites.Count == 0 || statCore == null) return;

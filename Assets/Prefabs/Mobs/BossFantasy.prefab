@@ -13,6 +13,10 @@ GameObject:
   - component: {fileID: 1538878592052523812}
   - component: {fileID: 559985995651944828}
   - component: {fileID: 189015980496445740}
+  - component: {fileID: 6147171658419059325}
+  - component: {fileID: -5756047353828130983}
+  - component: {fileID: 7920110721709907131}
+  - component: {fileID: 3532443435319596435}
   m_Layer: 26
   m_Name: BossFantasy
   m_TagString: Enemy
@@ -174,6 +178,7 @@ MonoBehaviour:
   contactDamage: 5
   contactCooldown: 1
   hungerReward: 10
+  scoreValue: 10
   wanderRadius: 3
   arriveDistance: 0.2
   idleChance: 0.2
@@ -181,17 +186,17 @@ MonoBehaviour:
   activeTree: 1
   maxHp: 2000
   damage: 30
-  detectionRange: 15
   meleeRange: 2.2
   meleeInterval: 1.8
+  meleeTelegraphRatio: 0.5
   meleeIndicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
   m1Radius: 1.5
-  m1Delay: 0.8
   m1FuseTime: 1.5
-  m1Damage: 35
   m1Count: 3
+  m1Interval: 0.3
+  m1Damage: 20
   m1IndicatorPrefab: {fileID: 2560156276862465191, guid: 73a7eed3b968083479016ac5ac2e9e9b, type: 3}
-  m1ExplosionPrefab: {fileID: 0}
+  m1ExplosionPrefab: {fileID: 621684957901441354, guid: cc0fb4b946ea33a409dc47eff2636350, type: 3}
   m2HpThreshold: 0.5
   m2DamageRatio: 0.7
   m2Telegraph: 2.5
@@ -199,8 +204,15 @@ MonoBehaviour:
   m2ZoneRadius: 2
   m2SafeZoneCount: 3
   m2MapRadius: 12
-  m2IndicatorPrefab: {fileID: 2560156276862465191, guid: 73a7eed3b968083479016ac5ac2e9e9b, type: 3}
+  m2DangerIndicatorPrefab: {fileID: 2560156276862465191, guid: 73a7eed3b968083479016ac5ac2e9e9b, type: 3}
+  m2SafeIndicatorPrefab: {fileID: 2560156276862465191, guid: 42906cabc90be934585d4fbd8f9627ce, type: 3}
+  magicSkillPatternChance: 0.4
   magicBaseCooldown: 8
+  m1AttackVfxPrefab: {fileID: 621684957901441354, guid: cc0fb4b946ea33a409dc47eff2636350, type: 3}
+  m1VfxDuration: 0.4
+  m2AttackVfxPrefab: {fileID: 1885474518447271456, guid: 1775f4f55e0587f45aa1211b8e341ff0, type: 3}
+  m2VfxDuration: 0.5
+  m2VfxHeightOffset: 5
   w1Telegraph: 2
   w1SwipeAngle: 120
   w1Range: 3.5
@@ -214,4 +226,196 @@ MonoBehaviour:
   w2StunDuration: 2
   w2Telegraph: 1
   w2IndicatorPrefab: {fileID: 2560156276862465191, guid: 73a7eed3b968083479016ac5ac2e9e9b, type: 3}
+  wildSkillPatternChance: 0.4
   wildBaseCooldown: 7
+  w1AttackVfxPrefab: {fileID: 8664807343668388468, guid: 848d432d0c653b74c8d225d276f3da2b, type: 3}
+  w1VfxDuration: 0.3
+  w2AttackVfxPrefab: {fileID: 7847302782323417921, guid: 38d269fa06b21284fbbdd4dde09adaa4, type: 3}
+  w2VfxDuration: 0.5
+--- !u!114 &6147171658419059325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588486130064410784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddada63f8f0bc4a4b9648b541dd1f751, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossSkillRegistry
+  slots:
+  - slotType: 0
+    activeSkill: {fileID: 11400000, guid: 0b417a9e098e0e24eabe03e955f23664, type: 2}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 0}
+    cooldown: 6
+    telegraph: 2
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 1
+    activeSkill: {fileID: 0}
+    autoSkill: {fileID: 11400000, guid: 5957ae6dbef1b214bb3225c7fe5c82fa, type: 2}
+    passiveSkill: {fileID: 0}
+    cooldown: 4
+    telegraph: 0.5
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 1
+    activeSkill: {fileID: 0}
+    autoSkill: {fileID: 11400000, guid: 59c6110e0cfb7de4ab809f463bada50d, type: 2}
+    passiveSkill: {fileID: 0}
+    cooldown: 3
+    telegraph: 0.2
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 1
+    activeSkill: {fileID: 0}
+    autoSkill: {fileID: 11400000, guid: 006849066bc9ab74d889dd30ebe2f9be, type: 2}
+    passiveSkill: {fileID: 0}
+    cooldown: 0
+    telegraph: 0
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 2
+    activeSkill: {fileID: 0}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 11400000, guid: f3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8, type: 2}
+    cooldown: 0
+    telegraph: 0
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 2
+    activeSkill: {fileID: 0}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 11400000, guid: 706ffaeebd1b0de448983615772f5f37, type: 2}
+    cooldown: 0
+    telegraph: 0
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 2
+    activeSkill: {fileID: 0}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 11400000, guid: f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6, type: 2}
+    cooldown: 0
+    telegraph: 0
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 2
+    activeSkill: {fileID: 0}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 11400000, guid: dc9fb245aa2e11d42a78f694da20c488, type: 2}
+    cooldown: 0
+    telegraph: 0
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 2
+    activeSkill: {fileID: 0}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 11400000, guid: f2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7, type: 2}
+    cooldown: 0
+    telegraph: 0
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 2
+    activeSkill: {fileID: 0}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 11400000, guid: 7c16a94f4061ec7408f2427234dc40f1, type: 2}
+    cooldown: 0
+    telegraph: 0
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  - slotType: 0
+    activeSkill: {fileID: 11400000, guid: 40551370fe942bf41b06b3b0e92055a7, type: 2}
+    autoSkill: {fileID: 0}
+    passiveSkill: {fileID: 0}
+    cooldown: 6
+    telegraph: 2
+    maxRange: 0
+    indicatorPrefab: {fileID: 2560156276862465191, guid: c8612a1921712ea4e8f687dcac2d6c01, type: 3}
+    indicatorRadiusOverride: 0
+    currentCooldown: 0
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 4194304
+  projectileLayerName: PlayerProjectile
+--- !u!95 &-5756047353828130983
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588486130064410784}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1c8fc51bde5c0dc4489e4535b9ab30d5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7920110721709907131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588486130064410784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2345e38aa92bcff4b9bf4f344f69e616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossSatelliteController
+  maxSatelliteCount: 3
+  damageMultiplier: 1
+  hasKnockback: 1
+  hungerDrainPerSecond: 0
+  satellitePrefab: {fileID: 4285463347646535907, guid: a530b7b56c345f24285d6fe9cad7f1a3, type: 3}
+  activeSatellites:
+  - {fileID: 0}
+  duration: 5
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &3532443435319596435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588486130064410784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49fb998e26461f14aa7575bd667aa485, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossLightningController
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 4194304

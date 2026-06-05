@@ -43,11 +43,13 @@ public abstract class StatManager
     public event Action<StatRegisterEvent> onStatRegister;   // 등록 전, Cancellable
     public event Action<StatType, float>   onStatRegistered; // 등록 후
 
-    public StatData getStat(StatType statType)
-    {
-        return calibratedStats[statType];
-    }
+public StatData getStat(StatType statType)
+{
+    if (calibratedStats.TryGetValue(statType, out var stat))
+        return stat;
 
+    return new StatData(statType, 0f, 0f);
+}
     public void registerStat(StatType statType, float value)
     {
         var events = new StatRegisterEvent(statType, value);

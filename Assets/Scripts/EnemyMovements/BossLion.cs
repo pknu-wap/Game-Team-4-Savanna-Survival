@@ -11,29 +11,45 @@ public partial class BossLion : Enemy
     [SerializeField] internal SkillTree activeTree = SkillTree.Wild;
 
     [Header("Config")]
-    [SerializeField] private float maxHp          = 2000f;
-    [SerializeField] private float damage         = 30f;
-    [SerializeField] private float detectionRange = 15f;
+    [SerializeField] private float maxHp  = 2000f;
+    [SerializeField] private float damage = 30f;
 
     [Header("Melee")]
-    [SerializeField] internal float meleeRange    = 2.2f;
-    [SerializeField] internal float meleeInterval = 1.8f;
+    [SerializeField] internal float      meleeRange          = 2.2f;
+    [SerializeField] internal float      meleeInterval       = 1.8f;
+    [SerializeField] internal float      meleeTelegraphRatio = 0.5f;
     [SerializeField] internal GameObject meleeIndicatorPrefab;
 
-    internal enum State { Wander, Chase, Melee, Pattern }
-    internal State state = State.Wander;
+    // ── 상태머신 ─────────────────────────────────────────────
+    internal enum State { Chase, Melee, Pattern }
+    internal State state = State.Chase;
 
     internal float patternTimer;
     internal float patternCooldown;
     internal float meleeTimer;
     internal int   activePatternId = -1;
 
+    // ── 레지스트리 참조 ──────────────────────────────────────
+    internal BossSkillRegistry skillRegistry;
+
+    // ── 애니메이터 ───────────────────────────────────────────
+    private Animator anim;
+    private static readonly int AnimSpeed  = Animator.StringToHash("Speed");
+    private static readonly int AnimAttack = Animator.StringToHash("Attack");
+    private static readonly int AnimDie    = Animator.StringToHash("Die");
+
+    // ── 초기화 ───────────────────────────────────────────────
+
     protected override void Awake()
     {
         base.Awake();
         statManager.InitAttacker(maxHp, damage);
         currentHp = statManager.getStat(StatType.HEALTH).rawValue;
-        SetNewWanderTarget();
+
+        skillRegistry = GetComponent<BossSkillRegistry>();
+        skillRegistry?.Init(statManager);
+
+        anim = GetComponent<Animator>();
     }
 
     protected override void Start()
@@ -45,25 +61,28 @@ public partial class BossLion : Enemy
 
     protected override bool IsPlayerInDetection() => true;
 
+    // ── 메인 루프 ────────────────────────────────────────────
+
     protected override void Move()
     {
-        if (player == null || !player.gameObject.activeInHierarchy) { Wander(); return; }
+        if (player == null || !player.gameObject.activeInHierarchy) return;
 
         float dist = Vector2.Distance(transform.position, player.position);
+
         switch (state)
         {
-            case State.Wander:  UpdateWander(dist); break;
             case State.Chase:   UpdateChase(dist);  break;
             case State.Melee:   UpdateMelee(dist);  break;
             case State.Pattern: UpdatePattern();    break;
         }
+
+        anim?.SetFloat(AnimSpeed, velocity.magnitude);
+
+        if (velocity.sqrMagnitude > 0.01f)
+            skillRegistry?.UpdateMoveDirection(velocity);
     }
 
-    private void UpdateWander(float dist)
-    {
-        if (dist <= detectionRange) { state = State.Chase; return; }
-        Wander();
-    }
+    // ── 상태별 업데이트 ──────────────────────────────────────
 
     private void UpdateChase(float dist)
     {
@@ -75,27 +94,43 @@ public partial class BossLion : Enemy
             return;
         }
 
-        if (dist <= meleeRange) { state = State.Melee; meleeTimer = 0f; return; }
-        if (dist > detectionRange) { state = State.Wander; SetNewWanderTarget(); return; }
+        if (dist <= meleeRange)
+        {
+            state = State.Melee;
+            meleeTimer = 0f;
+            return;
+        }
+
         MoveSmooth((player.position - transform.position).normalized * moveSpeed);
     }
 
     private void UpdateMelee(float dist)
     {
-        if (dist > meleeRange) { HideMeleeIndicator(); state = State.Chase; return; }
+        if (dist > meleeRange)
+        {
+            HideMeleeIndicator();
+            state = State.Chase;
+            return;
+        }
 
         MoveSmooth(Vector2.zero);
         meleeTimer += Time.deltaTime;
 
-        if (meleeTimer >= meleeInterval - 0.5f) ShowMeleeIndicator();
+        if (meleeTimer >= meleeInterval * (1f - meleeTelegraphRatio))
+            ShowMeleeIndicator();
 
         if (meleeTimer >= meleeInterval)
         {
-            DamagePlayer(statManager.getStat(StatType.DAMAGE).calibratedValue);
-            meleeTimer = 0f;
             HideMeleeIndicator();
+            float dmg = statManager.getStat(StatType.DAMAGE).calibratedValue;
+            DamagePlayer(dmg);
+            anim?.SetTrigger(AnimAttack);
+            meleeTimer = 0f;
+            Debug.Log($"[BossLion] 근접 공격 — 데미지 {dmg:F1}");
         }
     }
+
+    // ── 패턴 진입/종료 ───────────────────────────────────────
 
     private void EnterPattern()
     {
@@ -108,8 +143,32 @@ public partial class BossLion : Enemy
     internal void ExitPattern()
     {
         activePatternId = -1;
-        state = State.Chase;
+        patternTimer    = 0f; // ★ 패턴 종료 시 쿨다운 리셋 — 즉시 재진입 방지
+        state           = State.Chase;
     }
+
+    // ── 스킬 레지스트리 패턴 실행 ────────────────────────────
+
+    /// <summary>
+    /// 레지스트리의 Active 슬롯을 순서대로 순환하며 다음 준비된 스킬을 실행합니다.
+    /// 실행 시 Attack 트리거도 발동합니다.
+    /// </summary>
+    internal bool TryExecuteNextSkill()
+    {
+        if (skillRegistry == null) return false;
+        bool executed = skillRegistry.TryExecuteNextActive();
+        if (executed)
+            anim?.SetTrigger(AnimAttack);
+        return executed;
+    }
+
+    /// <summary>
+    /// 레지스트리에 준비된 Active 슬롯이 하나라도 있는지 확인합니다.
+    /// 패턴 진입 조건 체크에 사용합니다.
+    /// </summary>
+    internal bool HasSkillReady()
+        => skillRegistry != null && skillRegistry.HasAnyActiveReady();
+
 
     protected override void Die()
     {
@@ -117,11 +176,14 @@ public partial class BossLion : Enemy
         isDead = true;
 
         rb.linearVelocity = Vector2.zero;
+        anim?.SetTrigger(AnimDie);
         ApplyDeathRewards();
         HideMeleeIndicator();
         OnBossDeath();
         StartCoroutine(DieRoutine(0f));
     }
+
+    // ── 업데이트 / 방향 ──────────────────────────────────────
 
     protected override void Update()
     {
@@ -137,6 +199,8 @@ public partial class BossLion : Enemy
         transform.localScale = s;
     }
 
+    // ── 근접 인디케이터 ──────────────────────────────────────
+
     private GameObject meleeIndicator;
 
     private void ShowMeleeIndicator()
@@ -151,13 +215,20 @@ public partial class BossLion : Enemy
         meleeIndicator.SetActive(true);
     }
 
-    internal void HideMeleeIndicator() { if (meleeIndicator != null) meleeIndicator.SetActive(false); }
+    internal void HideMeleeIndicator()
+    {
+        if (meleeIndicator != null) meleeIndicator.SetActive(false);
+    }
+
+    // ── 기즈모 ───────────────────────────────────────────────
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.blue; Gizmos.DrawWireSphere(transform.position, detectionRange);
-        Gizmos.color = Color.red;  Gizmos.DrawWireSphere(transform.position, meleeRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, meleeRange);
     }
+
+    // ── 패턴 분기 ────────────────────────────────────────────
 
     private void InitPatternCooldowns()
     {
@@ -179,8 +250,9 @@ public partial class BossLion : Enemy
 
     private bool CanStartPattern(float dist)
     {
-        return activeTree == SkillTree.Wild ? CanStartWildPattern(dist)
-                                           : CanStartMagicPattern(dist);
+        return activeTree == SkillTree.Wild
+            ? CanStartWildPattern(dist)
+            : CanStartMagicPattern(dist);
     }
 
     private void OnBossDeath()
