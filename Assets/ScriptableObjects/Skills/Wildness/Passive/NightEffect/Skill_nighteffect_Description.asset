@@ -19,7 +19,7 @@ MonoBehaviour:
     \uC99D\uAC00"
   cost: 0
   prerequisites: []
-  treePosition: {x: 0, y: 0}
+  treePosition: {x: -690, y: -150}
   treeType: 0
   unlockBehavior: 0
   skillGroupId: 

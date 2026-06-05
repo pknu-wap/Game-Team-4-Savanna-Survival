@@ -11,10 +11,15 @@ public class SkillsBasic_attack : MonoBehaviour
     [SerializeField] private float attackRadius = 1f;
     [SerializeField] private float attackInterval = 1f;
 
+    //[Header("디버그")]
+    //[SerializeField] private bool debugTriggerLog = true;
+
     private PlayerStatCore statCore;
     private CircleCollider2D circleCollider;
     private SpriteRenderer spriteRenderer;
     private float attackTimer = 0f;
+    private bool isAttackActive = false;
+    private int triggerLogCount = 0;
 
     // 이중 타격 방지: 펄스 1회당 맞은 적 목록
     private readonly HashSet<Enemy> hitSet = new HashSet<Enemy>();
@@ -39,6 +44,9 @@ public class SkillsBasic_attack : MonoBehaviour
 
         SetupVisual();
         ApplyRadius();
+
+        // 범위 표시는 항상 보이지만, 데미지 트리거는 공격 펄스 중에만 켠다.
+        circleCollider.enabled = false;
     }
 
     private void SetupVisual()
@@ -110,16 +118,20 @@ public class SkillsBasic_attack : MonoBehaviour
     {
         // 펄스 시작 시 이중 타격 방지용 집합 초기화
         hitSet.Clear();
+        isAttackActive = true;
 
         if (spriteRenderer != null)
             spriteRenderer.color = new Color(1f, 0f, 0f, 0.4f);
 
-        // 콜라이더를 한 프레임 껐다 켜서 Trigger 재발동
+        // 진한 빨강 펄스 중에만 Trigger 판정을 켠다.
         circleCollider.enabled = false;
         yield return null;
         circleCollider.enabled = true;
 
         yield return new WaitForSeconds(0.1f);
+
+        circleCollider.enabled = false;
+        isAttackActive = false;
 
         if (spriteRenderer != null)
             spriteRenderer.color = new Color(1f, 0f, 0f, 0.15f);
@@ -127,11 +139,30 @@ public class SkillsBasic_attack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (statCore == null) return;
-
         Enemy enemy = other.GetComponent<Enemy>();
         if (enemy == null)
             enemy = other.GetComponentInParent<Enemy>();
+
+        bool alreadyHit = enemy != null && hitSet.Contains(enemy);
+
+        /*
+        if (debugTriggerLog)
+        {
+            Debug.Log(
+                $"[BasicAttack Trigger #{++triggerLogCount}] " +
+                $"active={isAttackActive}, " +
+                $"other={other.name}, " +
+                $"otherCollider={other.GetType().Name}, " +
+                $"enemy={(enemy != null ? enemy.name : "None")}, " +
+                $"alreadyHit={alreadyHit}, " +
+                $"selfColliders={GetSelfColliderDebugInfo()}",
+                this
+            );
+        }
+        */
+
+        if (!isAttackActive) return;
+        if (statCore == null) return;
         if (enemy == null) return;
 
         // 이미 이번 펄스에서 맞은 적이면 무시
@@ -143,6 +174,22 @@ public class SkillsBasic_attack : MonoBehaviour
             damageCorrection;
 
         enemy.TakeDamage(damage);
+    }
+
+    private string GetSelfColliderDebugInfo()
+    {
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        if (colliders.Length == 0) return "None";
+
+        string result = "";
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Collider2D col = colliders[i];
+            if (i > 0) result += ", ";
+            result += $"{col.GetType().Name}(enabled={col.enabled}, trigger={col.isTrigger})";
+        }
+
+        return result;
     }
 
     public void AddAttackDamageBonus(float value) => damageConstant += value;
