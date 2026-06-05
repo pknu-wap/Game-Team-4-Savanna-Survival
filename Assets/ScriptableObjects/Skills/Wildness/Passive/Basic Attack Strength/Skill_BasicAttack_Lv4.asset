@@ -24,4 +24,5 @@ MonoBehaviour:
   unlockBehavior: 0
   skillGroupId: 
   skillLevel: 0
-  effects: []
+  effects:
+  - {fileID: 11400000, guid: 6c2418ac7d2790543bbcee8c980a5041, type: 2}

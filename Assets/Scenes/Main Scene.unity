@@ -13982,7 +13982,6 @@ MonoBehaviour:
   damageCorrection: 0.2857143
   attackRadius: 0.5
   attackInterval: 1
-  debugTriggerLog: 1
 --- !u!212 &977639777
 SpriteRenderer:
   serializedVersion: 2
@@ -14091,7 +14090,7 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.0000000018626451}
+  m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
 --- !u!1 &992091339
 GameObject:
