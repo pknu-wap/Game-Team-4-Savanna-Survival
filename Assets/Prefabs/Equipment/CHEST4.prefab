@@ -53,6 +53,11 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -74,9 +79,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -2206418350134298321, guid: 4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -97,10 +104,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be57281b168e0e24bbfddfc7d03197f9, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentPickup
   equipmentData: {fileID: 11400000, guid: 1d5b0c9e7a3f2b68de26e0f2a4b69012, type: 2}
-  outlineObject: {fileID: 0}
+  outlineObject: {fileID: 7361449958033169289, guid: 984d391945434f84bb340d720d748388, type: 3}
 --- !u!50 &4695130465109628005
 Rigidbody2D:
   serializedVersion: 5

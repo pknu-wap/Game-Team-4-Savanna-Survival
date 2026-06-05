@@ -16,7 +16,7 @@ public class EquipmentPickup : MonoBehaviour
 
     private void Awake()
     {
-        setOutline(false);
+        // setOutline(false);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
