@@ -19,16 +19,8 @@ public class AugmentChoiceButton : MonoBehaviour
 
         nameText.text = data.Name;
 
-        AugmentPowerDTO power = data.Power.Find(p => p.Level == level);
-        if (power != null)
-        {
-            descriptionText.text = $"{data.Description}\n효과: +{power.Amount}";
-        }
-        else
-        {
-            descriptionText.text = data.Description;
-        }
-        
+        descriptionText.text = data.Description;
+
 
         // button.onClick.RemoveAllListeners();
         button.onClick.AddListener(OnClick);
@@ -37,12 +29,15 @@ public class AugmentChoiceButton : MonoBehaviour
     private void OnClick()
     {
         onSelected?.Invoke(augmentData);
-        
+        int id = augmentData.ID;
+
         // 실제 시스템 작동 코드 적용 필요. SO 데이터 파일 들어와야 함. 스킬 제작 후 적용.
 
-        // SkillManager.Instance.ReplaceSkill();
+
+        BaseSkillData originSkill = Resources.Load<BaseSkillData>("Skills/" + id);
+        BaseSkillData newSkill = Resources.Load<BaseSkillData>("Skills/" + id);
 
 
-
+        SkillManager.Instance.ReplaceSkill(originSkill, newSkill);
     }
 }
