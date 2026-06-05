@@ -17,16 +17,31 @@ public class HomingMissile : MonoBehaviour
     private Vector2 lastTargetPos;
     private Rigidbody2D rb;
 
-    public void Init(Transform t, PlayerStatManager sm, bool explosion, float explosionRad, float dmgMultiplier = 1f, float explosionDmgBonus = 0f)
+    public void Init(Transform t, PlayerStatManager sm, bool explosion, float explosionRad,
+                     float dmgMultiplier = 1f, float explosionDmgBonus = 0f,
+                     Collider2D ownerCol = null)
     {
-        target = t;
-        statManager = sm;
-        hasExplosion = explosion;
-        explosionRadius = explosionRad;
-        damageMultiplier = dmgMultiplier;
+        target               = t;
+        statManager          = sm;
+        hasExplosion         = explosion;
+        explosionRadius      = explosionRad;
+        damageMultiplier     = dmgMultiplier;
         explosionDamageBonus = explosionDmgBonus;
-        lastTargetPos = t != null ? (Vector2)t.position : (Vector2)transform.position;
-        rb = GetComponent<Rigidbody2D>();
+        lastTargetPos        = t != null ? (Vector2)t.position : (Vector2)transform.position;
+        rb                   = GetComponent<Rigidbody2D>();
+
+        // ✅ 발사자 콜라이더와 미사일 콜라이더 간 충돌을 물리 레벨에서 직접 끔
+        if (ownerCol != null)
+        {
+            var myCol = GetComponent<Collider2D>();
+            if (myCol != null)
+                Physics2D.IgnoreCollision(myCol, ownerCol, true);
+
+            // 보스에 콜라이더가 여러 개인 경우도 대응
+            var ownerCols = ownerCol.GetComponentsInParent<Collider2D>();
+            foreach (var c in ownerCols)
+                if (myCol != null) Physics2D.IgnoreCollision(myCol, c, true);
+        }
     }
 
     private void FixedUpdate()
@@ -34,11 +49,7 @@ public class HomingMissile : MonoBehaviour
         if (dead) return;
 
         lifetime -= Time.fixedDeltaTime;
-        if (lifetime <= 0f)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (lifetime <= 0f) { Destroy(gameObject); return; }
 
         Vector2 dir;
         if (target != null && target.gameObject.activeSelf)
@@ -49,11 +60,7 @@ public class HomingMissile : MonoBehaviour
         else
         {
             Vector2 toLastPos = lastTargetPos - (Vector2)transform.position;
-            if (toLastPos.magnitude < 0.15f)
-            {
-                Destroy(gameObject);
-                return;
-            }
+            if (toLastPos.magnitude < 0.15f) { Destroy(gameObject); return; }
             dir = toLastPos.normalized;
         }
 
@@ -64,21 +71,13 @@ public class HomingMissile : MonoBehaviour
 
         transform.up = dir;
 
-        var col = GetComponent<CircleCollider2D>();
-        if (col != null)
-        {
-            float checkRadius = col.radius * Mathf.Max(transform.lossyScale.x, transform.lossyScale.y);
-            Collider2D hit = Physics2D.OverlapCircle((Vector2)transform.position, checkRadius, LayerMask.GetMask("Enemy"));
-            if (hit != null)
-                Die(hit);
-        }
+        // ✅ OverlapCircle 수동 체크 제거 — OnTriggerEnter2D에만 의존
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (dead) return;
         if (other.GetComponent<Enemy>() == null) return;
-
         Die(other);
     }
 
@@ -91,9 +90,9 @@ public class HomingMissile : MonoBehaviour
         var col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
-        float baseDmg = 0f;
-        if (statManager != null)
-            baseDmg = statManager.StatCore.getStat(StatType.SKILL_DAMAGE).calibratedValue;
+        float baseDmg = statManager != null
+            ? statManager.StatCore.getStat(StatType.SKILL_DAMAGE).calibratedValue
+            : 0f;
 
         if (!hasExplosion)
         {
@@ -102,7 +101,8 @@ public class HomingMissile : MonoBehaviour
         else
         {
             float explosionDmg = baseDmg * (damageMultiplier + explosionDamageBonus);
-            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius, LayerMask.GetMask("Enemy"));
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius,
+                                                           LayerMask.GetMask("Enemy"));
             foreach (var hit in hits)
                 hit.GetComponent<Enemy>()?.TakeDamage(explosionDmg);
 

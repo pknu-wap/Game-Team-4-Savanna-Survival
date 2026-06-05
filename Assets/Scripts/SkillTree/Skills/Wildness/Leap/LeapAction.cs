@@ -19,7 +19,8 @@ public class LeapAction : ActiveAction
     {
         var controller = player.GetComponent<PlayerSkillController>();
         StopCurrent(player, controller);
-        activeRoutines[player] = controller.StartCoroutine(LeapRoutine(player, CalculateDamage(player)));
+        activeRoutines[player] = controller.StartCoroutine(
+            LeapRoutine(player, CalculateDamage(player)));
     }
 
     public override void Clear(GameObject player)
@@ -33,19 +34,18 @@ public class LeapAction : ActiveAction
             .getStat(StatType.SKILL_DAMAGE).calibratedValue * damageMultiplier);
     }
 
-    private LayerMask GetEnemyLayers()
+    private LayerMask GetTargetLayers(GameObject player)
     {
+        var bossCtrl = player.GetComponent<BossWildController>();
+        if (bossCtrl != null) return bossCtrl.TargetLayer;
         return enemyLayers.value == 0 ? LayerMask.GetMask("Enemy") : enemyLayers;
     }
 
     private void StopCurrent(GameObject player, PlayerSkillController controller)
     {
         if (!activeRoutines.TryGetValue(player, out Coroutine routine)) return;
-
         activeRoutines.Remove(player);
-        if (routine != null)
-            controller.StopCoroutine(routine);
-
+        if (routine != null) controller.StopCoroutine(routine);
         player.GetComponent<PlayerMovement>().reStartMove();
     }
 
@@ -55,40 +55,57 @@ public class LeapAction : ActiveAction
         movement.stopMove();
 
         Vector2 startPosition = player.transform.position;
-        Vector2 endPosition = startPosition + movement.GetLastMoveDirection() * distance;
+        Vector2 endPosition   = startPosition + movement.GetLastMoveDirection() * distance;
 
         float elapsed = 0f;
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            float ratio = Mathf.Clamp01(elapsed / duration);
+            float ratio      = Mathf.Clamp01(elapsed / duration);
             float easedRatio = Mathf.SmoothStep(0f, 1f, ratio);
             player.transform.position = Vector2.Lerp(startPosition, endPosition, easedRatio);
             yield return null;
         }
 
         player.transform.position = endPosition;
-        DamageLandingArea(endPosition, damage);
+        DamageLandingArea(player, endPosition, damage);
         movement.reStartMove();
         activeRoutines.Remove(player);
     }
 
-    private void DamageLandingArea(Vector2 center, float damage)
+    private void DamageLandingArea(GameObject player, Vector2 center, float damage)
     {
-        HashSet<Enemy> damagedEnemies = new();
-        Collider2D[] hits = Physics2D.OverlapCircleAll(center, landingRadius, GetEnemyLayers());
-        foreach (Collider2D hit in hits)
-        {
-            Enemy enemy = hit.GetComponentInParent<Enemy>();
-            if (enemy == null || damagedEnemies.Contains(enemy)) continue;
+        var bossCtrl  = player.GetComponent<BossWildController>();
+        bool isBoss   = bossCtrl != null;
+        int  mask     = (int)GetTargetLayers(player);
 
-            enemy.TakeDamage(damage);
+        var hits = Physics2D.OverlapCircleAll(center, landingRadius, mask);
+        HashSet<object> damaged = new();
+
+        foreach (var hit in hits)
+        {
+            if (isBoss)
+            {
+                // ✅ 플레이어 타격 — 중복 방지
+                var playerEffect = hit.GetComponent<PlayerEffectTemp>();
+                var statManager  = hit.GetComponent<PlayerStatManager>();
+                object key       = (object)playerEffect ?? statManager;
+                if (key == null || !damaged.Add(key)) continue;
+
+                bossCtrl.DamagePlayer(hit, damage);
+            }
+            else
+            {
+                var enemy = hit.GetComponentInParent<Enemy>();
+                if (enemy == null || !damaged.Add(enemy)) continue;
+                enemy.TakeDamage(damage);
+            }
+
             if (vfxPrefab != null)
             {
-                var vfx = Instantiate(vfxPrefab, enemy.transform.position, Quaternion.identity);
+                var vfx = Instantiate(vfxPrefab, hit.transform.position, Quaternion.identity);
                 Object.Destroy(vfx, vfxDuration);
             }
-            damagedEnemies.Add(enemy);
         }
     }
 }
