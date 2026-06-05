@@ -29,7 +29,7 @@ public class PlayerLevel : MonoBehaviour
 
         while (currentExp >= maxExp)
         {
-            playerMovement.stopMove();
+
 
             currentExp -= maxExp;
             level++;
@@ -37,14 +37,14 @@ public class PlayerLevel : MonoBehaviour
 
             statCore.addStat(StatType.SKILL_POINTS, skillPointsPerLevel);
 
-            if (AugmentManager.Instance != null)
-            {
-                AugmentManager.Instance.OpenAugment((int)level);
-            }
-            else
-            {
-                Debug.Log("PlayerLevel: AugmentManager.Instance가 없음");
-            }
+            // if (AugmentManager.Instance != null)
+            // {
+            //     AugmentManager.Instance.OpenAugment((int)level);
+            // }
+            // else
+            // {
+            //     Debug.Log("PlayerLevel: AugmentManager.Instance가 없음");
+            // }
             Debug.LogError("레벨업! 현재 레벨: " + level);
         }
 
