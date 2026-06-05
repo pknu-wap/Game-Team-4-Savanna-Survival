@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2484643deb87746b99a9ca76ae92bc, type: 3}
+  m_Name: BleedEffect
+  m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
+  id: 
+  skillName: "\uCD9C\uD608 \uBD80\uC5EC"
+  icon: {fileID: -4798391138835998086, guid: 422bdff6d5cad3e4bb3381cf4c8a0de1, type: 3}
+  description: "\uBBF8\uAD6C\uD604"
+  cost: 0
+  prerequisites: []
+  treePosition: {x: -690, y: -320}
+  treeType: 0
+  unlockBehavior: 0
+  skillGroupId: 
+  skillLevel: 0
+  effects: []
