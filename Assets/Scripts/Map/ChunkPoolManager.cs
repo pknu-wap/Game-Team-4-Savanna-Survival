@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,12 +16,25 @@ public class ChunkPoolManager : MonoBehaviour
     private StructureManager _structureManager;
 
     public Dictionary<Vector2Int, ChunkEntity> ActiveChunks => _activeChunks;
+
     private Vector2Int _lastChunkIndex = new Vector2Int(int.MinValue, int.MinValue);
+
+    private void Awake()
+    {
+        FindPlayer();
+    }
 
     private void Start()
     {
         _structureManager = FindAnyObjectByType<StructureManager>();
+
         InitPool();
+
+        if (playerTransform == null)
+        {
+            FindPlayer();
+        }
+
         if (playerTransform != null)
         {
             Vector2Int startIndex = GetChunkIndex(playerTransform.position);
@@ -32,13 +45,35 @@ public class ChunkPoolManager : MonoBehaviour
 
     private void Update()
     {
-        if (playerTransform == null) return;
+        if (playerTransform == null)
+        {
+            FindPlayer();
+            return;
+        }
 
         Vector2Int currentIndex = GetChunkIndex(playerTransform.position);
+
         if (currentIndex != _lastChunkIndex)
         {
             _lastChunkIndex = currentIndex;
             UpdateChunks(GetActiveIndices(currentIndex));
+        }
+    }
+
+    private void FindPlayer()
+    {
+        if (playerTransform != null)
+            return;
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObj != null)
+        {
+            playerTransform = playerObj.transform;
+        }
+        else
+        {
+            Debug.LogWarning("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
         }
     }
 
@@ -48,6 +83,7 @@ public class ChunkPoolManager : MonoBehaviour
         {
             GameObject obj = Instantiate(chunkPrefab, transform);
             obj.SetActive(false);
+
             ChunkEntity entity = obj.GetComponent<ChunkEntity>();
             _idlePool.Enqueue(entity);
         }
@@ -64,6 +100,7 @@ public class ChunkPoolManager : MonoBehaviour
     private List<Vector2Int> GetActiveIndices(Vector2Int center)
     {
         List<Vector2Int> indices = new List<Vector2Int>(9);
+
         for (int dx = -1; dx <= 1; dx++)
         {
             for (int dy = -1; dy <= 1; dy++)
@@ -71,6 +108,7 @@ public class ChunkPoolManager : MonoBehaviour
                 indices.Add(new Vector2Int(center.x + dx, center.y + dy));
             }
         }
+
         return indices;
     }
 
@@ -79,6 +117,7 @@ public class ChunkPoolManager : MonoBehaviour
         HashSet<Vector2Int> targetSet = new HashSet<Vector2Int>(targetIndices);
 
         List<Vector2Int> toRemove = new List<Vector2Int>();
+
         foreach (var kvp in _activeChunks)
         {
             if (!targetSet.Contains(kvp.Key))
@@ -89,10 +128,12 @@ public class ChunkPoolManager : MonoBehaviour
         {
             ChunkEntity entity = _activeChunks[index];
             _activeChunks.Remove(index);
+
             if (_structureManager != null)
             {
                 _structureManager.ClearStructuresForChunk(entity);
             }
+
             entity.ResetChunk();
             entity.gameObject.SetActive(false);
             _idlePool.Enqueue(entity);
@@ -100,12 +141,16 @@ public class ChunkPoolManager : MonoBehaviour
 
         foreach (var index in targetIndices)
         {
-            if (_activeChunks.ContainsKey(index)) continue;
-            if (_idlePool.Count == 0) break;
+            if (_activeChunks.ContainsKey(index))
+                continue;
+
+            if (_idlePool.Count == 0)
+                break;
 
             ChunkEntity entity = _idlePool.Dequeue();
             entity.gameObject.SetActive(true);
             entity.Initialize(index);
+
             _activeChunks[index] = entity;
 
             if (_structureManager != null)

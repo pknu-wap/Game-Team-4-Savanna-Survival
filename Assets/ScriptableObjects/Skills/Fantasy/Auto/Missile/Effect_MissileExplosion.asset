@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c481f6aa3b16844c9279a1c23678d2e, type: 3}
   m_Name: Effect_MissileExplosion
   m_EditorClassIdentifier: Assembly-CSharp::MissileExplosionEffect
-  explosionRadius: 2
+  explosionRadius: 3
+  explosionDamageBonus: 1

@@ -111,7 +111,7 @@ private void OnSkillRemoved(BaseSkillData skill)
 
             if (Input.GetKeyDown(key) && activeSkillCooldowns[skill] <= 0f)
             {
-                if (skill.action != null)
+                if (skill.action != null && skill.action.CanProcess(gameObject, skill))
                 {
                     SkillEvents.PublishSkillUse(skill);
                     skill.action.Process(gameObject, skill);
@@ -157,6 +157,16 @@ private void HandleAutoSkills()
         {
             SkillManager.Instance.OnSkillUnlocked -= OnSkillUnlocked;
             SkillManager.Instance.OnSkillRemoved -= OnSkillRemoved;
+        }
+    }
+
+
+public void TriggerAutoSkillGroup(string groupId)
+    {
+        foreach (var skill in unlockedAutoSkills)
+        {
+            if (skill.skillGroupId == groupId)
+                autoSkillTimers[skill] = 0f;
         }
     }
 }

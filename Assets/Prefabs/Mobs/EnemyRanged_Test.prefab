@@ -175,6 +175,7 @@ MonoBehaviour:
   contactDamage: 5
   contactCooldown: 1
   hungerReward: 10
+  scoreValue: 20
   wanderRadius: 2
   arriveDistance: 0.2
   idleChance: 0.2

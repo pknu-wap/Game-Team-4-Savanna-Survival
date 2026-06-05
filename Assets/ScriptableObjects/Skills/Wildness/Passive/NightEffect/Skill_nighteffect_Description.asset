@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2484643deb87746b99a9ca76ae92bc, type: 3}
+  m_Name: Skill_nighteffect_Description
+  m_EditorClassIdentifier: Assembly-CSharp::PassiveSkillData
+  id: 
+  skillName: "\uBC24 \uD5CC\uD130"
+  icon: {fileID: -7428107791919240788, guid: a1bcaa3a6a9beec49a49a4d64f9e1cee, type: 3}
+  description: "\uBC24\uC77C \uACBD\uC6B0 \uACF5\uACA9\uB825/\uC774\uB3D9\uC18D\uB3C4
+    \uC99D\uAC00"
+  cost: 0
+  prerequisites: []
+  treePosition: {x: 0, y: 0}
+  treeType: 0
+  unlockBehavior: 0
+  skillGroupId: 
+  skillLevel: 0
+  effects: []

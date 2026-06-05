@@ -3,28 +3,24 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SkillTree/Actions/BabyLionSummonAction")]
 public class BabyLionSummonAction : AutoAction
 {
-    [SerializeField] GameObject summonVfxPrefab;
-
     public override void Process(GameObject player, AutoSkillData data)
     {
         var petCtrl = player.GetComponent<PetController>();
         if (petCtrl == null)
         {
-            Debug.LogWarning("[BabyLionSummon] PetController가 플레이어에 없습니다. 컴포넌트를 추가하세요.");
+            Debug.LogWarning("[BabyLionSummon] PetController가 플레이어에 없습니다.");
             return;
         }
 
         petCtrl.activePets.RemoveAll(p => p == null);
-        if (petCtrl.activePets.Count >= petCtrl.maxPetCount) return;
 
-        Vector2 offset = Random.insideUnitCircle.normalized * 1.5f;
-        Vector3 spawnPos = player.transform.position + (Vector3)offset;
-
-        if (summonVfxPrefab != null)
-            Instantiate(summonVfxPrefab, spawnPos, Quaternion.identity);
-
-        if (petCtrl.petPrefab != null)
+        while (petCtrl.activePets.Count < petCtrl.maxPetCount)
         {
+            if (petCtrl.petPrefab == null) break;
+
+            Vector2 offset = Random.insideUnitCircle.normalized * 1.5f;
+            Vector3 spawnPos = player.transform.position + (Vector3)offset;
+
             var pet = Instantiate(petCtrl.petPrefab, spawnPos, Quaternion.identity);
             var ai = pet.GetComponent<BabyLionAI>();
             if (ai != null)
@@ -40,6 +36,13 @@ public class BabyLionSummonAction : AutoAction
 
     public override void Clear(GameObject player)
     {
-        player.GetComponent<PetController>()?.ClearAllPets();
+        var petCtrl = player.GetComponent<PetController>();
+        if (petCtrl == null) return;
+
+        petCtrl.lastPetPositions.Clear();
+        foreach (var pet in petCtrl.activePets)
+            if (pet != null) petCtrl.lastPetPositions.Add(pet.transform.position);
+
+        petCtrl.ClearAllPets();
     }
 }

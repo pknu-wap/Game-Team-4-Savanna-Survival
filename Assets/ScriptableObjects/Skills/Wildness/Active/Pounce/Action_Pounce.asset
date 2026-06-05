@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4880fdb7f13071d40807b619283d9f88, type: 3}
+  m_Name: Action_Pounce
+  m_EditorClassIdentifier: Assembly-CSharp::PounceAction
+  distance: 5
+  duration: 0.18
+  hitRadius: 0.8
+  damageMultiplier: 1
+  vfxPrefab: {fileID: 2560156276862465191, guid: fd75401de139cb348b7e32dde572a449, type: 3}
+  vfxDuration: 0.2
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 67108864
