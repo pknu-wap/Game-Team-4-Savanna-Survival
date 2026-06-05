@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SkillsBasic_attack : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class SkillsBasic_attack : MonoBehaviour
     [SerializeField] private float attackRadius = 1f;
     [SerializeField] private float attackInterval = 1f;
 
+    [Header("범위 표시")]
+    [SerializeField] private GameObject rangeObject;
+    [SerializeField] private float spriteOnTime = 0.1f;
+
     //[Header("디버그")]
     //[SerializeField] private bool debugTriggerLog = true;
 
@@ -20,6 +25,9 @@ public class SkillsBasic_attack : MonoBehaviour
     private float attackTimer = 0f;
     private bool isAttackActive = false;
     private int triggerLogCount = 0;
+    private float attackDamageBonus = 0f;
+    private float attackRangeBonus = 0f;
+    private readonly HashSet<Enemy> hitSet = new HashSet<Enemy>();
 
     private float FinalAttackRadius => Mathf.Max(0.1f, attackRadius + attackRangeBonus);
 
@@ -51,7 +59,7 @@ public class SkillsBasic_attack : MonoBehaviour
         if (attackTimer >= attackInterval)
         {
             attackTimer = 0f;
-            Attack();
+            StartCoroutine(AttackPulse());
         }
     }
 
@@ -66,23 +74,18 @@ public class SkillsBasic_attack : MonoBehaviour
         UpdateRangeSpriteSize();
     }
 
-    private void Attack()
+    private IEnumerator AttackPulse()
     {
         // 펄스 시작 시 이중 타격 방지용 집합 초기화
         hitSet.Clear();
         isAttackActive = true;
-
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, FinalAttackRadius);
 
         // 진한 빨강 펄스 중에만 Trigger 판정을 켠다.
         circleCollider.enabled = false;
         yield return null;
         circleCollider.enabled = true;
 
-            float damage =
-                statCore.getStat(StatType.DAMAGE).calibratedValue
-                * (damageConstant + attackDamageBonus)
-                / damageCorrection;
+        yield return null;
 
         circleCollider.enabled = false;
         isAttackActive = false;
@@ -91,7 +94,7 @@ public class SkillsBasic_attack : MonoBehaviour
             spriteRenderer.color = new Color(1f, 0f, 0f, 0.15f);
     }
 
-    private void CreateRangeSprite()
+    private void OnTriggerEnter2D(Collider2D other)
     {
         Enemy enemy = other.GetComponent<Enemy>();
         if (enemy == null)
@@ -124,31 +127,25 @@ public class SkillsBasic_attack : MonoBehaviour
 
         float damage =
             statCore.getStat(StatType.DAMAGE).calibratedValue *
-            damageConstant /
+            (damageConstant + attackDamageBonus) /
             damageCorrection;
 
         enemy.TakeDamage(damage);
     }
 
-    private string GetSelfColliderDebugInfo()
+    private void SetupVisual()
     {
-        Collider2D[] colliders = GetComponents<Collider2D>();
-        if (colliders.Length == 0) return "None";
-
-        string result = "";
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            Collider2D col = colliders[i];
-            if (i > 0) result += ", ";
-            result += $"{col.GetType().Name}(enabled={col.enabled}, trigger={col.isTrigger})";
-        }
-
-        return result;
+        circleCollider = GetComponent<CircleCollider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (rangeObject != null)
+            rangeObject.SetActive(false);
     }
 
-    public void AddAttackDamageBonus(float value) => damageConstant += value;
-
-        rangeObject.SetActive(false);
+    private void ApplyRadius()
+    {
+        if (circleCollider != null)
+            circleCollider.radius = FinalAttackRadius;
+        UpdateRangeSpriteSize();
     }
 
     private void UpdateRangeSpriteSize()
@@ -168,6 +165,23 @@ public class SkillsBasic_attack : MonoBehaviour
         rangeObject.SetActive(false);
     }
 
+    private string GetSelfColliderDebugInfo()
+    {
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        if (colliders.Length == 0) return "None";
+
+        string result = "";
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Collider2D col = colliders[i];
+            if (i > 0) result += ", ";
+            result += $"{col.GetType().Name}(enabled={col.enabled}, trigger={col.isTrigger})";
+        }
+
+        return result;
+    }
+
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
