@@ -19,7 +19,7 @@ MonoBehaviour:
   cost: 1
   prerequisites:
   - {fileID: 11400000, guid: 025cf3b66c595e34fafcb93706857126, type: 2}
-  treePosition: {x: -690, y: 120}
+  treePosition: {x: -690, y: 20}
   treeType: 1
   unlockBehavior: 1
   skillGroupId: wildness_hunger_max

@@ -18,7 +18,7 @@ MonoBehaviour:
   description: "\uACF5\uACA9\uB825 5%\n\uC774\uB3D9\uC18D\uB3C4 1%"
   cost: 1
   prerequisites: []
-  treePosition: {x: -810, y: 120}
+  treePosition: {x: -810, y: 20}
   treeType: 1
   unlockBehavior: 1
   skillGroupId: wildness_hunger_max
