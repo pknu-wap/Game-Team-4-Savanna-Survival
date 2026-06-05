@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MiddleUiManager : MonoBehaviour
@@ -12,6 +12,6 @@ public class MiddleUiManager : MonoBehaviour
     public void OnStartButton()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Main Scene");
+        SceneManager.LoadScene("Main Temp Scene");
     }
 }

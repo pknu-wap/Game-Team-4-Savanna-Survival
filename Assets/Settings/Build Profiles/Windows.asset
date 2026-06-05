@@ -32,6 +32,9 @@ MonoBehaviour:
   - m_enabled: 1
     m_path: Assets/Scenes/End Scene.unity
     m_guid: ce7c6e322597149419c8e94d44bc3852
+  - m_enabled: 1
+    m_path: Assets/Scenes/Boss Scene.unity
+    m_guid: 806ecbb3ec5b198478ce60988aa066cd
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
